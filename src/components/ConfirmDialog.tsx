@@ -28,11 +28,11 @@ export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent className="bg-background border-none">
-        <AlertDialogHeader>
+        <AlertDialogHeader className="text-center">
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-foreground">{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="sm:justify-center">
           <AlertDialogCancel onClick={onClose}>{t('common.cancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm}>{t('common.confirm')}</AlertDialogAction>
         </AlertDialogFooter>
