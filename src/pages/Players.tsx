@@ -2,28 +2,32 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List, Plus, Minus } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
-import { EditPlayerDialog } from "@/components/EditPlayerDialog";
+import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 const Players = () => {
-  const { players, updatePlayer, resetPlayerScores } = useScore();
+  const { players, updatePlayer, resetPlayerScores, incrementPlayerScore } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const handlePlayerClick = (player: Player) => {
+  const handleEditNameClick = (player: Player) => {
     setSelectedPlayer(player);
-    setEditDialogOpen(true);
+    setEditNameDialogOpen(true);
   };
 
-  const handleUpdatePlayer = (updates: { name: string; score: number }) => {
+  const handleUpdatePlayerName = (newName: string) => {
     if (selectedPlayer) {
-      updatePlayer(selectedPlayer.id, updates);
+      updatePlayer(selectedPlayer.id, { name: newName });
     }
+  };
+
+  const handleScoreChange = (playerId: number, amount: number) => {
+    incrementPlayerScore(playerId, amount);
   };
 
   return (
@@ -50,36 +54,56 @@ const Players = () => {
           viewMode === 'grid' ? (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground text-center cursor-pointer hover:bg-gray-100 transition-colors"
-              onClick={() => handlePlayerClick(player)}
+              className="bg-white text-card-foreground text-center flex flex-col"
             >
-              <CardHeader className="p-4">
+              <CardHeader
+                className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                onClick={() => handleEditNameClick(player)}
+              >
                 <CardTitle className="text-lg">{player.name}</CardTitle>
               </CardHeader>
-              <CardContent className="p-4">
-                <p className="text-2xl font-bold">{player.score}</p>
+              <CardContent className="p-4 flex items-center justify-center gap-4">
+                <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, -1)}>
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <p className="text-2xl font-bold w-10 text-center">{player.score}</p>
+                <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, 1)}>
+                  <Plus className="h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
           ) : (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground cursor-pointer hover:bg-gray-100 transition-colors"
-              onClick={() => handlePlayerClick(player)}
+              className="bg-white text-card-foreground"
             >
               <CardContent className="p-4 flex justify-between items-center">
-                <span className="text-lg font-medium">{player.name}</span>
-                <span className="text-2xl font-bold">{player.score}</span>
+                <span
+                  className="text-lg font-medium cursor-pointer hover:underline"
+                  onClick={() => handleEditNameClick(player)}
+                >
+                  {player.name}
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, -1)}>
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="text-2xl font-bold w-10 text-center">{player.score}</span>
+                  <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, 1)}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           )
         ))}
       </div>
       <AddPlayerDialog isOpen={addDialogOpen} onClose={() => setAddDialogOpen(false)} />
-      <EditPlayerDialog
-        isOpen={editDialogOpen}
-        onClose={() => setEditDialogOpen(false)}
+      <EditPlayerNameDialog
+        isOpen={editNameDialogOpen}
+        onClose={() => setEditNameDialogOpen(false)}
         player={selectedPlayer}
-        onUpdate={handleUpdatePlayer}
+        onUpdate={handleUpdatePlayerName}
       />
       <ConfirmDialog
         isOpen={isConfirmOpen}
