@@ -4,12 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useScore } from "@/context/ScoreContext";
 import { EditScoreDialog } from "@/components/EditScoreDialog";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 const Teams = () => {
   const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore } = useScore();
   const [scoresToAdd, setScoresToAdd] = useState<string[]>(['', '']);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleTeamNameChange = (index: number, name: string) => {
     const newTeams = [...teams];
@@ -113,7 +115,7 @@ const Teams = () => {
       </Card>
 
       <div className="mt-4">
-        <Button variant="destructive" onClick={resetTeamScores} className="w-full">
+        <Button variant="destructive" onClick={() => setIsConfirmOpen(true)} className="w-full">
           Delete All
         </Button>
       </div>
@@ -124,6 +126,14 @@ const Teams = () => {
         score={editingScore?.value ?? null}
         onUpdate={handleUpdateScore}
         onDelete={handleDeleteScore}
+      />
+
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={resetTeamScores}
+        title="Are you sure?"
+        description="This will delete all scores for both teams. This action cannot be undone."
       />
     </div>
   );
