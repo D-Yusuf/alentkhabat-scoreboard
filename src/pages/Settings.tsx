@@ -24,7 +24,7 @@ const Settings = () => {
         <div className="w-10"></div> {/* Spacer */}
       </div>
       <Card className="bg-white text-card-foreground">
-        <CardHeader>
+        <CardHeader className="rtl:text-right">
           <CardTitle>{t('language')}</CardTitle>
         </CardHeader>
         <CardContent>
@@ -33,11 +33,11 @@ const Settings = () => {
             onValueChange={changeLanguage}
             className="space-y-2"
           >
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="en" id="en" />
               <Label htmlFor="en">{t('english')}</Label>
             </div>
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="ar" id="ar" />
               <Label htmlFor="ar">{t('arabic')}</Label>
             </div>
