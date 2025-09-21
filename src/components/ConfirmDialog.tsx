@@ -28,7 +28,7 @@ export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent className="bg-background border-none">
-        <AlertDialogHeader className="text-center">
+        <AlertDialogHeader className="text-center sm:text-center">
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-foreground">{description}</AlertDialogDescription>
         </AlertDialogHeader>

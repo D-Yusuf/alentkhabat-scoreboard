@@ -41,7 +41,7 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
-        <DialogHeader className="text-center">
+        <DialogHeader className="text-center sm:text-center">
           <DialogTitle>{t('players_page.edit_score_for', { name: player.name })}</DialogTitle>
         </DialogHeader>
         <Input

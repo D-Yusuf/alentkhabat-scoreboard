@@ -45,7 +45,7 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
-        <DialogHeader className="text-center">
+        <DialogHeader className="text-center sm:text-center">
           <DialogTitle>{t('teams_page.edit_score')}</DialogTitle>
           <DialogDescription className="text-foreground">{t('teams_page.edit_score_description')}</DialogDescription>
         </DialogHeader>

@@ -40,7 +40,7 @@ export const EditPlayerNameDialog = ({ isOpen, onClose, player, onUpdate }: Edit
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
-        <DialogHeader className="text-center">
+        <DialogHeader className="text-center sm:text-center">
           <DialogTitle>{t('players_page.edit_player_name')}</DialogTitle>
         </DialogHeader>
         <Input
