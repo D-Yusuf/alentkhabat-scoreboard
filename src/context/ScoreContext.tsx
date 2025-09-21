@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Team {
   name: string;
@@ -39,10 +40,9 @@ const getInitialState = <T,>(key: string, defaultValue: T): T => {
 };
 
 export const ScoreProvider = ({ children }: { children: ReactNode }) => {
-  const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', [
-    { name: 'First Team', scores: [] },
-    { name: 'Second Team', scores: [] },
-  ]));
+  const { t } = useTranslation();
+  
+  const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', []));
   const [players, setPlayers] = useState<Player[]>(() => getInitialState('scoreboard_players', [
     { id: 1, name: 'Player 1', score: 0 },
     { id: 2, name: 'Player 2', score: 0 },
@@ -50,7 +50,18 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   ]));
 
   useEffect(() => {
-    localStorage.setItem('scoreboard_teams', JSON.stringify(teams));
+    if (!localStorage.getItem('scoreboard_teams')) {
+      setTeams([
+        { name: t('teams_page.first_team'), scores: [] },
+        { name: t('teams_page.second_team'), scores: [] },
+      ]);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    if (teams.length > 0) {
+      localStorage.setItem('scoreboard_teams', JSON.stringify(teams));
+    }
   }, [teams]);
 
   useEffect(() => {
