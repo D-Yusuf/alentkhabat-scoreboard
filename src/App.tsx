@@ -7,10 +7,34 @@ import Layout from "./components/Layout";
 import Teams from "./pages/Teams";
 import Players from "./pages/Players";
 import ScoreList from "./pages/ScoreList";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { ScoreProvider } from "@/context/ScoreContext";
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+    document.documentElement.dir = i18n.dir(i18n.language);
+  }, [i18n, i18n.language]);
+
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Teams />} />
+        <Route path="/players" element={<Players />} />
+        <Route path="/score-list" element={<ScoreList />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -19,14 +43,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Teams />} />
-              <Route path="/players" element={<Players />} />
-              <Route path="/score-list" element={<ScoreList />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppContent />
         </BrowserRouter>
       </ScoreProvider>
     </TooltipProvider>
