@@ -5,7 +5,7 @@ interface Team {
   scores: number[];
 }
 
-interface Player {
+export interface Player {
   id: number;
   name: string;
   score: number;
@@ -16,6 +16,7 @@ interface ScoreContextType {
   setTeams: (teams: Team[]) => void;
   players: Player[];
   addPlayer: (name: string) => void;
+  updatePlayerScore: (playerId: number, newScore: number) => void;
   addTeamScore: (teamIndex: number, score: number) => void;
   resetTeamScores: () => void;
   updateTeamScore: (teamIndex: number, scoreIndex: number, newScore: number) => void;
@@ -37,6 +38,14 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const addPlayer = (name: string) => {
     setPlayers(prev => [...prev, { id: Date.now(), name, score: 0 }]);
+  };
+
+  const updatePlayerScore = (playerId: number, newScore: number) => {
+    setPlayers(prev =>
+      prev.map(player =>
+        player.id === playerId ? { ...player, score: newScore } : player
+      )
+    );
   };
 
   const addTeamScore = (teamIndex: number, score: number) => {
@@ -72,7 +81,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore }}>
+    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, updatePlayerScore, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore }}>
       {children}
     </ScoreContext.Provider>
   );
