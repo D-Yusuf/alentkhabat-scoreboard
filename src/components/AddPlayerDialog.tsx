@@ -32,7 +32,7 @@ export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
-        <DialogHeader>
+        <DialogHeader className="text-center">
           <DialogTitle>{t('players_page.add_new_player')}</DialogTitle>
         </DialogHeader>
         <Input
@@ -42,7 +42,7 @@ export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
           className="bg-primary/20 border-primary/50 text-foreground placeholder:text-foreground/70"
         />
-        <DialogFooter>
+        <DialogFooter className="justify-center">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
           <Button onClick={handleAdd}>{t('common.add')}</Button>
         </DialogFooter>
