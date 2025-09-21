@@ -45,7 +45,7 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Score</DialogTitle>
-          <DialogDescription>Update or delete the score.</DialogDescription>
+          <DialogDescription className="text-card-foreground">Update or delete the score.</DialogDescription>
         </DialogHeader>
         <Input
           type="number"
