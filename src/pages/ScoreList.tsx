@@ -9,7 +9,7 @@ const ScoreList = () => {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-center">Score List</h1>
-      <Card className="bg-white">
+      <Card className="bg-white text-card-foreground">
         <CardContent className="p-4">
           <ul className="space-y-4">
             {sortedPlayers.map((player, index) => (

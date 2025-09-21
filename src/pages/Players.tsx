@@ -36,7 +36,7 @@ const Players = () => {
         {players.map((player) => (
           <Card
             key={player.id}
-            className="bg-white text-center cursor-pointer hover:bg-gray-100 transition-colors"
+            className="bg-white text-card-foreground text-center cursor-pointer hover:bg-gray-100 transition-colors"
             onClick={() => handlePlayerClick(player)}
           >
             <CardHeader className="p-4">
