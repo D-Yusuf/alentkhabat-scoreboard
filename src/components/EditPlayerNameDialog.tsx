@@ -50,7 +50,7 @@ export const EditPlayerNameDialog = ({ isOpen, onClose, player, onUpdate }: Edit
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />
-        <DialogFooter className="justify-center">
+        <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
           <Button onClick={handleUpdate}>{t('common.update')}</Button>
         </DialogFooter>

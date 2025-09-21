@@ -56,7 +56,7 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />
-        <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-center">
+        <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2">
           <Button variant="destructive" onClick={handleDelete}>{t('common.delete')}</Button>
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
           <Button onClick={handleUpdate}>{t('common.update')}</Button>

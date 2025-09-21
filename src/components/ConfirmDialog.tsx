@@ -32,7 +32,7 @@ export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-foreground">{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="sm:justify-center">
+        <AlertDialogFooter className="sm:justify-center gap-2">
           <AlertDialogCancel onClick={onClose}>{t('common.cancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm}>{t('common.confirm')}</AlertDialogAction>
         </AlertDialogFooter>
