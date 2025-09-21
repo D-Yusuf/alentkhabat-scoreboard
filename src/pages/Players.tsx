@@ -2,15 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List, Plus, Minus } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
+import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 const Players = () => {
-  const { players, updatePlayer, resetPlayerScores, incrementPlayerScore } = useScore();
+  const { players, updatePlayer, resetPlayerScores } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
+  const [editScoreDialogOpen, setEditScoreDialogOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -20,14 +22,21 @@ const Players = () => {
     setEditNameDialogOpen(true);
   };
 
+  const handleScoreClick = (player: Player) => {
+    setSelectedPlayer(player);
+    setEditScoreDialogOpen(true);
+  };
+
   const handleUpdatePlayerName = (newName: string) => {
     if (selectedPlayer) {
       updatePlayer(selectedPlayer.id, { name: newName });
     }
   };
 
-  const handleScoreChange = (playerId: number, amount: number) => {
-    incrementPlayerScore(playerId, amount);
+  const handleUpdatePlayerScore = (newScore: number) => {
+    if (selectedPlayer) {
+      updatePlayer(selectedPlayer.id, { score: newScore });
+    }
   };
 
   return (
@@ -62,14 +71,11 @@ const Players = () => {
               >
                 <CardTitle className="text-lg">{player.name}</CardTitle>
               </CardHeader>
-              <CardContent className="p-4 flex items-center justify-center gap-4">
-                <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, -1)}>
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <p className="text-2xl font-bold w-10 text-center">{player.score}</p>
-                <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, 1)}>
-                  <Plus className="h-4 w-4" />
-                </Button>
+              <CardContent
+                className="p-4 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors flex-grow"
+                onClick={() => handleScoreClick(player)}
+              >
+                <p className="text-2xl font-bold">{player.score}</p>
               </CardContent>
             </Card>
           ) : (
@@ -84,15 +90,12 @@ const Players = () => {
                 >
                   {player.name}
                 </span>
-                <div className="flex items-center gap-2">
-                  <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, -1)}>
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-2xl font-bold w-10 text-center">{player.score}</span>
-                  <Button size="icon" variant="outline" onClick={() => handleScoreChange(player.id, 1)}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+                <span
+                  className="text-2xl font-bold cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors"
+                  onClick={() => handleScoreClick(player)}
+                >
+                  {player.score}
+                </span>
               </CardContent>
             </Card>
           )
@@ -104,6 +107,12 @@ const Players = () => {
         onClose={() => setEditNameDialogOpen(false)}
         player={selectedPlayer}
         onUpdate={handleUpdatePlayerName}
+      />
+      <EditPlayerScoreDialog
+        isOpen={editScoreDialogOpen}
+        onClose={() => setEditScoreDialogOpen(false)}
+        player={selectedPlayer}
+        onUpdate={handleUpdatePlayerScore}
       />
       <ConfirmDialog
         isOpen={isConfirmOpen}
