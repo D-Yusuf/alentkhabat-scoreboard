@@ -42,16 +42,17 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-background border-none">
         <DialogHeader>
           <DialogTitle>Edit Score</DialogTitle>
-          <DialogDescription className="text-card-foreground">Update or delete the score.</DialogDescription>
+          <DialogDescription className="text-foreground">Update or delete the score.</DialogDescription>
         </DialogHeader>
         <Input
           type="number"
           value={newScore}
           onChange={(e) => setNewScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
+          className="bg-primary/20 border-primary/50 text-foreground"
         />
         <DialogFooter className="sm:justify-between">
           <Button variant="destructive" onClick={handleDelete}>Delete</Button>

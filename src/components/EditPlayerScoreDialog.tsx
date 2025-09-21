@@ -38,7 +38,7 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-background border-none">
         <DialogHeader>
           <DialogTitle>Edit Score for {player.name}</DialogTitle>
         </DialogHeader>
@@ -47,6 +47,7 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
           value={newScore}
           onChange={(e) => setNewScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
+          className="bg-primary/20 border-primary/50 text-foreground"
         />
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
