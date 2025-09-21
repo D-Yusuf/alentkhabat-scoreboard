@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface Team {
   name: string;
@@ -25,16 +25,36 @@ interface ScoreContextType {
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
 
+const getInitialState = <T,>(key: string, defaultValue: T): T => {
+  try {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue) {
+      return JSON.parse(storedValue);
+    }
+  } catch (error) {
+    console.error(`Error reading localStorage key “${key}”:`, error);
+  }
+  return defaultValue;
+};
+
 export const ScoreProvider = ({ children }: { children: ReactNode }) => {
-  const [teams, setTeams] = useState<Team[]>([
+  const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', [
     { name: 'First Team', scores: [] },
     { name: 'Second Team', scores: [] },
-  ]);
-  const [players, setPlayers] = useState<Player[]>([
+  ]));
+  const [players, setPlayers] = useState<Player[]>(() => getInitialState('scoreboard_players', [
     { id: 1, name: 'Player 1', score: 120 },
     { id: 2, name: 'Player 2', score: 50 },
     { id: 3, name: 'Player 3', score: 320 },
-  ]);
+  ]));
+
+  useEffect(() => {
+    localStorage.setItem('scoreboard_teams', JSON.stringify(teams));
+  }, [teams]);
+
+  useEffect(() => {
+    localStorage.setItem('scoreboard_players', JSON.stringify(players));
+  }, [players]);
 
   const addPlayer = (name: string) => {
     setPlayers(prev => [...prev, { id: Date.now(), name, score: 0 }]);
