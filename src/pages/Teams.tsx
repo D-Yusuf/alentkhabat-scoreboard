@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useScore } from "@/context/ScoreContext";
+import { EditScoreDialog } from "@/components/EditScoreDialog";
 
 const Teams = () => {
-  const { teams, setTeams, addTeamScore, resetTeamScores } = useScore();
+  const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore } = useScore();
   const [scoresToAdd, setScoresToAdd] = useState<string[]>(['', '']);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
 
   const handleTeamNameChange = (index: number, name: string) => {
     const newTeams = [...teams];
@@ -27,6 +30,23 @@ const Teams = () => {
       const newScoresToAdd = [...scoresToAdd];
       newScoresToAdd[teamIndex] = '';
       setScoresToAdd(newScoresToAdd);
+    }
+  };
+
+  const handleScoreClick = (teamIndex: number, scoreIndex: number, value: number) => {
+    setEditingScore({ teamIndex, scoreIndex, value });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateScore = (newScore: number) => {
+    if (editingScore) {
+      updateTeamScore(editingScore.teamIndex, editingScore.scoreIndex, newScore);
+    }
+  };
+
+  const handleDeleteScore = () => {
+    if (editingScore) {
+      deleteTeamScore(editingScore.teamIndex, editingScore.scoreIndex);
     }
   };
 
@@ -68,9 +88,19 @@ const Teams = () => {
           <div className="grid grid-cols-3 text-center font-mono text-lg">
             {scoreRows.map((row, i) => (
               <Fragment key={i}>
-                <div>{row.team1 ?? ""}</div>
+                <div
+                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                  onClick={() => row.team1 !== undefined && handleScoreClick(0, i, row.team1)}
+                >
+                  {row.team1 ?? ""}
+                </div>
                 <div>-</div>
-                <div>{row.team2 ?? ""}</div>
+                <div
+                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                  onClick={() => row.team2 !== undefined && handleScoreClick(1, i, row.team2)}
+                >
+                  {row.team2 ?? ""}
+                </div>
               </Fragment>
             ))}
           </div>
@@ -87,6 +117,14 @@ const Teams = () => {
           Delete All
         </Button>
       </div>
+
+      <EditScoreDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        score={editingScore?.value ?? null}
+        onUpdate={handleUpdateScore}
+        onDelete={handleDeleteScore}
+      />
     </div>
   );
 };
