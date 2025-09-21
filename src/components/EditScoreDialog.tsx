@@ -45,7 +45,7 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
-        <DialogHeader className="text-center">
+        <DialogHeader>
           <DialogTitle>{t('teams_page.edit_score')}</DialogTitle>
           <DialogDescription className="text-foreground">{t('teams_page.edit_score_description')}</DialogDescription>
         </DialogHeader>
@@ -56,10 +56,12 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />
-        <DialogFooter className="justify-center gap-2">
+        <DialogFooter className="sm:justify-between">
           <Button variant="destructive" onClick={handleDelete}>{t('common.delete')}</Button>
-          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleUpdate}>{t('common.update')}</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
+            <Button onClick={handleUpdate}>{t('common.update')}</Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
