@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Player } from "@/context/ScoreContext";
+import { useTranslation } from "react-i18next";
 
 interface EditPlayerScoreDialogProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface EditPlayerScoreDialogProps {
 
 export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerScoreDialogProps) => {
   const [score, setScore] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
@@ -40,19 +42,19 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader>
-          <DialogTitle>Edit Score for {player.name}</DialogTitle>
+          <DialogTitle>{t('players_page.edit_score_for', { name: player.name })}</DialogTitle>
         </DialogHeader>
         <Input
           type="number"
-          placeholder="Player score"
+          placeholder={t('players_page.player_score')}
           value={score}
           onChange={(e) => setScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
+          <Button onClick={handleUpdate}>{t('common.update')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

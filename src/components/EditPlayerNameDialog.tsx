@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Player } from "@/context/ScoreContext";
+import { useTranslation } from "react-i18next";
 
 interface EditPlayerNameDialogProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface EditPlayerNameDialogProps {
 
 export const EditPlayerNameDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerNameDialogProps) => {
   const [name, setName] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
@@ -39,18 +41,18 @@ export const EditPlayerNameDialog = ({ isOpen, onClose, player, onUpdate }: Edit
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader>
-          <DialogTitle>Edit Player Name</DialogTitle>
+          <DialogTitle>{t('players_page.edit_player_name')}</DialogTitle>
         </DialogHeader>
         <Input
-          placeholder="Player name"
+          placeholder={t('players_page.player_name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
+          <Button onClick={handleUpdate}>{t('common.update')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

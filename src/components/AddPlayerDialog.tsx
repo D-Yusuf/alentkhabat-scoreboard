@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useScore } from "@/context/ScoreContext";
+import { useTranslation } from "react-i18next";
 
 interface AddPlayerDialogProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface AddPlayerDialogProps {
 export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
   const [name, setName] = useState("");
   const { addPlayer } = useScore();
+  const { t } = useTranslation();
 
   const handleAdd = () => {
     if (name.trim()) {
@@ -31,18 +33,18 @@ export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader>
-          <DialogTitle>Add New Player</DialogTitle>
+          <DialogTitle>{t('players_page.add_new_player')}</DialogTitle>
         </DialogHeader>
         <Input
-          placeholder="Enter player name"
+          placeholder={t('players_page.enter_player_name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
           className="bg-primary/20 border-primary/50 text-foreground placeholder:text-foreground/70"
         />
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add Player</Button>
+          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
+          <Button onClick={handleAdd}>{t('common.add')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

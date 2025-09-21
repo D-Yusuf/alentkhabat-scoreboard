@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useScore } from "@/context/ScoreContext";
 import { EditScoreDialog } from "@/components/EditScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useTranslation } from "react-i18next";
 
 const Teams = () => {
   const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore } = useScore();
@@ -12,6 +13,7 @@ const Teams = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const { t } = useTranslation();
 
   const handleTeamNameChange = (index: number, name: string) => {
     const newTeams = [...teams];
@@ -72,14 +74,14 @@ const Teams = () => {
             />
             <Input
               type="number"
-              placeholder="Enter score"
+              placeholder={t('teams_page.enter_score')}
               value={scoresToAdd[index]}
               onChange={(e) => handleScoreChange(index, e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
               className="text-center bg-white text-card-foreground"
             />
             <Button onClick={() => handleAddScore(index)} className="w-full">
-              Add Score
+              {t('teams_page.add_score')}
             </Button>
           </div>
         ))}
@@ -116,7 +118,7 @@ const Teams = () => {
 
       <div className="mt-4">
         <Button variant="destructive" onClick={() => setIsConfirmOpen(true)} className="w-full">
-          Delete All
+          {t('teams_page.delete_all')}
         </Button>
       </div>
 
@@ -132,8 +134,8 @@ const Teams = () => {
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={resetTeamScores}
-        title="Are you sure?"
-        description="This will delete all scores for both teams. This action cannot be undone."
+        title={t('common.are_you_sure')}
+        description={t('teams_page.delete_all_description')}
       />
     </div>
   );

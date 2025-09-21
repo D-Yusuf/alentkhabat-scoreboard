@@ -14,13 +14,13 @@ const ScoreList = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
+        <div className="w-10"></div> {/* Spacer to balance the settings icon */}
+        <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
         <Link to="/settings">
           <Button variant="ghost" size="icon">
             <SettingsIcon className="h-6 w-6" />
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
-        <div className="w-10"></div> {/* Spacer to balance the settings icon */}
       </div>
       <Card className="bg-white text-card-foreground">
         <CardContent className="p-4">

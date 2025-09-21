@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface EditScoreDialogProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface EditScoreDialogProps {
 
 export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: EditScoreDialogProps) => {
   const [newScore, setNewScore] = useState(score?.toString() ?? "");
+  const { t } = useTranslation();
 
   useEffect(() => {
     setNewScore(score?.toString() ?? "");
@@ -44,8 +46,8 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader>
-          <DialogTitle>Edit Score</DialogTitle>
-          <DialogDescription className="text-foreground">Update or delete the score.</DialogDescription>
+          <DialogTitle>{t('teams_page.edit_score')}</DialogTitle>
+          <DialogDescription className="text-foreground">{t('teams_page.edit_score_description')}</DialogDescription>
         </DialogHeader>
         <Input
           type="number"
@@ -55,10 +57,10 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
           className="bg-primary/20 border-primary/50 text-foreground"
         />
         <DialogFooter className="sm:justify-between">
-          <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+          <Button variant="destructive" onClick={handleDelete}>{t('common.delete')}</Button>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
-            <Button onClick={handleUpdate}>Update</Button>
+            <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
+            <Button onClick={handleUpdate}>{t('common.update')}</Button>
           </div>
         </DialogFooter>
       </DialogContent>

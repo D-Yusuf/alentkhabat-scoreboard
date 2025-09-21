@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface ConfirmDialogProps {
 }
 
 export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }: ConfirmDialogProps) => {
+  const { t } = useTranslation();
   const handleConfirm = () => {
     onConfirm();
     onClose();
@@ -31,8 +33,8 @@ export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }
           <AlertDialogDescription className="text-foreground">{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+          <AlertDialogCancel onClick={onClose}>{t('common.cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirm}>{t('common.confirm')}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -7,6 +7,7 @@ import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useTranslation } from "react-i18next";
 
 const Players = () => {
   const { players, updatePlayer, resetPlayerScores } = useScore();
@@ -16,6 +17,7 @@ const Players = () => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const { t } = useTranslation();
 
   const handleEditNameClick = (player: Player) => {
     setSelectedPlayer(player);
@@ -47,7 +49,7 @@ const Players = () => {
             {viewMode === 'grid' ? <List className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
           </Button>
         </div>
-        <h1 className="text-2xl font-bold">Players</h1>
+        <h1 className="text-2xl font-bold">{t('players_page.title')}</h1>
         <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setIsConfirmOpen(true)}>
             <RotateCcw className="h-6 w-6" />
@@ -118,8 +120,8 @@ const Players = () => {
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={resetPlayerScores}
-        title="Are you sure?"
-        description="This will reset all player scores to 0. This action cannot be undone."
+        title={t('common.are_you_sure')}
+        description={t('players_page.reset_scores_description')}
       />
     </div>
   );
