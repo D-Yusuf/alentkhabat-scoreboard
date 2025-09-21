@@ -3,8 +3,8 @@ import BottomNav from './BottomNav';
 
 const Layout = () => {
   return (
-    <div className="min-h-screen pb-20">
-      <main className="p-4 container mx-auto max-w-md">
+    <div className="h-screen">
+      <main className="p-4 container mx-auto max-w-md h-full pb-20 box-border flex flex-col">
         <Outlet />
       </main>
       <BottomNav />

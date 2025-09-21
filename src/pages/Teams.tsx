@@ -39,7 +39,7 @@ const Teams = () => {
   }));
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 gap-4">
         {teams.map((team, index) => (
           <div key={index} className="space-y-2">
@@ -63,8 +63,8 @@ const Teams = () => {
         ))}
       </div>
 
-      <Card className="bg-white">
-        <CardContent className="p-4 min-h-[200px]">
+      <Card className="bg-white mt-4 flex-grow flex flex-col overflow-hidden">
+        <CardContent className="p-4 flex-grow overflow-y-auto">
           <div className="grid grid-cols-3 text-center font-mono text-lg">
             {scoreRows.map((row, i) => (
               <Fragment key={i}>
@@ -75,16 +75,18 @@ const Teams = () => {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="p-4 bg-gray-100 font-bold text-xl flex justify-around">
+        <CardFooter className="p-4 bg-gray-100 font-bold text-xl flex justify-around flex-shrink-0">
           <span>{totalScores[0]}</span>
           <span>-</span>
           <span>{totalScores[1]}</span>
         </CardFooter>
       </Card>
 
-      <Button variant="destructive" onClick={resetTeamScores} className="w-full">
-        Delete All
-      </Button>
+      <div className="mt-4">
+        <Button variant="destructive" onClick={resetTeamScores} className="w-full">
+          Delete All
+        </Button>
+      </div>
     </div>
   );
 };
