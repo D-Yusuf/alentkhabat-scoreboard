@@ -3,12 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useScore } from "@/context/ScoreContext";
-import { AddScoreDialog } from "@/components/AddScoreDialog";
 
 const Teams = () => {
   const { teams, setTeams, addTeamScore, resetTeamScores } = useScore();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+  const [scoresToAdd, setScoresToAdd] = useState<string[]>(['', '']);
 
   const handleTeamNameChange = (index: number, name: string) => {
     const newTeams = [...teams];
@@ -16,14 +14,19 @@ const Teams = () => {
     setTeams(newTeams);
   };
 
-  const openAddScoreDialog = (teamIndex: number) => {
-    setSelectedTeam(teamIndex);
-    setDialogOpen(true);
+  const handleScoreChange = (index: number, value: string) => {
+    const newScoresToAdd = [...scoresToAdd];
+    newScoresToAdd[index] = value;
+    setScoresToAdd(newScoresToAdd);
   };
 
-  const handleAddScore = (score: number) => {
-    if (selectedTeam !== null) {
-      addTeamScore(selectedTeam, score);
+  const handleAddScore = (teamIndex: number) => {
+    const scoreValue = parseInt(scoresToAdd[teamIndex], 10);
+    if (!isNaN(scoreValue)) {
+      addTeamScore(teamIndex, scoreValue);
+      const newScoresToAdd = [...scoresToAdd];
+      newScoresToAdd[teamIndex] = '';
+      setScoresToAdd(newScoresToAdd);
     }
   };
 
@@ -45,7 +48,15 @@ const Teams = () => {
               onChange={(e) => handleTeamNameChange(index, e.target.value)}
               className="text-center font-bold bg-white"
             />
-            <Button onClick={() => openAddScoreDialog(index)} className="w-full">
+            <Input
+              type="number"
+              placeholder="Enter score"
+              value={scoresToAdd[index]}
+              onChange={(e) => handleScoreChange(index, e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
+              className="text-center bg-white"
+            />
+            <Button onClick={() => handleAddScore(index)} className="w-full">
               Add Score
             </Button>
           </div>
@@ -74,15 +85,6 @@ const Teams = () => {
       <Button variant="destructive" onClick={resetTeamScores} className="w-full">
         Delete All
       </Button>
-
-      {selectedTeam !== null && (
-        <AddScoreDialog
-          isOpen={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          onAddScore={handleAddScore}
-          teamName={teams[selectedTeam].name}
-        />
-      )}
     </div>
   );
 };
