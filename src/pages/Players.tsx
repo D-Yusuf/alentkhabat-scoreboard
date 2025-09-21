@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
 import { PlusCircle } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
-import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
+import { EditPlayerDialog } from "@/components/EditPlayerDialog";
 
 const Players = () => {
-  const { players, updatePlayerScore } = useScore();
+  const { players, updatePlayer } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -17,9 +17,9 @@ const Players = () => {
     setEditDialogOpen(true);
   };
 
-  const handleUpdateScore = (newScore: number) => {
+  const handleUpdatePlayer = (updates: { name: string; score: number }) => {
     if (selectedPlayer) {
-      updatePlayerScore(selectedPlayer.id, newScore);
+      updatePlayer(selectedPlayer.id, updates);
     }
   };
 
@@ -49,11 +49,11 @@ const Players = () => {
         ))}
       </div>
       <AddPlayerDialog isOpen={addDialogOpen} onClose={() => setAddDialogOpen(false)} />
-      <EditPlayerScoreDialog
+      <EditPlayerDialog
         isOpen={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
         player={selectedPlayer}
-        onUpdate={handleUpdateScore}
+        onUpdate={handleUpdatePlayer}
       />
     </div>
   );

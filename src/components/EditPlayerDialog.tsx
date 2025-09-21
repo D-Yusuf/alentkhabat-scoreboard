@@ -10,26 +10,28 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Player } from "@/context/ScoreContext";
 
-interface EditPlayerScoreDialogProps {
+interface EditPlayerDialogProps {
   isOpen: boolean;
   onClose: () => void;
   player: Player | null;
-  onUpdate: (newScore: number) => void;
+  onUpdate: (updates: { name: string; score: number }) => void;
 }
 
-export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerScoreDialogProps) => {
-  const [newScore, setNewScore] = useState("");
+export const EditPlayerDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerDialogProps) => {
+  const [name, setName] = useState("");
+  const [score, setScore] = useState("");
 
   useEffect(() => {
     if (player) {
-      setNewScore(player.score.toString());
+      setName(player.name);
+      setScore(player.score.toString());
     }
   }, [player]);
 
   const handleUpdate = () => {
-    const scoreValue = parseInt(newScore, 10);
-    if (!isNaN(scoreValue)) {
-      onUpdate(scoreValue);
+    const scoreValue = parseInt(score, 10);
+    if (!isNaN(scoreValue) && name.trim()) {
+      onUpdate({ name: name.trim(), score: scoreValue });
       onClose();
     }
   };
@@ -40,12 +42,19 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader>
-          <DialogTitle>Edit Score for {player.name}</DialogTitle>
+          <DialogTitle>Edit Player</DialogTitle>
         </DialogHeader>
         <Input
+          placeholder="Player name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="bg-primary/20 border-primary/50 text-foreground"
+        />
+        <Input
           type="number"
-          value={newScore}
-          onChange={(e) => setNewScore(e.target.value)}
+          placeholder="Player score"
+          value={score}
+          onChange={(e) => setScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-primary/20 border-primary/50 text-foreground"
         />

@@ -16,7 +16,7 @@ interface ScoreContextType {
   setTeams: (teams: Team[]) => void;
   players: Player[];
   addPlayer: (name: string) => void;
-  updatePlayerScore: (playerId: number, newScore: number) => void;
+  updatePlayer: (playerId: number, updates: { name: string; score: number }) => void;
   addTeamScore: (teamIndex: number, score: number) => void;
   resetTeamScores: () => void;
   updateTeamScore: (teamIndex: number, scoreIndex: number, newScore: number) => void;
@@ -43,9 +43,9 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     { name: 'Second Team', scores: [] },
   ]));
   const [players, setPlayers] = useState<Player[]>(() => getInitialState('scoreboard_players', [
-    { id: 1, name: 'Player 1', score: 120 },
-    { id: 2, name: 'Player 2', score: 50 },
-    { id: 3, name: 'Player 3', score: 320 },
+    { id: 1, name: 'Player 1', score: 0 },
+    { id: 2, name: 'Player 2', score: 0 },
+    { id: 3, name: 'Player 3', score: 0 },
   ]));
 
   useEffect(() => {
@@ -60,10 +60,10 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setPlayers(prev => [...prev, { id: Date.now(), name, score: 0 }]);
   };
 
-  const updatePlayerScore = (playerId: number, newScore: number) => {
+  const updatePlayer = (playerId: number, updates: { name: string; score: number }) => {
     setPlayers(prev =>
       prev.map(player =>
-        player.id === playerId ? { ...player, score: newScore } : player
+        player.id === playerId ? { ...player, ...updates } : player
       )
     );
   };
@@ -101,7 +101,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, updatePlayerScore, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore }}>
+    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, updatePlayer, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore }}>
       {children}
     </ScoreContext.Provider>
   );
