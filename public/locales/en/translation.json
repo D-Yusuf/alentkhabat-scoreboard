@@ -12,7 +12,8 @@
     "cancel": "Cancel",
     "update": "Update",
     "confirm": "Confirm",
-    "add": "Add"
+    "add": "Add",
+    "close": "Close"
   },
   "teams_page": {
     "first_team": "First Team",

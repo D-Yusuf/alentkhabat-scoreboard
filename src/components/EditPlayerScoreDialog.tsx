@@ -71,11 +71,13 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, curre
           onChange={(e) => setScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-card border-primary/50 text-card-foreground"
-          disabled={currentRound === -1} // Disable input if "All Rounds" is selected
+          // Input is always enabled as per new request
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button variant="outline" onClick={handleUpdate} disabled={currentRound === -1}>{t('common.update')}</Button>
+          <Button variant="outline" onClick={handleUpdate}>
+            {currentRound === -1 ? t('common.close') : t('common.update')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
