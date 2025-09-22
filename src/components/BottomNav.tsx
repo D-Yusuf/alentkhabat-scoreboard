@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 const BottomNav = () => {
   const { t } = useTranslation();
-  const activeLinkClass = "text-primary"; // Use primary color for active link
-  const inactiveLinkClass = "text-muted-foreground"; // Use muted-foreground for inactive link
+  const activeLinkClass = "text-blue-600";
+  const inactiveLinkClass = "text-gray-500";
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border"> {/* Use bg-card and border-border */}
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t">
       <div className="flex justify-around max-w-md mx-auto">
         <NavLink to="/" className={({ isActive }) => `flex flex-col items-center p-3 ${isActive ? activeLinkClass : inactiveLinkClass}`}>
           <Users size={20} />

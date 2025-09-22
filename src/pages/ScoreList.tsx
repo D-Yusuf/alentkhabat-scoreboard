@@ -13,7 +13,7 @@ const ScoreList = () => {
       <div className="flex justify-center items-center">
         <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
       </div>
-      <Card className="bg-card text-card-foreground"> {/* Use bg-card */}
+      <Card className="bg-white text-card-foreground">
         <CardContent className="p-4">
           <ul className="space-y-4">
             {sortedPlayers.map((player, index) => (

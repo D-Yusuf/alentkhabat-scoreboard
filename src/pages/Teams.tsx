@@ -70,7 +70,7 @@ const Teams = () => {
             <Input
               value={team.name}
               onChange={(e) => handleTeamNameChange(index, e.target.value)}
-              className="text-center font-bold bg-card text-card-foreground" // Use bg-card
+              className="text-center font-bold bg-white text-card-foreground"
             />
             <Input
               type="number"
@@ -78,7 +78,7 @@ const Teams = () => {
               value={scoresToAdd[index]}
               onChange={(e) => handleScoreChange(index, e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
-              className="text-center bg-card text-card-foreground" // Use bg-card
+              className="text-center bg-white text-card-foreground"
             />
             <Button onClick={() => handleAddScore(index)} className="w-full">
               {t('teams_page.add_score')}
@@ -87,20 +87,20 @@ const Teams = () => {
         ))}
       </div>
 
-      <Card className="bg-card text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden"> {/* Use bg-card */}
+      <Card className="bg-white text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
         <CardContent className="p-4 flex-grow overflow-y-auto">
           <div className="grid grid-cols-3 text-center font-mono text-lg">
             {scoreRows.map((row, i) => (
               <Fragment key={i}>
                 <div
-                  className="cursor-pointer hover:bg-muted rounded p-1 transition-colors" // Use hover:bg-muted
+                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
                   onClick={() => row.team1 !== undefined && handleScoreClick(0, i, row.team1)}
                 >
                   {row.team1 ?? ""}
                 </div>
                 <div>-</div>
                 <div
-                  className="cursor-pointer hover:bg-muted rounded p-1 transition-colors" // Use hover:bg-muted
+                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
                   onClick={() => row.team2 !== undefined && handleScoreClick(1, i, row.team2)}
                 >
                   {row.team2 ?? ""}
@@ -109,7 +109,7 @@ const Teams = () => {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="p-4 bg-muted font-bold text-xl flex justify-around flex-shrink-0"> {/* Use bg-muted */}
+        <CardFooter className="p-4 bg-gray-100 font-bold text-xl flex justify-around flex-shrink-0">
           <span>{totalScores[0]}</span>
           <span>-</span>
           <span>{totalScores[1]}</span>

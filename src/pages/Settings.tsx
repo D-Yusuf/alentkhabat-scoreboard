@@ -25,7 +25,7 @@ const Settings = () => {
       <div className="flex items-center justify-center">
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
       </div>
-      <Card className="bg-card text-card-foreground"> {/* Use bg-card */}
+      <Card className="bg-white text-card-foreground">
         <CardHeader className="rtl:text-right">
           <CardTitle>{t('language')}</CardTitle>
         </CardHeader>
@@ -47,13 +47,13 @@ const Settings = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-card text-card-foreground"> {/* Use bg-card */}
+      <Card className="bg-white text-card-foreground">
         <CardHeader className="rtl:text-right">
           <CardTitle>{t('theme')}</CardTitle>
         </CardHeader>
         <CardContent>
           <RadioGroup
-            value={theme === 'system' ? 'light' : theme}
+            value={theme === 'system' ? 'light' : theme} // Ensure 'system' doesn't show as selected if it was the default
             onValueChange={setTheme}
             className="space-y-2"
           >
