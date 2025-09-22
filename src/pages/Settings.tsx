@@ -27,7 +27,6 @@ const Settings = () => {
             defaultValue={i18n.language}
             onValueChange={changeLanguage}
             className="space-y-2"
-            dir={i18n.dir(i18n.language)}
           >
             <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="en" id="en" />
@@ -50,7 +49,6 @@ const Settings = () => {
             defaultValue={theme}
             onValueChange={setTheme}
             className="space-y-2"
-            dir={i18n.dir(i18n.language)}
           >
             <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="light" id="light" />
