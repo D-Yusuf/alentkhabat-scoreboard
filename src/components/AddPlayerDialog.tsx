@@ -44,7 +44,7 @@ export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleAdd}>{t('common.add')}</Button>
+          <Button variant="outline" onClick={handleAdd}>{t('common.add')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
