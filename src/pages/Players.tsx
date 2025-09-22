@@ -155,6 +155,7 @@ const Players = () => {
         onClose={() => setEditScoreDialogOpen(false)}
         player={selectedPlayer}
         onUpdate={handleUpdatePlayerScore}
+        currentRound={currentRound}
       />
       <ConfirmDialog
         isOpen={isResetConfirmOpen}

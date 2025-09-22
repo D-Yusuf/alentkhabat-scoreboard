@@ -38,5 +38,8 @@
   "theme": "السمة",
   "light_mode": "فاتح",
   "dark_mode": "داكن",
-  "system_mode": "النظام"
+  "system_mode": "النظام",
+  "score_list_page": {
+    "all_rounds": "جميع الجولات"
+  }
 }

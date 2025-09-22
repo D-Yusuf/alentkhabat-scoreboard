@@ -17,21 +17,34 @@ interface EditPlayerScoreDialogProps {
   onClose: () => void;
   player: Player | null;
   onUpdate: (newScore: number) => void;
+  currentRound: number; // Added currentRound prop
 }
 
-export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerScoreDialogProps) => {
+export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, currentRound }: EditPlayerScoreDialogProps) => {
   const [score, setScore] = useState("");
-  const { currentRound } = useScore();
+  const { getPlayerTotalScore } = useScore(); // Use getPlayerTotalScore
   const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
-      const currentScore = player.scores[currentRound] || 0;
-      setScore(currentScore.toString());
+      if (currentRound === -1) {
+        // If "All Rounds" is selected, display total score
+        setScore(getPlayerTotalScore(player.id).toString());
+      } else {
+        // Display score for the specific round
+        const currentScore = player.scores[currentRound] || 0;
+        setScore(currentScore.toString());
+      }
     }
-  }, [player, currentRound]);
+  }, [player, currentRound, getPlayerTotalScore]);
 
   const handleUpdate = () => {
+    if (currentRound === -1) {
+      // If "All Rounds" is selected, do not save, just close
+      onClose();
+      return;
+    }
+
     const newScore = parseInt(score, 10);
     if (!isNaN(newScore)) {
       onUpdate(newScore);
@@ -41,13 +54,15 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
 
   if (!player) return null;
 
+  const dialogTitle = currentRound === -1
+    ? t('players_page.edit_score_for', { name: player.name }) + ` (${t('score_list_page.all_rounds')})`
+    : t('players_page.edit_score_for', { name: player.name }) + ` - Round ${currentRound + 1}`;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader className="text-center sm:text-center">
-          <DialogTitle>
-            {t('players_page.edit_score_for', { name: player.name })} - Round {currentRound + 1}
-          </DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
         <Input
           type="number"
@@ -56,10 +71,11 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
           onChange={(e) => setScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-card border-primary/50 text-card-foreground"
+          disabled={currentRound === -1} // Disable input if "All Rounds" is selected
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button variant="outline" onClick={handleUpdate}>{t('common.update')}</Button>
+          <Button variant="outline" onClick={handleUpdate} disabled={currentRound === -1}>{t('common.update')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
