@@ -80,7 +80,7 @@ const Teams = () => {
               onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
               className="text-center bg-white text-card-foreground"
             />
-            <Button onClick={() => handleAddScore(index)} className="w-full">
+            <Button onClick={() => handleAddScore(index)} className="w-full bg-primary/10 hover:bg-primary/20 text-primary border-primary/30">
               {t('teams_page.add_score')}
             </Button>
           </div>
