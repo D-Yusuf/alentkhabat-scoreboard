@@ -75,7 +75,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   });
   const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed, -1 for "All Rounds"
   const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
-  const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'manual'));
+  const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
 
   // Initialize currentScore based on currentRound on first load
   useEffect(() => {
