@@ -161,7 +161,7 @@ const ScoreList = () => {
             <SelectItem value="all">{t('score_list_page.all_rounds')}</SelectItem>
             {roundOptions.map((round) => (
               <SelectItem key={round} value={round.toString()}>
-                Round {round + 1}
+                {t('round')} {round + 1}
               </SelectItem>
             ))}
           </SelectContent>

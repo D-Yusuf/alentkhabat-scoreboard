@@ -44,5 +44,6 @@
     "round_management": "إدارة الجولات",
     "automatic_rounds": "تلقائي (عدد اللاعبين)",
     "number_of_rounds": "عدد الجولات"
-  }
+  },
+  "round": "جولة"
 }
