@@ -3,27 +3,51 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "next-themes"; // Import ThemeProvider
-import Index from "./pages/Index";
+import Layout from "./components/Layout";
+import Teams from "./pages/Teams";
+import Players from "./pages/Players";
+import ScoreList from "./pages/ScoreList";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import Settings from "./pages/Settings"; // Import Settings page
+import { ScoreProvider } from "@/context/ScoreContext";
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { ThemeProvider } from "@/components/ThemeProvider"; // Import ThemeProvider
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+    document.documentElement.dir = i18n.dir(i18n.language);
+  }, [i18n, i18n.language]);
+
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Teams />} />
+        <Route path="/players" element={<Players />} />
+        <Route path="/score-list" element={<ScoreList />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}> {/* Add ThemeProvider here */}
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/settings" element={<Settings />} /> {/* Add route for Settings page */}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <ScoreProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </ScoreProvider>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>

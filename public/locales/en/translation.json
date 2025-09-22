@@ -1,0 +1,42 @@
+{
+  "score_list": "Score List",
+  "settings": "Settings",
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic",
+  "teams": "Teams",
+  "players": "Players",
+  "common": {
+    "are_you_sure": "Are you sure?",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "update": "Update",
+    "confirm": "Confirm",
+    "add": "Add"
+  },
+  "teams_page": {
+    "first_team": "First Team",
+    "second_team": "Second Team",
+    "enter_score": "Enter score",
+    "add_score": "Add Score",
+    "delete_all": "Delete All",
+    "delete_all_description": "This will delete all scores for both teams. This action cannot be undone.",
+    "edit_score": "Edit Score",
+    "edit_score_description": "Update or delete the score."
+  },
+  "players_page": {
+    "title": "Players",
+    "reset_scores_description": "This will reset all player scores to 0. This action cannot be undone.",
+    "add_new_player": "Add New Player",
+    "enter_player_name": "Enter player name",
+    "edit_player_name": "Edit Player Name",
+    "player_name": "Player name",
+    "edit_score_for": "Edit Score for {{name}}",
+    "player_score": "Player score",
+    "delete_player_description": "This will delete {{name}} and all their scores. This action cannot be undone."
+  },
+  "theme": "Theme",
+  "light_mode": "Light",
+  "dark_mode": "Dark",
+  "system_mode": "System"
+}
