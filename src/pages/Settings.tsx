@@ -33,7 +33,7 @@ const Settings = () => {
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
         <div className="w-10"></div> {/* Spacer */}
       </div>
-      <Card className="bg-white text-card-foreground">
+      <Card className="bg-card text-card-foreground">
         <CardHeader className="rtl:text-right">
           <CardTitle>{t('language')}</CardTitle>
         </CardHeader>
@@ -55,7 +55,7 @@ const Settings = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-white text-card-foreground">
+      <Card className="bg-card text-card-foreground">
         <CardHeader className="rtl:text-right">
           <CardTitle>{t('theme')}</CardTitle>
         </CardHeader>
