@@ -15,8 +15,8 @@ const Settings = () => {
 
   // Set initial theme if not already set (e.g., on first load)
   useEffect(() => {
-    if (!theme) {
-      setTheme('system');
+    if (!theme || theme === 'system') { // If theme is system, default to light
+      setTheme('light');
     }
   }, [theme, setTheme]);
 
@@ -53,7 +53,7 @@ const Settings = () => {
         </CardHeader>
         <CardContent>
           <RadioGroup
-            value={theme}
+            value={theme === 'system' ? 'light' : theme} // Ensure 'system' doesn't show as selected if it was the default
             onValueChange={setTheme}
             className="space-y-2"
           >
@@ -64,10 +64,6 @@ const Settings = () => {
             <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="dark" id="dark" />
               <Label htmlFor="dark">{t('dark_mode')}</Label>
-            </div>
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="system" id="system" />
-              <Label htmlFor="system">{t('system_mode')}</Label>
             </div>
           </RadioGroup>
         </CardContent>
