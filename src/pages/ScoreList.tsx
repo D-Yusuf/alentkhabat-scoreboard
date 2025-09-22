@@ -157,7 +157,7 @@ const ScoreList = () => {
           <SelectTrigger className="w-[180px] bg-card text-card-foreground" dir={i18n.dir(i18n.language)}>
             <SelectValue placeholder="Select Round" />
           </SelectTrigger>
-          <SelectContent className="bg-card text-card-foreground">
+          <SelectContent className="bg-card text-card-foreground" dir={i18n.dir(i18n.language)}>
             <SelectItem value="all">{t('score_list_page.all_rounds')}</SelectItem>
             {roundOptions.map((round) => (
               <SelectItem key={round} value={round.toString()}>
