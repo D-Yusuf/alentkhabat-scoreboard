@@ -50,11 +50,17 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
   
   const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', []));
-  const [players, setPlayers] = useState<Player[]>(() => getInitialState('scoreboard_players', [
-    { id: 1, name: 'Player 1', scores: [0] },
-    { id: 2, name: 'Player 2', scores: [0] },
-    { id: 3, name: 'Player 3', scores: [0] },
-  ]));
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const storedPlayers = getInitialState('scoreboard_players', null);
+    if (storedPlayers) return storedPlayers;
+    
+    // Default players with proper score initialization
+    return [
+      { id: 1, name: 'Player 1', scores: [0] },
+      { id: 2, name: 'Player 2', scores: [0] },
+      { id: 3, name: 'Player 3', scores: [0] },
+    ];
+  });
   const [currentRound, setCurrentRound] = useState<number>(0); // 0-indexed
 
   useEffect(() => {
@@ -73,7 +79,12 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   }, [teams]);
 
   useEffect(() => {
-    localStorage.setItem('scoreboard_players', JSON.stringify(players));
+    // Ensure all players have scores array before saving
+    const playersWithScores = players.map(player => ({
+      ...player,
+      scores: player.scores || [0] // Ensure scores array exists
+    }));
+    localStorage.setItem('scoreboard_players', JSON.stringify(playersWithScores));
   }, [players]);
 
   useEffect(() => {
@@ -85,7 +96,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       const newPlayer = { 
         id: Date.now(), 
         name, 
-        scores: Array(players[0]?.scores.length || 1).fill(0) 
+        scores: [0] // Always start with score 0
       };
       return [...prev, newPlayer];
     });
@@ -147,7 +158,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setPlayers(prev =>
       prev.map(player => {
         if (player.id === playerId) {
-          const newScores = [...(player.scores || [])];
+          const newScores = [...(player.scores || [0])]; // Ensure we have at least [0]
           // Ensure we have enough rounds
           while (newScores.length <= roundIndex) {
             newScores.push(0);
@@ -162,7 +173,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const getPlayerTotalScore = (playerId: number) => {
     const player = players.find(p => p.id === playerId);
-    return player ? (player.scores || []).reduce((sum, score) => sum + score, 0) : 0;
+    return player ? (player.scores || [0]).reduce((sum, score) => sum + score, 0) : 0;
   };
 
   const getPlayerScoreForRound = (playerId: number, roundIndex: number) => {
