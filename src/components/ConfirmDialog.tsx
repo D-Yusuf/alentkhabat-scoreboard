@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 
 interface ConfirmDialogProps {
@@ -33,8 +34,12 @@ export const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, description }
           <AlertDialogDescription className="text-foreground">{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="sm:justify-center gap-2">
-          <AlertDialogCancel onClick={onClose}>{t('common.cancel')}</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>{t('common.confirm')}</AlertDialogAction>
+          <AlertDialogCancel asChild>
+            <Button variant="outline">{t('common.cancel')}</Button>
+          </AlertDialogCancel>
+          <AlertDialogAction asChild>
+            <Button variant="outline" onClick={handleConfirm}>{t('common.confirm')}</Button>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
