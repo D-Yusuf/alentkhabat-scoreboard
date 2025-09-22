@@ -33,5 +33,9 @@
     "player_name": "اسم اللاعب",
     "edit_score_for": "تعديل نتيجة {{name}}",
     "player_score": "نتيجة اللاعب"
-  }
+  },
+  "theme": "السمة",
+  "light_mode": "فاتح",
+  "dark_mode": "داكن",
+  "system_mode": "النظام"
 }

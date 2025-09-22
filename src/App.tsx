@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import { ScoreProvider } from "@/context/ScoreContext";
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import { ThemeProvider } from "@/components/ThemeProvider"; // Import ThemeProvider
 
 const queryClient = new QueryClient();
 
@@ -38,15 +39,17 @@ const AppContent = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <ScoreProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </ScoreProvider>
-    </TooltipProvider>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <TooltipProvider>
+        <ScoreProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </ScoreProvider>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

@@ -33,5 +33,9 @@
     "player_name": "Player name",
     "edit_score_for": "Edit Score for {{name}}",
     "player_score": "Player score"
-  }
+  },
+  "theme": "Theme",
+  "light_mode": "Light",
+  "dark_mode": "Dark",
+  "system_mode": "System"
 }
