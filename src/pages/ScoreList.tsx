@@ -126,6 +126,7 @@ const ScoreList = () => {
               id="automatic-rounds"
               checked={roundCountMode === 'automatic'}
               onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
+              className="data-[state=unchecked]:bg-gray-400 border border-gray-300"
             />
           </div>
           {roundCountMode === 'manual' && (
