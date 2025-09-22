@@ -109,7 +109,7 @@ const ScoreList = () => {
   const roundOptions = Array.from({ length: numRounds }, (_, i) => i);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3"> {/* Changed from space-y-4 to space-y-3 */}
       <div className="flex justify-center items-center">
         <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
       </div>
