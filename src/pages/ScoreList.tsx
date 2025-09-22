@@ -23,25 +23,30 @@ const ScoreList = () => {
 
   // Get players with their appropriate scores
   const getDisplayScores = () => {
-    if (currentRound === -1) {
-      // Show total scores for all rounds
-      return players.map(player => ({
-        ...player,
-        displayScore: player.scores.reduce((sum, score) => sum + score, 0)
-      }));
-    } else {
-      // Show scores for specific round
-      return players.map(player => ({
-        ...player,
-        displayScore: player.scores[currentRound] || 0
-      }));
-    }
+    return players.map(player => {
+      // Ensure player.scores exists and is an array
+      const scores = player.scores || [];
+      
+      if (currentRound === -1) {
+        // Show total scores for all rounds
+        return {
+          ...player,
+          displayScore: scores.reduce((sum, score) => sum + score, 0)
+        };
+      } else {
+        // Show scores for specific round
+        return {
+          ...player,
+          displayScore: scores[currentRound] !== undefined ? scores[currentRound] : 0
+        };
+      }
+    });
   };
 
   const displayPlayers = getDisplayScores().sort((a, b) => b.displayScore - a.displayScore);
 
   // Generate round options based on maximum rounds played
-  const maxRounds = Math.max(...players.map(p => p.scores.length), 1);
+  const maxRounds = Math.max(...players.map(p => (p.scores || []).length), 1);
   const roundOptions = Array.from({ length: maxRounds }, (_, i) => i);
 
   return (
