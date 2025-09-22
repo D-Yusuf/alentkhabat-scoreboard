@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils'; // Import cn utility
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -12,8 +11,6 @@ const Settings = () => {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
-
-  const isRtl = i18n.dir(i18n.language) === 'rtl';
 
   return (
     <div className="space-y-4">
@@ -32,13 +29,13 @@ const Settings = () => {
             className="space-y-2"
             dir={i18n.dir(i18n.language)}
           >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="en" id="en" className={cn(isRtl && 'order-2')} />
-              <Label htmlFor="en" className={cn(isRtl && 'order-1')}>{t('english')}</Label>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="en" id="en" />
+              <Label htmlFor="en">{t('english')}</Label>
             </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="ar" id="ar" className={cn(isRtl && 'order-2')} />
-              <Label htmlFor="ar" className={cn(isRtl && 'order-1')}>{t('arabic')}</Label>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="ar" id="ar" />
+              <Label htmlFor="ar">{t('arabic')}</Label>
             </div>
           </RadioGroup>
         </CardContent>
@@ -55,17 +52,17 @@ const Settings = () => {
             className="space-y-2"
             dir={i18n.dir(i18n.language)}
           >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="light" id="light" className={cn(isRtl && 'order-2')} />
-              <Label htmlFor="light" className={cn(isRtl && 'order-1')}>{t('light_mode')}</Label>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="light" id="light" />
+              <Label htmlFor="light">{t('light_mode')}</Label>
             </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="dark" id="dark" className={cn(isRtl && 'order-2')} />
-              <Label htmlFor="dark" className={cn(isRtl && 'order-1')}>{t('dark_mode')}</Label>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="dark" id="dark" />
+              <Label htmlFor="dark">{t('dark_mode')}</Label>
             </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="system" id="system" className={cn(isRtl && 'order-2')} />
-              <Label htmlFor="system" className={cn(isRtl && 'order-1')}>{t('system_mode')}</Label>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="system" id="system" />
+              <Label htmlFor="system">{t('system_mode')}</Label>
             </div>
           </RadioGroup>
         </CardContent>
