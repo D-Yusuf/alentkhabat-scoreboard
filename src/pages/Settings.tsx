@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
-import { useEffect } from 'react';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -12,13 +11,6 @@ const Settings = () => {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
-
-  // Set initial theme if not already set (e.g., on first load)
-  useEffect(() => {
-    if (!theme || theme === 'system') { // If theme is system, default to light
-      setTheme('light');
-    }
-  }, [theme, setTheme]);
 
   return (
     <div className="space-y-4">
@@ -53,7 +45,7 @@ const Settings = () => {
         </CardHeader>
         <CardContent>
           <RadioGroup
-            value={theme === 'system' ? 'light' : theme} // Ensure 'system' doesn't show as selected if it was the default
+            value={theme}
             onValueChange={setTheme}
             className="space-y-2"
           >
@@ -64,6 +56,10 @@ const Settings = () => {
             <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="dark" id="dark" />
               <Label htmlFor="dark">{t('dark_mode')}</Label>
+            </div>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="system" id="system" />
+              <Label htmlFor="system">{t('system_mode')}</Label>
             </div>
           </RadioGroup>
         </CardContent>
