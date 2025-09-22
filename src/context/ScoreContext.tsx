@@ -196,9 +196,20 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const updatePlayerCurrentScore = (playerId: number, newScore: number) => {
     setPlayers(prev =>
-      prev.map(player =>
-        player.id === playerId ? { ...player, currentScore: newScore } : player
-      )
+      prev.map(player => {
+        if (player.id === playerId) {
+          const newRoundScores = [...(player.roundScores || [])];
+          // Only update roundScores if a specific round is selected and it's within bounds
+          if (currentRound !== -1 && currentRound < numRounds) {
+            while (newRoundScores.length <= currentRound) {
+              newRoundScores.push(0);
+            }
+            newRoundScores[currentRound] = newScore;
+          }
+          return { ...player, currentScore: newScore, roundScores: newRoundScores };
+        }
+        return player;
+      })
     );
   };
 
