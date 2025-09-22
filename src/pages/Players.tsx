@@ -96,13 +96,13 @@ const Players = () => {
                 </Button>
               )}
               <CardHeader
-                className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="p-4 cursor-pointer hover:bg-accent transition-colors"
                 onClick={() => handleEditNameClick(player)}
               >
                 <CardTitle className="text-lg">{player.name}</CardTitle>
               </CardHeader>
               <CardContent
-                className="p-4 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors flex-grow"
+                className="p-4 flex items-center justify-center cursor-pointer hover:bg-accent transition-colors flex-grow"
                 onClick={() => handleScoreClick(player)}
               >
                 <p className="text-2xl font-bold">{player.score}</p>
@@ -122,7 +122,7 @@ const Players = () => {
                 </span>
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-2xl font-bold cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors"
+                    className="text-2xl font-bold cursor-pointer hover:bg-accent rounded p-2 transition-colors"
                     onClick={() => handleScoreClick(player)}
                   >
                     {player.score}

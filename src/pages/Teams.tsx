@@ -93,14 +93,14 @@ const Teams = () => {
             {scoreRows.map((row, i) => (
               <Fragment key={i}>
                 <div
-                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                  className="cursor-pointer hover:bg-accent rounded p-1 transition-colors"
                   onClick={() => row.team1 !== undefined && handleScoreClick(0, i, row.team1)}
                 >
                   {row.team1 ?? ""}
                 </div>
                 <div>-</div>
                 <div
-                  className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                  className="cursor-pointer hover:bg-accent rounded p-1 transition-colors"
                   onClick={() => row.team2 !== undefined && handleScoreClick(1, i, row.team2)}
                 >
                   {row.team2 ?? ""}
@@ -109,7 +109,7 @@ const Teams = () => {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="p-4 bg-gray-100 font-bold text-xl flex justify-around flex-shrink-0">
+        <CardFooter className="p-4 bg-muted font-bold text-xl flex justify-around flex-shrink-0">
           <span>{totalScores[0]}</span>
           <span>-</span>
           <span>{totalScores[1]}</span>
