@@ -56,13 +56,6 @@ const Players = () => {
     }
   };
 
-  // Get current round score safely
-  const getCurrentRoundScore = (player: Player) => {
-    return player.scores && player.scores[currentRound] !== undefined 
-      ? player.scores[currentRound] 
-      : 0;
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -113,9 +106,6 @@ const Players = () => {
                 onClick={() => handleScoreClick(player)}
               >
                 <p className="text-2xl font-bold">{getPlayerTotalScore(player.id)}</p>
-                <span className="text-sm text-muted-foreground ml-2">
-                  (Round {currentRound + 1}: {getCurrentRoundScore(player)})
-                </span>
               </CardContent>
             </Card>
           ) : (
@@ -136,9 +126,6 @@ const Players = () => {
                     onClick={() => handleScoreClick(player)}
                   >
                     {getPlayerTotalScore(player.id)}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    (R{currentRound + 1}: {getCurrentRoundScore(player)})
                   </span>
                   {isEditMode && (
                     <Button

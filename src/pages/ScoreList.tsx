@@ -45,8 +45,8 @@ const ScoreList = () => {
 
   const displayPlayers = getDisplayScores().sort((a, b) => b.displayScore - a.displayScore);
 
-  // Generate round options based on maximum rounds played
-  const maxRounds = Math.max(...players.map(p => (p.scores || []).length), 1);
+  // Generate round options based on the number of players
+  const maxRounds = players.length;
   const roundOptions = Array.from({ length: maxRounds }, (_, i) => i);
 
   return (
