@@ -2,11 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-// Removed useTheme import
+import { useTheme } from 'next-themes';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
-  // Removed theme and setTheme from useTheme()
+  const { theme, setTheme } = useTheme();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -17,6 +17,7 @@ const Settings = () => {
       <div className="flex items-center justify-center">
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
       </div>
+      
       <Card className="bg-card text-card-foreground">
         <CardHeader className="rtl:text-right">
           <CardTitle>{t('language')}</CardTitle>
@@ -39,7 +40,31 @@ const Settings = () => {
         </CardContent>
       </Card>
 
-      {/* Removed Theme selection Card */}
+      <Card className="bg-card text-card-foreground">
+        <CardHeader className="rtl:text-right">
+          <CardTitle>{t('theme')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup
+            defaultValue={theme}
+            onValueChange={setTheme}
+            className="space-y-2"
+          >
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="light" id="light" />
+              <Label htmlFor="light">{t('light_mode')}</Label>
+            </div>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="dark" id="dark" />
+              <Label htmlFor="dark">{t('dark_mode')}</Label>
+            </div>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="system" id="system" />
+              <Label htmlFor="system">{t('system_mode')}</Label>
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
     </div>
   );
 };
