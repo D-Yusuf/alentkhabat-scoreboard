@@ -83,26 +83,26 @@ const Players = () => {
           viewMode === 'grid' ? (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground text-center flex flex-col relative"
+              className="bg-card text-card-foreground text-center flex flex-col relative"
             >
               {isEditMode && ( // Conditionally render delete button
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                  className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
                   onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
               <CardHeader
-                className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="p-4 cursor-pointer hover:bg-muted/50 transition-colors"
                 onClick={() => handleEditNameClick(player)}
               >
                 <CardTitle className="text-lg">{player.name}</CardTitle>
               </CardHeader>
               <CardContent
-                className="p-4 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors flex-grow"
+                className="p-4 flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors flex-grow"
                 onClick={() => handleScoreClick(player)}
               >
                 <p className="text-2xl font-bold">{player.score}</p>
@@ -111,7 +111,7 @@ const Players = () => {
           ) : (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground relative"
+              className="bg-card text-card-foreground relative"
             >
               <CardContent className="p-4 flex justify-between items-center">
                 <span
@@ -122,7 +122,7 @@ const Players = () => {
                 </span>
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-2xl font-bold cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors"
+                    className="text-2xl font-bold cursor-pointer hover:bg-muted/50 rounded p-2 transition-colors"
                     onClick={() => handleScoreClick(player)}
                   >
                     {player.score}
@@ -131,7 +131,7 @@ const Players = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-red-500 hover:text-red-700"
+                      className="text-destructive hover:text-destructive/80"
                       onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
                     >
                       <Trash2 className="h-5 w-5" />
