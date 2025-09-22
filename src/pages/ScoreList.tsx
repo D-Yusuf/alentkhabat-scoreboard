@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useRef, useState } from "react";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { RtlSwitch } from "@/components/RtlSwitch"; // Import the new RtlSwitch
 
 const ScoreList = () => {
   const {
@@ -124,7 +124,7 @@ const ScoreList = () => {
             <Label htmlFor="automatic-rounds" className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis">
               {t('score_list_page.automatic_rounds')}
             </Label>
-            <Switch
+            <RtlSwitch // Using the new RtlSwitch
               id="automatic-rounds"
               checked={roundCountMode === 'automatic'}
               onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
