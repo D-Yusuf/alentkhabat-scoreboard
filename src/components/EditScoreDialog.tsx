@@ -3,7 +3,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -56,11 +55,11 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
           className="bg-card border-primary/50 text-foreground"
         />
-        <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2">
-          <Button variant="destructive" onClick={handleDelete}>{t('common.delete')}</Button>
+        <div className="flex flex-col sm:flex-row sm:justify-center gap-2">
+          <Button variant="outline" onClick={handleDelete}>{t('common.delete')}</Button>
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleUpdate}>{t('common.update')}</Button>
-        </DialogFooter>
+          <Button variant="outline" onClick={handleUpdate}>{t('common.update')}</Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
