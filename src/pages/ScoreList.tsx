@@ -109,7 +109,7 @@ const ScoreList = () => {
   const roundOptions = Array.from({ length: numRounds }, (_, i) => i);
 
   return (
-    <div className="space-y-3"> {/* Changed from space-y-4 to space-y-3 */}
+    <div className="space-y-3">
       <div className="flex justify-center items-center">
         <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
       </div>
@@ -121,12 +121,14 @@ const ScoreList = () => {
         </CardHeader>
         <CardContent className="p-3 space-y-3">
           <div className="flex items-center justify-between">
-            <Label htmlFor="automatic-rounds">{t('score_list_page.automatic_rounds')}</Label>
+            <Label htmlFor="automatic-rounds" className="flex-grow text-right whitespace-nowrap overflow-hidden text-ellipsis">
+              {t('score_list_page.automatic_rounds')}
+            </Label>
             <Switch
               id="automatic-rounds"
               checked={roundCountMode === 'automatic'}
               onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
-              className="data-[state=unchecked]:bg-gray-400 border border-gray-300 data-[state=checked]:bg-white"
+              className="flex-shrink-0 data-[state=unchecked]:bg-gray-400 border border-gray-300 data-[state=checked]:bg-white"
             />
           </div>
           {roundCountMode === 'manual' && (
