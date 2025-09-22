@@ -120,7 +120,7 @@ const ScoreList = () => {
           <CardTitle className="text-xl">{t('score_list_page.round_management')}</CardTitle>
         </CardHeader>
         <CardContent className="p-3 space-y-3">
-          <div className="flex items-center gap-2 rtl:flex-row-reverse">
+          <div className="flex items-center gap-2 rtl:flex-row-reverse" dir={i18n.dir(i18n.language)}>
             <Label htmlFor="automatic-rounds" className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis">
               {t('score_list_page.automatic_rounds')}
             </Label>
