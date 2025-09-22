@@ -14,7 +14,7 @@ const LoadingPage = () => {
   if (!show) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div className="flex flex-col items-center">
         <img 
           src="/Full-Logo.png" 
