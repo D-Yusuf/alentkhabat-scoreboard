@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const LoadingPage = () => {
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShow(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!show) return null;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center">
