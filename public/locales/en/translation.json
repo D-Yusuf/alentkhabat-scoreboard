@@ -40,6 +40,9 @@
   "dark_mode": "Dark",
   "system_mode": "System",
   "score_list_page": {
-    "all_rounds": "All Rounds"
+    "all_rounds": "All Rounds",
+    "round_management": "Round Management",
+    "automatic_rounds": "Automatic (Players count)",
+    "number_of_rounds": "Number of Rounds"
   }
 }

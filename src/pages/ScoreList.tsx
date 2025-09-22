@@ -1,5 +1,5 @@
 import { useScore } from "@/context/ScoreContext";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import {
   Select,
@@ -8,7 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const ScoreList = () => {
   const {
@@ -19,30 +22,47 @@ const ScoreList = () => {
     getPlayerRoundScore,
     saveCurrentScoresToRound,
     loadRoundScoresToCurrent,
+    numRounds,
+    setNumRounds,
+    roundCountMode,
+    setRoundCountMode,
   } = useScore();
   const { t } = useTranslation();
 
   // Ref to store the previous currentRound to know when it changes
   const prevCurrentRoundRef = useRef<number>(currentRound);
+  const prevNumRoundsRef = useRef<number>(numRounds);
+
+  // State for manual round input
+  const [manualRoundsInput, setManualRoundsInput] = useState(numRounds.toString());
+
+  // Update manual input field when numRounds changes from context (e.g., automatic mode)
+  useEffect(() => {
+    if (roundCountMode === 'manual') {
+      setManualRoundsInput(numRounds.toString());
+    }
+  }, [numRounds, roundCountMode]);
 
   useEffect(() => {
     const prevRound = prevCurrentRoundRef.current;
+    const currentNumRounds = numRounds; // Use the current numRounds from context
 
-    // If we are switching from a specific round (not -1)
-    if (prevRound !== -1 && prevRound !== currentRound) {
+    // If we are switching from a specific round (not -1) AND the round is valid
+    if (prevRound !== -1 && prevRound < prevNumRoundsRef.current && prevRound !== currentRound) {
       // Save the current scores (from Players page) to the round we are *leaving*.
       saveCurrentScoresToRound(prevRound);
     }
 
-    // If we are switching to a specific round (not -1)
-    if (currentRound !== -1 && prevRound !== currentRound) {
+    // If we are switching to a specific round (not -1) AND the round is valid
+    if (currentRound !== -1 && currentRound < currentNumRounds && prevRound !== currentRound) {
       // Load the scores for the new currentRound into currentScore
       loadRoundScoresToCurrent(currentRound);
     }
 
-    // Update the ref for the next render
+    // Update the refs for the next render
     prevCurrentRoundRef.current = currentRound;
-  }, [currentRound, saveCurrentScoresToRound, loadRoundScoresToCurrent]);
+    prevNumRoundsRef.current = currentNumRounds;
+  }, [currentRound, numRounds, saveCurrentScoresToRound, loadRoundScoresToCurrent]);
 
 
   const handleRoundChange = (round: string) => {
@@ -50,6 +70,17 @@ const ScoreList = () => {
       setCurrentRound(-1); // -1 indicates "all rounds"
     } else {
       setCurrentRound(parseInt(round, 10));
+    }
+  };
+
+  const handleManualRoundsInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setManualRoundsInput(value);
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue) && parsedValue >= 0) {
+      setNumRounds(parsedValue);
+    } else if (value === '') {
+      setNumRounds(0); // Allow clearing the input
     }
   };
 
@@ -74,15 +105,44 @@ const ScoreList = () => {
 
   const displayPlayers = getDisplayPlayers();
 
-  // Generate round options based on the maximum number of rounds any player has
-  const maxRounds = players.reduce((max, player) => Math.max(max, player.roundScores.length), 0);
-  const roundOptions = Array.from({ length: maxRounds + 1 }, (_, i) => i); // +1 to allow for a new round
+  // Generate round options based on the current numRounds from context
+  const roundOptions = Array.from({ length: numRounds }, (_, i) => i);
 
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
         <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
       </div>
+
+      {/* Round Management Card */}
+      <Card className="bg-card text-card-foreground">
+        <CardHeader className="rtl:text-right">
+          <CardTitle>{t('score_list_page.round_management')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="automatic-rounds">{t('score_list_page.automatic_rounds')}</Label>
+            <Switch
+              id="automatic-rounds"
+              checked={roundCountMode === 'automatic'}
+              onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
+            />
+          </div>
+          {roundCountMode === 'manual' && (
+            <div className="flex items-center gap-2">
+              <Label htmlFor="manual-rounds" className="whitespace-nowrap">{t('score_list_page.number_of_rounds')}</Label>
+              <Input
+                id="manual-rounds"
+                type="number"
+                min="0"
+                value={manualRoundsInput}
+                onChange={handleManualRoundsInputChange}
+                className="w-full bg-background text-foreground"
+              />
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Round Selection */}
       <div className="flex justify-center">

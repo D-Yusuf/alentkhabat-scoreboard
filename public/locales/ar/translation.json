@@ -40,6 +40,9 @@
   "dark_mode": "داكن",
   "system_mode": "النظام",
   "score_list_page": {
-    "all_rounds": "جميع الجولات"
+    "all_rounds": "جميع الجولات",
+    "round_management": "إدارة الجولات",
+    "automatic_rounds": "تلقائي (عدد اللاعبين)",
+    "number_of_rounds": "عدد الجولات"
   }
 }

@@ -33,6 +33,10 @@ interface ScoreContextType {
   loadRoundScoresToCurrent: (roundIndex: number) => void; // Loads all players' roundScores[roundIndex] into their currentScore
   currentRound: number;
   setCurrentRound: (round: number) => void;
+  numRounds: number; // New: Total number of rounds available
+  setNumRounds: (count: number) => void; // New: Function to set total rounds
+  roundCountMode: 'manual' | 'automatic'; // New: Mode for round count
+  setRoundCountMode: (mode: 'manual' | 'automatic') => void; // New: Function to set round count mode
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -56,11 +60,10 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [players, setPlayers] = useState<Player[]>(() => {
     const storedPlayers = getInitialState('scoreboard_players', null);
     if (storedPlayers) {
-      // Ensure roundScores is always an array when loading from storage
       return storedPlayers.map((player: Player) => ({
         ...player,
         roundScores: player.roundScores || [],
-        currentScore: player.currentScore !== undefined ? player.currentScore : 0 // Ensure currentScore is also initialized
+        currentScore: player.currentScore !== undefined ? player.currentScore : 0
       }));
     }
 
@@ -71,13 +74,14 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     ];
   });
   const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed, -1 for "All Rounds"
+  const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
+  const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'manual'));
 
   // Initialize currentScore based on currentRound on first load
   useEffect(() => {
     if (currentRound !== -1) {
       setPlayers(prevPlayers =>
         prevPlayers.map(player => {
-          // Ensure player.roundScores is an array before accessing it
           const safeRoundScores = player.roundScores || [];
           const scoreToLoad = safeRoundScores[currentRound] !== undefined ? safeRoundScores[currentRound] : 0;
           return { ...player, currentScore: scoreToLoad };
@@ -109,6 +113,61 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('scoreboard_current_round', JSON.stringify(currentRound));
   }, [currentRound]);
 
+  useEffect(() => {
+    localStorage.setItem('scoreboard_num_rounds', JSON.stringify(numRounds));
+  }, [numRounds]);
+
+  useEffect(() => {
+    localStorage.setItem('scoreboard_round_count_mode', JSON.stringify(roundCountMode));
+  }, [roundCountMode]);
+
+  // Function to set numRounds and adjust player roundScores accordingly
+  const setNumRounds = (count: number) => {
+    const newCount = Math.max(0, count); // Ensure non-negative
+    setNumRoundsState(newCount);
+    setPlayers(prevPlayers =>
+      prevPlayers.map(player => {
+        const newRoundScores = [...(player.roundScores || [])];
+        if (newRoundScores.length < newCount) {
+          // Pad with zeros if new count is larger
+          while (newRoundScores.length < newCount) {
+            newRoundScores.push(0);
+          }
+        } else if (newRoundScores.length > newCount) {
+          // Truncate if new count is smaller
+          newRoundScores.splice(newCount);
+        }
+        return { ...player, roundScores: newRoundScores };
+      })
+    );
+    // If currentRound is now out of bounds, reset it
+    if (currentRound !== -1 && currentRound >= newCount) {
+      setCurrentRound(0); // Or -1 for "All Rounds"
+    }
+  };
+
+  const setRoundCountMode = (mode: 'manual' | 'automatic') => {
+    setRoundCountModeState(mode);
+    if (mode === 'automatic') {
+      setNumRounds(players.length);
+    } else {
+      // When switching to manual, keep the current numRounds or set a default if it was 0
+      if (numRounds === 0 && players.length > 0) {
+        setNumRounds(1); // Default to at least 1 round if players exist
+      } else if (numRounds === 0) {
+        setNumRounds(1); // Default to 1 round if no players
+      }
+    }
+  };
+
+  // Update numRounds automatically if mode is 'automatic' and players change
+  useEffect(() => {
+    if (roundCountMode === 'automatic') {
+      setNumRounds(players.length);
+    }
+  }, [players.length, roundCountMode]);
+
+
   // --- Player-specific score management ---
 
   const addPlayer = (name: string) => {
@@ -117,7 +176,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
         id: Date.now(),
         name,
         currentScore: 0,
-        roundScores: []
+        roundScores: Array(numRounds).fill(0) // Initialize with current numRounds
       };
       return [...prev, newPlayer];
     });
@@ -150,17 +209,21 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const getPlayerRoundScore = (playerId: number, roundIndex: number) => {
     const player = players.find(p => p.id === playerId);
-    return player && player.roundScores && player.roundScores[roundIndex] !== undefined ? player.roundScores[roundIndex] : 0;
+    // Ensure roundIndex is within bounds of numRounds
+    if (player && player.roundScores && roundIndex >= 0 && roundIndex < numRounds) {
+      return player.roundScores[roundIndex] !== undefined ? player.roundScores[roundIndex] : 0;
+    }
+    return 0;
   };
 
   const saveCurrentScoresToRound = (roundIndex: number) => {
-    if (roundIndex === -1) return; // Do not save if "All Rounds" is selected
+    if (roundIndex === -1 || roundIndex >= numRounds) return; // Do not save if "All Rounds" or out of bounds
 
     setPlayers(prevPlayers =>
       prevPlayers.map(player => {
         const newRoundScores = [...(player.roundScores || [])];
-        // Ensure the roundScores array is long enough
-        while (newRoundScores.length <= roundIndex) {
+        // Ensure the roundScores array is long enough and respects numRounds
+        while (newRoundScores.length < numRounds) {
           newRoundScores.push(0);
         }
         newRoundScores[roundIndex] = player.currentScore; // Save currentScore to the specific round
@@ -170,7 +233,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const loadRoundScoresToCurrent = (roundIndex: number) => {
-    if (roundIndex === -1) return; // Do not load if "All Rounds" is selected
+    if (roundIndex === -1 || roundIndex >= numRounds) return; // Do not load if "All Rounds" or out of bounds
 
     setPlayers(prevPlayers =>
       prevPlayers.map(player => {
@@ -185,7 +248,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setPlayers(prev => prev.map(player => ({
       ...player,
       currentScore: 0,
-      roundScores: []
+      roundScores: Array(numRounds).fill(0) // Reset to current numRounds
     })));
   };
 
@@ -242,6 +305,10 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       loadRoundScoresToCurrent,
       currentRound,
       setCurrentRound,
+      numRounds,
+      setNumRounds,
+      roundCountMode,
+      setRoundCountMode,
     }}>
       {children}
     </ScoreContext.Provider>
