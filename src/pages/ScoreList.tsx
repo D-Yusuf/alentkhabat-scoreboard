@@ -27,7 +27,7 @@ const ScoreList = () => {
     roundCountMode,
     setRoundCountMode,
   } = useScore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Ref to store the previous currentRound to know when it changes
   const prevCurrentRoundRef = useRef<number>(currentRound);
@@ -120,8 +120,8 @@ const ScoreList = () => {
           <CardTitle className="text-xl">{t('score_list_page.round_management')}</CardTitle>
         </CardHeader>
         <CardContent className="p-3 space-y-3">
-          <div className="flex items-center gap-2 rtl:flex-row-reverse"> {/* Adjusted classes here */}
-            <Label htmlFor="automatic-rounds" className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis"> {/* Removed text-right */}
+          <div className="flex items-center gap-2 rtl:flex-row-reverse">
+            <Label htmlFor="automatic-rounds" className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis">
               {t('score_list_page.automatic_rounds')}
             </Label>
             <Switch
@@ -129,6 +129,7 @@ const ScoreList = () => {
               checked={roundCountMode === 'automatic'}
               onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
               className="flex-shrink-0 data-[state=unchecked]:bg-gray-400 border border-gray-300 data-[state=checked]:bg-white"
+              dir={i18n.dir(i18n.language)}
             />
           </div>
           {roundCountMode === 'manual' && (
