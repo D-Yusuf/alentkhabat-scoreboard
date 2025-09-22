@@ -50,7 +50,7 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
           value={score}
           onChange={(e) => setScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
-          className="bg-primary/20 border-primary/50 text-foreground"
+          className="bg-card border-primary/50 text-foreground"
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>

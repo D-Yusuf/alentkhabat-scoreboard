@@ -40,7 +40,7 @@ export const AddPlayerDialog = ({ isOpen, onClose }: AddPlayerDialogProps) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
-          className="bg-primary/20 border-primary/50 text-foreground placeholder:text-foreground/70"
+          className="bg-card border-primary/50 text-foreground placeholder:text-foreground/70"
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>

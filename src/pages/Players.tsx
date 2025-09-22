@@ -83,7 +83,7 @@ const Players = () => {
           viewMode === 'grid' ? (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground text-center flex flex-col relative"
+              className="bg-card text-card-foreground text-center flex flex-col relative"
             >
               {isEditMode && ( // Conditionally render delete button
                 <Button
@@ -111,7 +111,7 @@ const Players = () => {
           ) : (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground relative"
+              className="bg-card text-card-foreground relative"
             >
               <CardContent className="p-4 flex justify-between items-center">
                 <span

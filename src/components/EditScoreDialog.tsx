@@ -54,7 +54,7 @@ export const EditScoreDialog = ({ isOpen, onClose, score, onUpdate, onDelete }: 
           value={newScore}
           onChange={(e) => setNewScore(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
-          className="bg-primary/20 border-primary/50 text-foreground"
+          className="bg-card border-primary/50 text-foreground"
         />
         <DialogFooter className="flex-col sm:flex-row sm:justify-center gap-2">
           <Button variant="destructive" onClick={handleDelete}>{t('common.delete')}</Button>
