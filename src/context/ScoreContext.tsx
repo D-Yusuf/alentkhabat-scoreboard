@@ -55,7 +55,14 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', []));
   const [players, setPlayers] = useState<Player[]>(() => {
     const storedPlayers = getInitialState('scoreboard_players', null);
-    if (storedPlayers) return storedPlayers;
+    if (storedPlayers) {
+      // Ensure roundScores is always an array when loading from storage
+      return storedPlayers.map((player: Player) => ({
+        ...player,
+        roundScores: player.roundScores || [],
+        currentScore: player.currentScore !== undefined ? player.currentScore : 0 // Ensure currentScore is also initialized
+      }));
+    }
 
     return [
       { id: 1, name: 'Player 1', currentScore: 0, roundScores: [] },
@@ -70,7 +77,9 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     if (currentRound !== -1) {
       setPlayers(prevPlayers =>
         prevPlayers.map(player => {
-          const scoreToLoad = player.roundScores[currentRound] !== undefined ? player.roundScores[currentRound] : 0;
+          // Ensure player.roundScores is an array before accessing it
+          const safeRoundScores = player.roundScores || [];
+          const scoreToLoad = safeRoundScores[currentRound] !== undefined ? safeRoundScores[currentRound] : 0;
           return { ...player, currentScore: scoreToLoad };
         })
       );
@@ -165,7 +174,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
     setPlayers(prevPlayers =>
       prevPlayers.map(player => {
-        const scoreToLoad = player.roundScores[roundIndex] !== undefined ? player.roundScores[roundIndex] : 0;
+        const safeRoundScores = player.roundScores || []; // Ensure it's an array
+        const scoreToLoad = safeRoundScores[roundIndex] !== undefined ? safeRoundScores[roundIndex] : 0;
         return { ...player, currentScore: scoreToLoad };
       })
     );
