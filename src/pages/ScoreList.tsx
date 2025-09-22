@@ -116,10 +116,10 @@ const ScoreList = () => {
 
       {/* Round Management Card */}
       <Card className="bg-card text-card-foreground">
-        <CardHeader className="rtl:text-right">
-          <CardTitle>{t('score_list_page.round_management')}</CardTitle>
+        <CardHeader className="rtl:text-right p-3">
+          <CardTitle className="text-xl">{t('score_list_page.round_management')}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="p-3 space-y-3">
           <div className="flex items-center justify-between">
             <Label htmlFor="automatic-rounds">{t('score_list_page.automatic_rounds')}</Label>
             <Switch
