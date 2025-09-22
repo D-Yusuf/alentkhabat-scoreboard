@@ -120,8 +120,8 @@ const ScoreList = () => {
           <CardTitle className="text-xl">{t('score_list_page.round_management')}</CardTitle>
         </CardHeader>
         <CardContent className="p-3 space-y-3">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="automatic-rounds" className="flex-grow text-right whitespace-nowrap overflow-hidden text-ellipsis">
+          <div className="flex items-center gap-2 rtl:flex-row-reverse"> {/* Adjusted classes here */}
+            <Label htmlFor="automatic-rounds" className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis"> {/* Removed text-right */}
               {t('score_list_page.automatic_rounds')}
             </Label>
             <Switch
