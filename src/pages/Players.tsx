@@ -65,7 +65,7 @@ const Players = () => {
           viewMode === 'grid' ? (
             <Card
               key={player.id}
-              className="bg-card text-card-foreground text-center flex flex-col"
+              className="bg-white text-card-foreground text-center flex flex-col"
             >
               <CardHeader
                 className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
@@ -83,7 +83,7 @@ const Players = () => {
           ) : (
             <Card
               key={player.id}
-              className="bg-card text-card-foreground"
+              className="bg-white text-card-foreground"
             >
               <CardContent className="p-4 flex justify-between items-center">
                 <span
