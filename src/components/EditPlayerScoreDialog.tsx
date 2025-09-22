@@ -54,7 +54,7 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
         />
         <DialogFooter className="justify-center gap-2">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleUpdate}>{t('common.update')}</Button>
+          <Button variant="outline" onClick={handleUpdate}>{t('common.update')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
