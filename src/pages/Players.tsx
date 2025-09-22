@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil } from "lucide-react"; // Import Pencil icon
+import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
@@ -10,7 +10,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 const Players = () => {
-  const { players, updatePlayer, deletePlayer, resetPlayerScores } = useScore();
+  const { players, updatePlayer, deletePlayer, resetPlayerScores, updatePlayerScoreForRound, getPlayerTotalScore, currentRound } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
   const [editScoreDialogOpen, setEditScoreDialogOpen] = useState(false);
@@ -19,7 +19,7 @@ const Players = () => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [isEditMode, setIsEditMode] = useState(false); // New state for edit mode
+  const [isEditMode, setIsEditMode] = useState(false);
   const { t } = useTranslation();
 
   const handleEditNameClick = (player: Player) => {
@@ -40,7 +40,7 @@ const Players = () => {
 
   const handleUpdatePlayerScore = (newScore: number) => {
     if (selectedPlayer) {
-      updatePlayer(selectedPlayer.id, { score: newScore });
+      updatePlayerScoreForRound(selectedPlayer.id, currentRound, newScore);
     }
   };
 
@@ -63,7 +63,7 @@ const Players = () => {
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
             {viewMode === 'grid' ? <List className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}> {/* Edit button */}
+          <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}>
             <Pencil className="h-6 w-6" />
           </Button>
         </div>
@@ -85,7 +85,7 @@ const Players = () => {
               key={player.id}
               className="bg-card text-card-foreground text-center flex flex-col relative"
             >
-              {isEditMode && ( // Conditionally render delete button
+              {isEditMode && (
                 <Button
                   variant="ghost"
                   size="icon"
@@ -105,7 +105,10 @@ const Players = () => {
                 className="p-4 flex items-center justify-center cursor-pointer hover:bg-accent transition-colors flex-grow"
                 onClick={() => handleScoreClick(player)}
               >
-                <p className="text-2xl font-bold">{player.score}</p>
+                <p className="text-2xl font-bold">{getPlayerTotalScore(player.id)}</p>
+                <span className="text-sm text-muted-foreground ml-2">
+                  (Round {currentRound + 1}: {player.scores[currentRound] || 0})
+                </span>
               </CardContent>
             </Card>
           ) : (
@@ -125,9 +128,12 @@ const Players = () => {
                     className="text-2xl font-bold cursor-pointer hover:bg-accent rounded p-2 transition-colors"
                     onClick={() => handleScoreClick(player)}
                   >
-                    {player.score}
+                    {getPlayerTotalScore(player.id)}
                   </span>
-                  {isEditMode && ( // Conditionally render delete button
+                  <span className="text-sm text-muted-foreground">
+                    (R{currentRound + 1}: {player.scores[currentRound] || 0})
+                  </span>
+                  {isEditMode && (
                     <Button
                       variant="ghost"
                       size="icon"

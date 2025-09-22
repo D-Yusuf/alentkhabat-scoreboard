@@ -1,7 +1,6 @@
 import { useScore } from "@/context/ScoreContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,14 +10,39 @@ import {
 } from "@/components/ui/select";
 
 const ScoreList = () => {
-  const { players } = useScore();
+  const { players, currentRound, setCurrentRound } = useScore();
   const { t } = useTranslation();
-  const [selectedRound, setSelectedRound] = useState<string>("all");
 
-  const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+  const handleRoundChange = (round: string) => {
+    if (round === "all") {
+      setCurrentRound(-1); // -1 indicates "all rounds"
+    } else {
+      setCurrentRound(parseInt(round, 10));
+    }
+  };
 
-  // Generate round options based on number of players
-  const roundOptions = Array.from({ length: players.length }, (_, i) => i + 1);
+  // Get players with their appropriate scores
+  const getDisplayScores = () => {
+    if (currentRound === -1) {
+      // Show total scores for all rounds
+      return players.map(player => ({
+        ...player,
+        displayScore: player.scores.reduce((sum, score) => sum + score, 0)
+      }));
+    } else {
+      // Show scores for specific round
+      return players.map(player => ({
+        ...player,
+        displayScore: player.scores[currentRound] || 0
+      }));
+    }
+  };
+
+  const displayPlayers = getDisplayScores().sort((a, b) => b.displayScore - a.displayScore);
+
+  // Generate round options based on maximum rounds played
+  const maxRounds = Math.max(...players.map(p => p.scores.length), 1);
+  const roundOptions = Array.from({ length: maxRounds }, (_, i) => i);
 
   return (
     <div className="space-y-4">
@@ -28,7 +52,10 @@ const ScoreList = () => {
       
       {/* Round Selection */}
       <div className="flex justify-center">
-        <Select value={selectedRound} onValueChange={setSelectedRound}>
+        <Select 
+          value={currentRound === -1 ? "all" : currentRound.toString()} 
+          onValueChange={handleRoundChange}
+        >
           <SelectTrigger className="w-[180px] bg-card text-card-foreground">
             <SelectValue placeholder="Select Round" />
           </SelectTrigger>
@@ -36,7 +63,7 @@ const ScoreList = () => {
             <SelectItem value="all">All Rounds</SelectItem>
             {roundOptions.map((round) => (
               <SelectItem key={round} value={round.toString()}>
-                Round {round}
+                Round {round + 1}
               </SelectItem>
             ))}
           </SelectContent>
@@ -46,10 +73,10 @@ const ScoreList = () => {
       <Card className="bg-card text-card-foreground">
         <CardContent className="p-4">
           <ul className="space-y-4">
-            {sortedPlayers.map((player, index) => (
+            {displayPlayers.map((player, index) => (
               <li key={player.id} className="flex justify-between items-center text-lg">
                 <span>{index + 1} - {player.name}</span>
-                <span className="font-bold">{player.score}</span>
+                <span className="font-bold">{player.displayScore}</span>
               </li>
             ))}
           </ul>

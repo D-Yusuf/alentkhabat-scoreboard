@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Player } from "@/context/ScoreContext";
+import { useScore } from "@/context/ScoreContext";
 import { useTranslation } from "react-i18next";
 
 interface EditPlayerScoreDialogProps {
@@ -20,13 +21,15 @@ interface EditPlayerScoreDialogProps {
 
 export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: EditPlayerScoreDialogProps) => {
   const [score, setScore] = useState("");
+  const { currentRound } = useScore();
   const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
-      setScore(player.score.toString());
+      const currentScore = player.scores[currentRound] || 0;
+      setScore(currentScore.toString());
     }
-  }, [player]);
+  }, [player, currentRound]);
 
   const handleUpdate = () => {
     const newScore = parseInt(score, 10);
@@ -42,7 +45,9 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate }: Edi
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none">
         <DialogHeader className="text-center sm:text-center">
-          <DialogTitle>{t('players_page.edit_score_for', { name: player.name })}</DialogTitle>
+          <DialogTitle>
+            {t('players_page.edit_score_for', { name: player.name })} - Round {currentRound + 1}
+          </DialogTitle>
         </DialogHeader>
         <Input
           type="number"
