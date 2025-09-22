@@ -12,20 +12,18 @@ import NotFound from "./pages/NotFound";
 import { ScoreProvider } from "@/context/ScoreContext";
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { useTheme } from 'next-themes'; // Import useTheme
+// Removed ThemeProvider and useTheme import
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { i18n } = useTranslation();
-  const { theme } = useTheme(); // Get the current theme
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
     document.documentElement.dir = i18n.dir(i18n.language);
-    console.log("Current theme:", theme); // Log the theme to help diagnose
-  }, [i18n, i18n.language, theme]);
+    // Removed console.log for theme
+  }, [i18n, i18n.language]);
 
   return (
     <Routes>
@@ -42,7 +40,7 @@ const AppContent = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    {/* Removed ThemeProvider */}
       <TooltipProvider>
         <ScoreProvider>
           <Toaster />
@@ -52,7 +50,6 @@ const App = () => (
           </BrowserRouter>
         </ScoreProvider>
       </TooltipProvider>
-    </ThemeProvider>
   </QueryClientProvider>
 );
 
