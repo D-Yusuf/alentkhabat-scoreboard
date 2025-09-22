@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2 } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
@@ -10,12 +10,14 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 const Players = () => {
-  const { players, updatePlayer, resetPlayerScores } = useScore();
+  const { players, updatePlayer, deletePlayer, resetPlayerScores } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
   const [editScoreDialogOpen, setEditScoreDialogOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { t } = useTranslation();
 
@@ -41,6 +43,18 @@ const Players = () => {
     }
   };
 
+  const handleDeletePlayerClick = (player: Player) => {
+    setPlayerToDelete(player);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleConfirmDeletePlayer = () => {
+    if (playerToDelete) {
+      deletePlayer(playerToDelete.id);
+      setPlayerToDelete(null);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -51,7 +65,7 @@ const Players = () => {
         </div>
         <h1 className="text-2xl font-bold">{t('players_page.title')}</h1>
         <div className="flex items-center">
-          <Button variant="ghost" size="icon" onClick={() => setIsConfirmOpen(true)}>
+          <Button variant="ghost" size="icon" onClick={() => setIsResetConfirmOpen(true)}>
             <RotateCcw className="h-6 w-6" />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setAddDialogOpen(true)}>
@@ -65,8 +79,16 @@ const Players = () => {
           viewMode === 'grid' ? (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground text-center flex flex-col"
+              className="bg-white text-card-foreground text-center flex flex-col relative"
             >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
               <CardHeader
                 className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
                 onClick={() => handleEditNameClick(player)}
@@ -83,7 +105,7 @@ const Players = () => {
           ) : (
             <Card
               key={player.id}
-              className="bg-white text-card-foreground"
+              className="bg-white text-card-foreground relative"
             >
               <CardContent className="p-4 flex justify-between items-center">
                 <span
@@ -92,12 +114,22 @@ const Players = () => {
                 >
                   {player.name}
                 </span>
-                <span
-                  className="text-2xl font-bold cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors"
-                  onClick={() => handleScoreClick(player)}
-                >
-                  {player.score}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className="text-2xl font-bold cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors"
+                    onClick={() => handleScoreClick(player)}
+                  >
+                    {player.score}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-500 hover:text-red-700"
+                    onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           )
@@ -117,11 +149,18 @@ const Players = () => {
         onUpdate={handleUpdatePlayerScore}
       />
       <ConfirmDialog
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
+        isOpen={isResetConfirmOpen}
+        onClose={() => setIsResetConfirmOpen(false)}
         onConfirm={resetPlayerScores}
         title={t('common.are_you_sure')}
         description={t('players_page.reset_scores_description')}
+      />
+      <ConfirmDialog
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleConfirmDeletePlayer}
+        title={t('common.are_you_sure')}
+        description={t('players_page.delete_player_description', { name: playerToDelete?.name })}
       />
     </div>
   );

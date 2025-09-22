@@ -32,7 +32,8 @@
     "edit_player_name": "تعديل اسم اللاعب",
     "player_name": "اسم اللاعب",
     "edit_score_for": "تعديل نتيجة {{name}}",
-    "player_score": "نتيجة اللاعب"
+    "player_score": "نتيجة اللاعب",
+    "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائجه. لا يمكن التراجع عن هذا الإجراء."
   },
   "theme": "السمة",
   "light_mode": "فاتح",

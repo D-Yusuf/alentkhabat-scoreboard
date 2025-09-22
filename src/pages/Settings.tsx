@@ -2,8 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
 
@@ -15,8 +13,6 @@ const Settings = () => {
     i18n.changeLanguage(lng);
   };
 
-  const isRtl = i18n.dir() === 'rtl';
-
   // Set initial theme if not already set (e.g., on first load)
   useEffect(() => {
     if (!theme) {
@@ -26,12 +22,8 @@ const Settings = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Link to="/score-list" className="p-2">
-          {isRtl ? <ArrowRight className="h-6 w-6" /> : <ArrowLeft className="h-6 w-6" />}
-        </Link>
+      <div className="flex items-center justify-center">
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
-        <div className="w-10"></div> {/* Spacer */}
       </div>
       <Card className="bg-white text-card-foreground">
         <CardHeader className="rtl:text-right">

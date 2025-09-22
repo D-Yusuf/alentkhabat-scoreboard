@@ -18,6 +18,7 @@ interface ScoreContextType {
   players: Player[];
   addPlayer: (name: string) => void;
   updatePlayer: (playerId: number, updates: Partial<{ name: string; score: number }>) => void;
+  deletePlayer: (playerId: number) => void; // Added deletePlayer
   addTeamScore: (teamIndex: number, score: number) => void;
   resetTeamScores: () => void;
   updateTeamScore: (teamIndex: number, scoreIndex: number, newScore: number) => void;
@@ -80,6 +81,10 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const deletePlayer = (playerId: number) => {
+    setPlayers(prev => prev.filter(player => player.id !== playerId));
+  };
+
   const addTeamScore = (teamIndex: number, score: number) => {
     setTeams(prev => {
       const newTeams = prev.map((team, index) => {
@@ -117,7 +122,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, updatePlayer, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, resetPlayerScores }}>
+    <ScoreContext.Provider value={{ teams, setTeams, players, addPlayer, updatePlayer, deletePlayer, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, resetPlayerScores }}>
       {children}
     </ScoreContext.Provider>
   );

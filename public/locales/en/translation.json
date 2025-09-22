@@ -32,7 +32,8 @@
     "edit_player_name": "Edit Player Name",
     "player_name": "Player name",
     "edit_score_for": "Edit Score for {{name}}",
-    "player_score": "Player score"
+    "player_score": "Player score",
+    "delete_player_description": "This will delete {{name}} and all their scores. This action cannot be undone."
   },
   "theme": "Theme",
   "light_mode": "Light",
