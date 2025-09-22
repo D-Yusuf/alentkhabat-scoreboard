@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2 } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil } from "lucide-react"; // Import Pencil icon
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
@@ -19,6 +19,7 @@ const Players = () => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isEditMode, setIsEditMode] = useState(false); // New state for edit mode
   const { t } = useTranslation();
 
   const handleEditNameClick = (player: Player) => {
@@ -58,9 +59,12 @@ const Players = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div>
+        <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
             {viewMode === 'grid' ? <List className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}> {/* Edit button */}
+            <Pencil className="h-6 w-6" />
           </Button>
         </div>
         <h1 className="text-2xl font-bold">{t('players_page.title')}</h1>
@@ -81,14 +85,16 @@ const Players = () => {
               key={player.id}
               className="bg-white text-card-foreground text-center flex flex-col relative"
             >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              {isEditMode && ( // Conditionally render delete button
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                  onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
               <CardHeader
                 className="p-4 cursor-pointer hover:bg-gray-100 transition-colors"
                 onClick={() => handleEditNameClick(player)}
@@ -121,14 +127,16 @@ const Players = () => {
                   >
                     {player.score}
                   </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-700"
-                    onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
+                  {isEditMode && ( // Conditionally render delete button
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-500 hover:text-red-700"
+                      onClick={(e) => { e.stopPropagation(); handleDeletePlayerClick(player); }}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
