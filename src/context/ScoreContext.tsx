@@ -30,6 +30,7 @@ interface ScoreContextType {
   getPlayerScoreForRound: (playerId: number, roundIndex: number) => number;
   currentRound: number;
   setCurrentRound: (round: number) => void;
+  setPlayerTotalScore: (playerId: number, newTotalScore: number) => void; // New function
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -61,7 +62,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       { id: 3, name: 'Player 3', scores: [0] },
     ];
   });
-  const [currentRound, setCurrentRound] = useState<number>(0); // 0-indexed
+  const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed
 
   useEffect(() => {
     if (!localStorage.getItem('scoreboard_teams')) {
@@ -163,7 +164,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
           while (newScores.length <= roundIndex) {
             newScores.push(0);
           }
-          newScores[roundIndex] = score;
+          newScores[roundIndex] = score; // This line replaces the score for the specific round
           return { ...player, scores: newScores };
         }
         return player;
@@ -179,6 +180,18 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const getPlayerScoreForRound = (playerId: number, roundIndex: number) => {
     const player = players.find(p => p.id === playerId);
     return player && player.scores && player.scores[roundIndex] !== undefined ? player.scores[roundIndex] : 0;
+  };
+
+  // New function to set the total score, effectively clearing previous rounds and setting the new total as the first round's score
+  const setPlayerTotalScore = (playerId: number, newTotalScore: number) => {
+    setPlayers(prev =>
+      prev.map(player => {
+        if (player.id === playerId) {
+          return { ...player, scores: [newTotalScore] };
+        }
+        return player;
+      })
+    );
   };
 
   return (
@@ -198,7 +211,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       getPlayerTotalScore,
       getPlayerScoreForRound,
       currentRound,
-      setCurrentRound
+      setCurrentRound,
+      setPlayerTotalScore // Provide the new function
     }}>
       {children}
     </ScoreContext.Provider>

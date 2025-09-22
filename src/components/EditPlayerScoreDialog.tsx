@@ -16,22 +16,20 @@ interface EditPlayerScoreDialogProps {
   isOpen: boolean;
   onClose: () => void;
   player: Player | null;
-  onUpdate: (newScore: number) => void;
-  currentRound: number; // Added currentRound prop
+  onUpdate: (newScore: number) => void; // This is for specific rounds
+  currentRound: number;
 }
 
 export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, currentRound }: EditPlayerScoreDialogProps) => {
   const [score, setScore] = useState("");
-  const { getPlayerTotalScore } = useScore(); // Use getPlayerTotalScore
+  const { getPlayerTotalScore, setPlayerTotalScore } = useScore(); // Get setPlayerTotalScore
   const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
       if (currentRound === -1) {
-        // If "All Rounds" is selected, display total score
         setScore(getPlayerTotalScore(player.id).toString());
       } else {
-        // Display score for the specific round
         const currentScore = player.scores[currentRound] || 0;
         setScore(currentScore.toString());
       }
@@ -39,15 +37,17 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, curre
   }, [player, currentRound, getPlayerTotalScore]);
 
   const handleUpdate = () => {
-    if (currentRound === -1) {
-      // If "All Rounds" is selected, do not save, just close
-      onClose();
-      return;
-    }
-
     const newScore = parseInt(score, 10);
     if (!isNaN(newScore)) {
-      onUpdate(newScore);
+      if (currentRound === -1) {
+        // If "All Rounds" is selected, use setPlayerTotalScore
+        if (player) {
+          setPlayerTotalScore(player.id, newScore);
+        }
+      } else {
+        // For a specific round, use the onUpdate prop (which calls updatePlayerScoreForRound)
+        onUpdate(newScore);
+      }
       onClose();
     }
   };
