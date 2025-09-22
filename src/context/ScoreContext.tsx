@@ -138,7 +138,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const resetPlayerScores = () => {
     setPlayers(prev => prev.map(player => ({ 
       ...player, 
-      scores: player.scores.map(() => 0) 
+      scores: (player.scores || []).map(() => 0) 
     })));
   };
 
@@ -147,7 +147,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setPlayers(prev =>
       prev.map(player => {
         if (player.id === playerId) {
-          const newScores = [...player.scores];
+          const newScores = [...(player.scores || [])];
           // Ensure we have enough rounds
           while (newScores.length <= roundIndex) {
             newScores.push(0);
@@ -162,12 +162,12 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const getPlayerTotalScore = (playerId: number) => {
     const player = players.find(p => p.id === playerId);
-    return player ? player.scores.reduce((sum, score) => sum + score, 0) : 0;
+    return player ? (player.scores || []).reduce((sum, score) => sum + score, 0) : 0;
   };
 
   const getPlayerScoreForRound = (playerId: number, roundIndex: number) => {
     const player = players.find(p => p.id === playerId);
-    return player && player.scores[roundIndex] !== undefined ? player.scores[roundIndex] : 0;
+    return player && player.scores && player.scores[roundIndex] !== undefined ? player.scores[roundIndex] : 0;
   };
 
   return (
