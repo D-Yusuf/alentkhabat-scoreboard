@@ -154,7 +154,7 @@ const ScoreList = () => {
           value={currentRound === -1 ? "all" : currentRound.toString()}
           onValueChange={handleRoundChange}
         >
-          <SelectTrigger className="w-[180px] bg-card text-card-foreground">
+          <SelectTrigger className="w-[180px] bg-card text-card-foreground" dir={i18n.dir(i18n.language)}>
             <SelectValue placeholder="Select Round" />
           </SelectTrigger>
           <SelectContent className="bg-card text-card-foreground">
