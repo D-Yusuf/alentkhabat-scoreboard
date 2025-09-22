@@ -9,45 +9,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Player } from "@/context/ScoreContext";
-import { useScore } from "@/context/ScoreContext";
 import { useTranslation } from "react-i18next";
 
 interface EditPlayerScoreDialogProps {
   isOpen: boolean;
   onClose: () => void;
   player: Player | null;
-  onUpdate: (newScore: number) => void; // This is for specific rounds
-  currentRound: number;
+  onUpdate: (newScore: number) => void; // This now updates player.currentScore
+  currentRound: number; // Only for display in title
 }
 
 export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, currentRound }: EditPlayerScoreDialogProps) => {
   const [score, setScore] = useState("");
-  const { getPlayerTotalScore, setPlayerTotalScore } = useScore(); // Get setPlayerTotalScore
   const { t } = useTranslation();
 
   useEffect(() => {
     if (player) {
-      if (currentRound === -1) {
-        setScore(getPlayerTotalScore(player.id).toString());
-      } else {
-        const currentScore = player.scores[currentRound] || 0;
-        setScore(currentScore.toString());
-      }
+      setScore(player.currentScore.toString()); // Initialize with player.currentScore
     }
-  }, [player, currentRound, getPlayerTotalScore]);
+  }, [player]); // No dependency on currentRound here
 
   const handleUpdate = () => {
     const newScore = parseInt(score, 10);
     if (!isNaN(newScore)) {
-      if (currentRound === -1) {
-        // If "All Rounds" is selected, use setPlayerTotalScore
-        if (player) {
-          setPlayerTotalScore(player.id, newScore);
-        }
-      } else {
-        // For a specific round, use the onUpdate prop (which calls updatePlayerScoreForRound)
-        onUpdate(newScore);
-      }
+      onUpdate(newScore); // This calls updatePlayerCurrentScore
       onClose();
     }
   };

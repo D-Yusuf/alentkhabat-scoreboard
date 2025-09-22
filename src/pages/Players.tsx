@@ -10,7 +10,13 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 const Players = () => {
-  const { players, updatePlayer, deletePlayer, resetPlayerScores, updatePlayerScoreForRound, getPlayerTotalScore, currentRound } = useScore();
+  const {
+    players,
+    updatePlayerName,
+    deletePlayer,
+    resetPlayerScores,
+    updatePlayerCurrentScore,
+  } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
   const [editScoreDialogOpen, setEditScoreDialogOpen] = useState(false);
@@ -34,13 +40,13 @@ const Players = () => {
 
   const handleUpdatePlayerName = (newName: string) => {
     if (selectedPlayer) {
-      updatePlayer(selectedPlayer.id, { name: newName });
+      updatePlayerName(selectedPlayer.id, newName);
     }
   };
 
   const handleUpdatePlayerScore = (newScore: number) => {
     if (selectedPlayer) {
-      updatePlayerScoreForRound(selectedPlayer.id, currentRound, newScore);
+      updatePlayerCurrentScore(selectedPlayer.id, newScore);
     }
   };
 
@@ -105,7 +111,7 @@ const Players = () => {
                 className="p-4 flex items-center justify-center cursor-pointer hover:bg-accent transition-colors flex-grow"
                 onClick={() => handleScoreClick(player)}
               >
-                <p className="text-2xl font-bold">{getPlayerTotalScore(player.id)}</p>
+                <p className="text-2xl font-bold">{player.currentScore}</p>
               </CardContent>
             </Card>
           ) : (
@@ -125,7 +131,7 @@ const Players = () => {
                     className="text-2xl font-bold cursor-pointer hover:bg-accent rounded p-2 transition-colors"
                     onClick={() => handleScoreClick(player)}
                   >
-                    {getPlayerTotalScore(player.id)}
+                    {player.currentScore}
                   </span>
                   {isEditMode && (
                     <Button
@@ -155,7 +161,7 @@ const Players = () => {
         onClose={() => setEditScoreDialogOpen(false)}
         player={selectedPlayer}
         onUpdate={handleUpdatePlayerScore}
-        currentRound={currentRound}
+        currentRound={-1} // Pass -1 or any dummy value, as it's not used for saving here
       />
       <ConfirmDialog
         isOpen={isResetConfirmOpen}

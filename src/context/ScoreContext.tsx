@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Team {
@@ -9,7 +9,8 @@ interface Team {
 export interface Player {
   id: number;
   name: string;
-  scores: number[]; // Array of scores for each round
+  currentScore: number; // The score displayed and edited on the Players page
+  roundScores: number[]; // Array of scores for each round, managed by ScoreList
 }
 
 interface ScoreContextType {
@@ -17,20 +18,21 @@ interface ScoreContextType {
   setTeams: (teams: Team[]) => void;
   players: Player[];
   addPlayer: (name: string) => void;
-  updatePlayer: (playerId: number, updates: Partial<{ name: string; score: number }>) => void;
+  updatePlayerName: (playerId: number, newName: string) => void;
   deletePlayer: (playerId: number) => void;
   addTeamScore: (teamIndex: number, score: number) => void;
   resetTeamScores: () => void;
   updateTeamScore: (teamIndex: number, scoreIndex: number, newScore: number) => void;
   deleteTeamScore: (teamIndex: number, scoreIndex: number) => void;
   resetPlayerScores: () => void;
-  // New methods for round-based scoring
-  updatePlayerScoreForRound: (playerId: number, roundIndex: number, score: number) => void;
-  getPlayerTotalScore: (playerId: number) => number;
-  getPlayerScoreForRound: (playerId: number, roundIndex: number) => number;
+  // Player-specific score management
+  updatePlayerCurrentScore: (playerId: number, newScore: number) => void; // Updates currentScore
+  getPlayerTotalRoundScore: (playerId: number) => number; // Sums roundScores
+  getPlayerRoundScore: (playerId: number, roundIndex: number) => number; // Gets specific roundScore
+  saveCurrentScoresToRound: (roundIndex: number) => void; // Saves all players' currentScore to their roundScores[roundIndex]
+  loadRoundScoresToCurrent: (roundIndex: number) => void; // Loads all players' roundScores[roundIndex] into their currentScore
   currentRound: number;
   setCurrentRound: (round: number) => void;
-  setPlayerTotalScore: (playerId: number, newTotalScore: number) => void; // New function
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -49,20 +51,31 @@ const getInitialState = <T,>(key: string, defaultValue: T): T => {
 
 export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
-  
+
   const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', []));
   const [players, setPlayers] = useState<Player[]>(() => {
     const storedPlayers = getInitialState('scoreboard_players', null);
     if (storedPlayers) return storedPlayers;
-    
-    // Default players with proper score initialization
+
     return [
-      { id: 1, name: 'Player 1', scores: [0] },
-      { id: 2, name: 'Player 2', scores: [0] },
-      { id: 3, name: 'Player 3', scores: [0] },
+      { id: 1, name: 'Player 1', currentScore: 0, roundScores: [] },
+      { id: 2, name: 'Player 2', currentScore: 0, roundScores: [] },
+      { id: 3, name: 'Player 3', currentScore: 0, roundScores: [] },
     ];
   });
-  const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed
+  const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed, -1 for "All Rounds"
+
+  // Initialize currentScore based on currentRound on first load
+  useEffect(() => {
+    if (currentRound !== -1) {
+      setPlayers(prevPlayers =>
+        prevPlayers.map(player => {
+          const scoreToLoad = player.roundScores[currentRound] !== undefined ? player.roundScores[currentRound] : 0;
+          return { ...player, currentScore: scoreToLoad };
+        })
+      );
+    }
+  }, []); // Run only once on mount
 
   useEffect(() => {
     if (!localStorage.getItem('scoreboard_teams')) {
@@ -80,33 +93,31 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   }, [teams]);
 
   useEffect(() => {
-    // Ensure all players have scores array before saving
-    const playersWithScores = players.map(player => ({
-      ...player,
-      scores: player.scores || [0] // Ensure scores array exists
-    }));
-    localStorage.setItem('scoreboard_players', JSON.stringify(playersWithScores));
+    localStorage.setItem('scoreboard_players', JSON.stringify(players));
   }, [players]);
 
   useEffect(() => {
     localStorage.setItem('scoreboard_current_round', JSON.stringify(currentRound));
   }, [currentRound]);
 
+  // --- Player-specific score management ---
+
   const addPlayer = (name: string) => {
     setPlayers(prev => {
-      const newPlayer = { 
-        id: Date.now(), 
-        name, 
-        scores: [0] // Always start with score 0
+      const newPlayer = {
+        id: Date.now(),
+        name,
+        currentScore: 0,
+        roundScores: []
       };
       return [...prev, newPlayer];
     });
   };
 
-  const updatePlayer = (playerId: number, updates: Partial<{ name: string; score: number }>) => {
+  const updatePlayerName = (playerId: number, newName: string) => {
     setPlayers(prev =>
       prev.map(player =>
-        player.id === playerId ? { ...player, ...updates } : player
+        player.id === playerId ? { ...player, name: newName } : player
       )
     );
   };
@@ -115,6 +126,60 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setPlayers(prev => prev.filter(player => player.id !== playerId));
   };
 
+  const updatePlayerCurrentScore = (playerId: number, newScore: number) => {
+    setPlayers(prev =>
+      prev.map(player =>
+        player.id === playerId ? { ...player, currentScore: newScore } : player
+      )
+    );
+  };
+
+  const getPlayerTotalRoundScore = (playerId: number) => {
+    const player = players.find(p => p.id === playerId);
+    return player ? (player.roundScores || []).reduce((sum, score) => sum + score, 0) : 0;
+  };
+
+  const getPlayerRoundScore = (playerId: number, roundIndex: number) => {
+    const player = players.find(p => p.id === playerId);
+    return player && player.roundScores && player.roundScores[roundIndex] !== undefined ? player.roundScores[roundIndex] : 0;
+  };
+
+  const saveCurrentScoresToRound = (roundIndex: number) => {
+    if (roundIndex === -1) return; // Do not save if "All Rounds" is selected
+
+    setPlayers(prevPlayers =>
+      prevPlayers.map(player => {
+        const newRoundScores = [...(player.roundScores || [])];
+        // Ensure the roundScores array is long enough
+        while (newRoundScores.length <= roundIndex) {
+          newRoundScores.push(0);
+        }
+        newRoundScores[roundIndex] = player.currentScore; // Save currentScore to the specific round
+        return { ...player, roundScores: newRoundScores };
+      })
+    );
+  };
+
+  const loadRoundScoresToCurrent = (roundIndex: number) => {
+    if (roundIndex === -1) return; // Do not load if "All Rounds" is selected
+
+    setPlayers(prevPlayers =>
+      prevPlayers.map(player => {
+        const scoreToLoad = player.roundScores[roundIndex] !== undefined ? player.roundScores[roundIndex] : 0;
+        return { ...player, currentScore: scoreToLoad };
+      })
+    );
+  };
+
+  const resetPlayerScores = () => {
+    setPlayers(prev => prev.map(player => ({
+      ...player,
+      currentScore: 0,
+      roundScores: []
+    })));
+  };
+
+  // --- Team-specific score management (no changes needed here based on new player logic) ---
   const addTeamScore = (teamIndex: number, score: number) => {
     setTeams(prev => {
       const newTeams = prev.map((team, index) => {
@@ -147,72 +212,26 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const resetPlayerScores = () => {
-    setPlayers(prev => prev.map(player => ({ 
-      ...player, 
-      scores: (player.scores || []).map(() => 0) 
-    })));
-  };
-
-  // New methods for round-based scoring
-  const updatePlayerScoreForRound = (playerId: number, roundIndex: number, score: number) => {
-    setPlayers(prev =>
-      prev.map(player => {
-        if (player.id === playerId) {
-          const newScores = [...(player.scores || [0])]; // Ensure we have at least [0]
-          // Ensure we have enough rounds
-          while (newScores.length <= roundIndex) {
-            newScores.push(0);
-          }
-          newScores[roundIndex] = score; // This line replaces the score for the specific round
-          return { ...player, scores: newScores };
-        }
-        return player;
-      })
-    );
-  };
-
-  const getPlayerTotalScore = (playerId: number) => {
-    const player = players.find(p => p.id === playerId);
-    return player ? (player.scores || [0]).reduce((sum, score) => sum + score, 0) : 0;
-  };
-
-  const getPlayerScoreForRound = (playerId: number, roundIndex: number) => {
-    const player = players.find(p => p.id === playerId);
-    return player && player.scores && player.scores[roundIndex] !== undefined ? player.scores[roundIndex] : 0;
-  };
-
-  // New function to set the total score, effectively clearing previous rounds and setting the new total as the first round's score
-  const setPlayerTotalScore = (playerId: number, newTotalScore: number) => {
-    setPlayers(prev =>
-      prev.map(player => {
-        if (player.id === playerId) {
-          return { ...player, scores: [newTotalScore] };
-        }
-        return player;
-      })
-    );
-  };
-
   return (
-    <ScoreContext.Provider value={{ 
-      teams, 
-      setTeams, 
-      players, 
-      addPlayer, 
-      updatePlayer, 
-      deletePlayer, 
-      addTeamScore, 
-      resetTeamScores, 
-      updateTeamScore, 
-      deleteTeamScore, 
+    <ScoreContext.Provider value={{
+      teams,
+      setTeams,
+      players,
+      addPlayer,
+      updatePlayerName,
+      deletePlayer,
+      addTeamScore,
+      resetTeamScores,
+      updateTeamScore,
+      deleteTeamScore,
       resetPlayerScores,
-      updatePlayerScoreForRound,
-      getPlayerTotalScore,
-      getPlayerScoreForRound,
+      updatePlayerCurrentScore,
+      getPlayerTotalRoundScore,
+      getPlayerRoundScore,
+      saveCurrentScoresToRound,
+      loadRoundScoresToCurrent,
       currentRound,
       setCurrentRound,
-      setPlayerTotalScore // Provide the new function
     }}>
       {children}
     </ScoreContext.Provider>
