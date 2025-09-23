@@ -86,7 +86,7 @@ const Players = () => {
     : `${t('round')} ${currentRound + 1}`;
 
   return (
-    <div className="space-y-4 flex flex-col h-full">
+    <div className="space-y-4 flex flex-col flex-grow">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
