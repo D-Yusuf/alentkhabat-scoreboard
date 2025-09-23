@@ -141,7 +141,8 @@ const Players = () => {
         </div>
       </div>
 
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0 flex-grow items-start" : "flex flex-col gap-4 overflow-y-auto min-h-0 flex-grow"}>
+      {/* This container now has flex-grow to push the round navigation down, but individual cards will not stretch. */}
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0 flex-grow" : "flex flex-col gap-4 overflow-y-auto min-h-0 flex-grow"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
@@ -165,7 +166,7 @@ const Players = () => {
                 <CardTitle className="text-lg">{player.name}</CardTitle>
               </CardHeader>
               <CardContent
-                className="p-4 flex items-center justify-center cursor-pointer hover:bg-accent transition-colors"
+                className="p-4 flex items-center justify-center cursor-pointer hover:bg-accent transition-colors" // Removed flex-grow here
                 onClick={() => handleScoreClick(player)}
               >
                 <p className="text-2xl font-bold">{player.currentScore}</p>
