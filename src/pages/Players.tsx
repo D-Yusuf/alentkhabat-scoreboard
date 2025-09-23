@@ -66,16 +66,14 @@ const Players = () => {
   };
 
   const handlePreviousRound = () => {
-    if (currentRound === 0) {
-      setCurrentRound(-1); // Go to "All Rounds" (which displays as Round 1 on this page)
-    } else if (currentRound > 0) {
+    if (currentRound > 0) {
       setCurrentRound(currentRound - 1);
     }
   };
 
   const handleNextRound = () => {
     if (currentRound === -1) {
-      setCurrentRound(0); // Go from "All Rounds" (displaying as Round 1) to actual Round 1
+      setCurrentRound(0); // If currently showing "All Rounds" (displayed as Round 1), go to actual Round 1 (index 0)
     } else if (currentRound < numRounds - 1) {
       setCurrentRound(currentRound + 1);
     }
@@ -84,10 +82,10 @@ const Players = () => {
   const displayCurrentRoundText = numRounds === 0
     ? t('score_list_page.no_rounds')
     : currentRound === -1
-      ? `${t('round')} 1`
+      ? `${t('round')} 1` // Always display "Round 1" if currentRound is -1
       : `${t('round')} ${currentRound + 1}`;
 
-  const isPreviousDisabled = numRounds === 0 || currentRound === -1;
+  const isPreviousDisabled = numRounds === 0 || currentRound === -1 || currentRound === 0;
   const isNextDisabled = numRounds === 0 || currentRound === numRounds - 1;
 
   return (

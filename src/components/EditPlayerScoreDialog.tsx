@@ -40,8 +40,8 @@ export const EditPlayerScoreDialog = ({ isOpen, onClose, player, onUpdate, curre
   if (!player) return null;
 
   const dialogTitle = currentRound === -1
-    ? t('players_page.edit_score_for', { name: player.name }) + ` (${t('score_list_page.all_rounds')})`
-    : t('players_page.edit_score_for', { name: player.name }) + ` - Round ${currentRound + 1}`;
+    ? t('players_page.edit_current_score_for', { name: player.name })
+    : t('players_page.edit_score_for', { name: player.name }) + ` - ${t('round')} ${currentRound + 1}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

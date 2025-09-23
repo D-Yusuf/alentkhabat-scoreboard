@@ -34,6 +34,7 @@
     "edit_player_name": "تعديل اسم اللاعب",
     "player_name": "اسم اللاعب",
     "edit_score_for": "تعديل نتيجة {{name}}",
+    "edit_current_score_for": "تعديل النتيجة الحالية لـ {{name}}",
     "player_score": "نتيجة اللاعب",
     "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائمه. لا يمكن التراجع عن هذا الإجراء."
   },
