@@ -141,7 +141,7 @@ const Players = () => {
         </div>
       </div>
 
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 overflow-y-auto min-h-0 flex-grow items-start" : "flex flex-col overflow-y-auto min-h-0 flex-grow"}>
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0 flex-grow items-start" : "flex flex-col gap-4 overflow-y-auto min-h-0 flex-grow"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
