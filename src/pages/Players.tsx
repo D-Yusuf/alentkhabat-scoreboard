@@ -126,14 +126,16 @@ const Players = () => {
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
             {viewMode === 'grid' ? <List className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}>
-            <Pencil className="h-6 w-6" />
+          {/* Moved Reset button here */}
+          <Button variant="ghost" size="icon" onClick={() => setIsResetConfirmOpen(true)}>
+            <RotateCcw className="h-6 w-6" />
           </Button>
         </div>
         <h1 className="text-2xl font-bold">{t('players_page.title')}</h1>
         <div className="flex items-center">
-          <Button variant="ghost" size="icon" onClick={() => setIsResetConfirmOpen(true)}>
-            <RotateCcw className="h-6 w-6" />
+          {/* Moved Edit button here */}
+          <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}>
+            <Pencil className="h-6 w-6" />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setAddDialogOpen(true)}>
             <PlusCircle className="h-6 w-6" />
