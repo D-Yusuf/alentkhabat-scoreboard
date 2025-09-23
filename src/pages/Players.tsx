@@ -126,14 +126,12 @@ const Players = () => {
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
             {viewMode === 'grid' ? <List className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
           </Button>
-          {/* Moved Reset button here */}
           <Button variant="ghost" size="icon" onClick={() => setIsResetConfirmOpen(true)}>
             <RotateCcw className="h-6 w-6" />
           </Button>
         </div>
         <h1 className="text-2xl font-bold">{t('players_page.title')}</h1>
         <div className="flex items-center">
-          {/* Moved Edit button here */}
           <Button variant="ghost" size="icon" onClick={() => setIsEditMode(prev => !prev)}>
             <Pencil className="h-6 w-6" />
           </Button>
@@ -143,7 +141,7 @@ const Players = () => {
         </div>
       </div>
 
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 flex-grow overflow-y-auto min-h-0" : "flex flex-col gap-4 flex-grow overflow-y-auto min-h-0"}>
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0" : "flex flex-col gap-4 overflow-y-auto min-h-0"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
