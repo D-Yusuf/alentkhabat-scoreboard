@@ -77,18 +77,9 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
   const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
 
-  // Initialize currentScore based on currentRound on first load
-  useEffect(() => {
-    if (currentRound !== -1) {
-      setPlayers(prevPlayers =>
-        prevPlayers.map(player => {
-          const safeRoundScores = player.roundScores || [];
-          const scoreToLoad = safeRoundScores[currentRound] !== undefined ? safeRoundScores[currentRound] : 0;
-          return { ...player, currentScore: scoreToLoad };
-        })
-      );
-    }
-  }, []); // Run only once on mount
+  // Refs to store previous values for comparison in useEffect
+  const prevCurrentRoundRef = useRef<number>(currentRound);
+  const prevNumRoundsRef = useRef<number>(numRounds);
 
   useEffect(() => {
     if (!localStorage.getItem('scoreboard_teams')) {
@@ -262,6 +253,32 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       roundScores: Array(numRounds).fill(0) // Reset to current numRounds
     })));
   };
+
+  // Centralized effect for saving/loading scores on round change
+  useEffect(() => {
+    const prevRound = prevCurrentRoundRef.current;
+    const currentNumRounds = numRounds;
+
+    // If we are switching from a specific round (not -1) AND the round is valid
+    if (prevRound !== -1 && prevRound < prevNumRoundsRef.current && prevRound !== currentRound) {
+      // Save the current scores (from Players page) to the round we are *leaving*.
+      saveCurrentScoresToRound(prevRound);
+    }
+
+    // If we are switching to a specific round (not -1) AND the round is valid
+    if (currentRound !== -1 && currentRound < currentNumRounds && prevRound !== currentRound) {
+      // Load the scores for the new currentRound into currentScore
+      loadRoundScoresToCurrent(currentRound);
+    } else if (currentRound === -1) {
+      // If switching to "All Rounds", reset currentScore to 0 for display purposes
+      setPlayers(prevPlayers => prevPlayers.map(player => ({ ...player, currentScore: 0 })));
+    }
+
+    // Update the refs for the next render
+    prevCurrentRoundRef.current = currentRound;
+    prevNumRoundsRef.current = currentNumRounds;
+  }, [currentRound, numRounds, saveCurrentScoresToRound, loadRoundScoresToCurrent]);
+
 
   // --- Team-specific score management (no changes needed here based on new player logic) ---
   const addTeamScore = (teamIndex: number, score: number) => {

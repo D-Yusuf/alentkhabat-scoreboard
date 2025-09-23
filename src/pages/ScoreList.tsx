@@ -29,10 +29,6 @@ const ScoreList = () => {
   } = useScore();
   const { t, i18n } = useTranslation();
 
-  // Ref to store the previous currentRound to know when it changes
-  const prevCurrentRoundRef = useRef<number>(currentRound);
-  const prevNumRoundsRef = useRef<number>(numRounds);
-
   // State for manual round input
   const [manualRoundsInput, setManualRoundsInput] = useState(numRounds.toString());
 
@@ -42,28 +38,6 @@ const ScoreList = () => {
       setManualRoundsInput(numRounds.toString());
     }
   }, [numRounds, roundCountMode]);
-
-  useEffect(() => {
-    const prevRound = prevCurrentRoundRef.current;
-    const currentNumRounds = numRounds; // Use the current numRounds from context
-
-    // If we are switching from a specific round (not -1) AND the round is valid
-    if (prevRound !== -1 && prevRound < prevNumRoundsRef.current && prevRound !== currentRound) {
-      // Save the current scores (from Players page) to the round we are *leaving*.
-      saveCurrentScoresToRound(prevRound);
-    }
-
-    // If we are switching to a specific round (not -1) AND the round is valid
-    if (currentRound !== -1 && currentRound < currentNumRounds && prevRound !== currentRound) {
-      // Load the scores for the new currentRound into currentScore
-      loadRoundScoresToCurrent(currentRound);
-    }
-
-    // Update the refs for the next render
-    prevCurrentRoundRef.current = currentRound;
-    prevNumRoundsRef.current = currentNumRounds;
-  }, [currentRound, numRounds, saveCurrentScoresToRound, loadRoundScoresToCurrent]);
-
 
   const handleRoundChange = (round: string) => {
     if (round === "all") {
