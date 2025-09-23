@@ -66,24 +66,29 @@ const Players = () => {
   };
 
   const handlePreviousRound = () => {
-    if (currentRound > 0) {
+    if (currentRound === 0) {
+      setCurrentRound(-1); // Go to "All Rounds" (which displays as Round 1 on this page)
+    } else if (currentRound > 0) {
       setCurrentRound(currentRound - 1);
-    } else if (currentRound === 0) {
-      setCurrentRound(-1); // Go to "All Rounds"
     }
   };
 
   const handleNextRound = () => {
     if (currentRound === -1) {
-      setCurrentRound(0); // Go from "All Rounds" to Round 1
+      setCurrentRound(0); // Go from "All Rounds" (displaying as Round 1) to actual Round 1
     } else if (currentRound < numRounds - 1) {
       setCurrentRound(currentRound + 1);
     }
   };
 
-  const displayCurrentRoundText = currentRound === -1
-    ? t('score_list_page.all_rounds')
-    : `${t('round')} ${currentRound + 1}`;
+  const displayCurrentRoundText = numRounds === 0
+    ? t('score_list_page.no_rounds')
+    : currentRound === -1
+      ? `${t('round')} 1`
+      : `${t('round')} ${currentRound + 1}`;
+
+  const isPreviousDisabled = numRounds === 0 || currentRound === -1;
+  const isNextDisabled = numRounds === 0 || currentRound === numRounds - 1;
 
   return (
     <div className="space-y-4 flex flex-col flex-grow">
@@ -174,25 +179,29 @@ const Players = () => {
       </div>
 
       {/* Round Navigation */}
-      {numRounds > 0 && (
+      {numRounds > 0 ? (
         <div className="flex flex-col items-center gap-2 mt-4 flex-shrink-0">
           <p className="text-lg font-semibold">{displayCurrentRoundText}</p>
           <div className="flex gap-2 w-full">
             <Button
               onClick={handlePreviousRound}
-              disabled={currentRound === -1 || currentRound === 0}
+              disabled={isPreviousDisabled}
               className="flex-grow"
             >
               <ChevronLeft className="h-5 w-5 mr-2" /> {t('common.previous_round')}
             </Button>
             <Button
               onClick={handleNextRound}
-              disabled={currentRound === numRounds - 1}
+              disabled={isNextDisabled}
               className="flex-grow"
             >
               {t('common.next_round')} <ChevronRight className="h-5 w-5 ml-2" />
             </Button>
           </div>
+        </div>
+      ) : (
+        <div className="text-center text-muted-foreground mt-4">
+          <p>{t('score_list_page.no_rounds_available')}</p>
         </div>
       )}
 

@@ -45,7 +45,9 @@
     "all_rounds": "All Rounds",
     "round_management": "Round Management",
     "automatic_rounds": "Automatic (Players count)",
-    "number_of_rounds": "Number of Rounds"
+    "number_of_rounds": "Number of Rounds",
+    "no_rounds": "No Rounds",
+    "no_rounds_available": "No rounds available. Add players or set manual rounds."
   },
   "round": "Round"
 }

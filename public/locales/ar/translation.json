@@ -35,7 +35,7 @@
     "player_name": "اسم اللاعب",
     "edit_score_for": "تعديل نتيجة {{name}}",
     "player_score": "نتيجة اللاعب",
-    "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائجه. لا يمكن التراجع عن هذا الإجراء."
+    "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائمه. لا يمكن التراجع عن هذا الإجراء."
   },
   "theme": "السمة",
   "light_mode": "فاتح",
@@ -45,7 +45,9 @@
     "all_rounds": "جميع الجولات",
     "round_management": "إدارة الجولات",
     "automatic_rounds": "تلقائي (عدد اللاعبين)",
-    "number_of_rounds": "عدد الجولات"
+    "number_of_rounds": "عدد الجولات",
+    "no_rounds": "لا توجد جولات",
+    "no_rounds_available": "لا توجد جولات متاحة. أضف لاعبين أو قم بتعيين جولات يدوية."
   },
   "round": "جولة"
 }
