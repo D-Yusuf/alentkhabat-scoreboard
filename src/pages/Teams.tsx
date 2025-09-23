@@ -83,8 +83,9 @@ const Teams = () => {
               className="text-center bg-card border border-input text-card-foreground"
             />
             <Button
+              variant="outline" // Changed to outline variant
               onClick={() => handleAddScore(index)}
-              className="w-full bg-primary/10 hover:bg-primary/20 text-white border border-input"
+              className="w-full" // Removed custom background/text classes
             >
               {t('teams_page.add_score')}
             </Button>
