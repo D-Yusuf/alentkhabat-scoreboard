@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
@@ -30,6 +30,17 @@ const Players = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isEditMode, setIsEditMode] = useState(false);
   const { t } = useTranslation();
+
+  // Effect to ensure currentRound is always a valid index (0 or higher) on Players page
+  useEffect(() => {
+    if (currentRound === -1 && numRounds > 0) {
+      setCurrentRound(0); // If "All Rounds" is selected, default to actual Round 1
+    } else if (numRounds === 0 && currentRound !== -1) {
+      // If no rounds exist, but currentRound is not -1, set it to -1
+      // This handles cases where rounds are deleted while on a specific round
+      setCurrentRound(-1);
+    }
+  }, [currentRound, numRounds, setCurrentRound]);
 
   const handleEditNameClick = (player: Player) => {
     setSelectedPlayer(player);
@@ -72,20 +83,16 @@ const Players = () => {
   };
 
   const handleNextRound = () => {
-    if (currentRound === -1) {
-      setCurrentRound(0); // If currently showing "All Rounds" (displayed as Round 1), go to actual Round 1 (index 0)
-    } else if (currentRound < numRounds - 1) {
+    if (currentRound < numRounds - 1) {
       setCurrentRound(currentRound + 1);
     }
   };
 
   const displayCurrentRoundText = numRounds === 0
     ? t('score_list_page.no_rounds')
-    : currentRound === -1
-      ? `${t('round')} 1` // Always display "Round 1" if currentRound is -1
-      : `${t('round')} ${currentRound + 1}`;
+    : `${t('round')} ${currentRound + 1}`;
 
-  const isPreviousDisabled = numRounds === 0 || currentRound === -1 || currentRound === 0;
+  const isPreviousDisabled = numRounds === 0 || currentRound === 0;
   const isNextDisabled = numRounds === 0 || currentRound === numRounds - 1;
 
   return (
