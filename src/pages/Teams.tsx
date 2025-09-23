@@ -78,7 +78,7 @@ const Teams = () => {
               value={scoresToAdd[index]}
               onChange={(e) => handleScoreChange(index, e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
-              className="text-center bg-card text-card-foreground"
+              className="text-center bg-card border border-input text-card-foreground"
             />
             <Button onClick={() => handleAddScore(index)} className="w-full bg-primary/10 hover:bg-primary/20 text-white border-primary/30 border border-gray-100/50">
               {t('teams_page.add_score')}
@@ -87,7 +87,7 @@ const Teams = () => {
         ))}
       </div>
 
-      <Card className="bg-[#fffdf0] border border-[rgba(255,215,0,0.5)] dark:bg-card dark:border-border text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
+      <Card className="dark:bg-card dark:border-border text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
         <CardContent className="p-4 flex-grow overflow-y-auto">
           <div className="grid grid-cols-3 text-center font-mono text-lg">
             {scoreRows.map((row, i) => (

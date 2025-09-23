@@ -128,7 +128,7 @@ const ScoreList = () => {
               id="automatic-rounds"
               checked={roundCountMode === 'automatic'}
               onCheckedChange={(checked) => setRoundCountMode(checked ? 'automatic' : 'manual')}
-              className="flex-shrink-0 data-[state=unchecked]:bg-gray-400 border border-gray-300 data-[state=checked]:bg-white"
+              className="flex-shrink-0 data-[state=unchecked]:bg-gray-400 border border-input data-[state=checked]:bg-white"
               dir={i18n.dir(i18n.language)}
             />
           </div>
@@ -141,7 +141,7 @@ const ScoreList = () => {
                 min="0"
                 value={manualRoundsInput}
                 onChange={handleManualRoundsInputChange}
-                className="w-full bg-background text-foreground"
+                className="w-full bg-background border border-input text-foreground"
               />
             </div>
           )}
@@ -154,10 +154,10 @@ const ScoreList = () => {
           value={currentRound === -1 ? "all" : currentRound.toString()}
           onValueChange={handleRoundChange}
         >
-          <SelectTrigger className="w-[180px] bg-card text-card-foreground" dir={i18n.dir(i18n.language)}>
+          <SelectTrigger className="w-[180px] bg-card border border-input text-card-foreground" dir={i18n.dir(i18n.language)}>
             <SelectValue placeholder="Select Round" />
           </SelectTrigger>
-          <SelectContent className="bg-card text-card-foreground" dir={i18n.dir(i18n.language)}>
+          <SelectContent className="bg-card border border-input text-card-foreground" dir={i18n.dir(i18n.language)}>
             <SelectItem value="all">{t('score_list_page.all_rounds')}</SelectItem>
             {roundOptions.map((round) => (
               <SelectItem key={round} value={round.toString()}>
