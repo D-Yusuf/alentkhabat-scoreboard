@@ -212,17 +212,8 @@ const Players = () => {
         <div className="flex flex-col items-center gap-2 mt-4 flex-shrink-0">
           <p className="text-lg font-semibold">{displayCurrentRoundText}</p>
           <div className="flex gap-2 w-full">
-            {isRTL ? (
-              <>
-                {nextRoundButton}
-                {previousRoundButton}
-              </>
-            ) : (
-              <>
-                {previousRoundButton}
-                {nextRoundButton}
-              </>
-            )}
+            {previousRoundButton}
+            {nextRoundButton}
           </div>
         </div>
       ) : (
