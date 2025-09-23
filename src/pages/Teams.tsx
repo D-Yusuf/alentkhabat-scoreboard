@@ -87,7 +87,7 @@ const Teams = () => {
         ))}
       </div>
 
-      <Card className="bg-[#fffdf0] border border-[#FFD700] dark:bg-card dark:border-border text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
+      <Card className="bg-[#fffdf0] border border-[rgba(255,215,0,0.5)] dark:bg-card dark:border-border text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
         <CardContent className="p-4 flex-grow overflow-y-auto">
           <div className="grid grid-cols-3 text-center font-mono text-lg">
             {scoreRows.map((row, i) => (
