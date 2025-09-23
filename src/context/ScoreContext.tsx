@@ -291,7 +291,12 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   // --- Team-specific score management with undo history ---
 
   const pushTeamStateToHistory = (currentTeams: Team[]) => {
-    setTeamHistory(prev => [...prev, currentTeams]);
+    // Deep copy the teams array and its nested scores arrays
+    const deepCopy = currentTeams.map(team => ({
+      ...team,
+      scores: [...team.scores]
+    }));
+    setTeamHistory(prev => [...prev, deepCopy]);
   };
 
   const undoLastTeamAction = () => {
@@ -300,7 +305,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
         const newHistory = [...prev];
         const lastState = newHistory.pop();
         if (lastState) {
-          setTeams(lastState); // Revert teams to the last saved state
+          setTeams(lastState); // Revert teams to the last saved state (which is a deep copy)
         }
         return newHistory;
       }
@@ -315,7 +320,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     setTeams(prev => {
       const newTeams = prev.map((team, index) => {
         if (index === teamIndex) {
-          return { ...team, scores: [...team.scores, score] };
+          return { ...team, scores: [...team.scores, score] }; // This already creates new arrays, so it's fine.
         }
         return team;
       });
@@ -325,14 +330,20 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
 
   const resetTeamScores = () => {
     pushTeamStateToHistory(teams); // Save current state before modification
-    setTeams(prev => prev.map(team => ({ ...team, scores: [] })));
+    setTeams(prev => prev.map(team => ({ ...team, scores: [] }))); // This also creates new arrays, so it's fine.
   };
 
   const updateTeamScore = (teamIndex: number, scoreIndex: number, newScore: number) => {
     pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => {
-      const newTeams = [...prev];
-      newTeams[teamIndex].scores[scoreIndex] = newScore;
+      const newTeams = prev.map((team, i) => {
+        if (i === teamIndex) {
+          const newScores = [...team.scores]; // Create a new scores array
+          newScores[scoreIndex] = newScore; // Modify the new scores array
+          return { ...team, scores: newScores }; // Create a new team object
+        }
+        return team;
+      });
       return newTeams;
     });
   };
@@ -340,8 +351,13 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const deleteTeamScore = (teamIndex: number, scoreIndex: number) => {
     pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => {
-      const newTeams = [...prev];
-      newTeams[teamIndex].scores.splice(scoreIndex, 1);
+      const newTeams = prev.map((team, i) => {
+        if (i === teamIndex) {
+          const newScores = team.scores.filter((_, sIdx) => sIdx !== scoreIndex); // Create a new scores array without the deleted score
+          return { ...team, scores: newScores }; // Create a new team object
+        }
+        return team;
+      });
       return newTeams;
     });
   };
