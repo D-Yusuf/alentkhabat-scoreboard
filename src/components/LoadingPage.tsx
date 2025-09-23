@@ -19,9 +19,8 @@ const LoadingPage = () => {
         <img 
           src="/Full-Logo.png" 
           alt="Scoreboard Logo" 
-          className="w-32 h-32 animate-pulse"
+          className="w-48 h-48 animate-pulse"
         />
-        <p className="mt-4 text-foreground text-lg">Loading...</p>
       </div>
     </div>
   );
