@@ -29,7 +29,9 @@ const Players = () => {
   const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isEditMode, setIsEditMode] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // Get i18n instance for direction
+
+  const isRTL = i18n.dir() === 'rtl';
 
   // Effect to ensure currentRound is always a valid index (0 or higher) on Players page
   useEffect(() => {
@@ -94,6 +96,28 @@ const Players = () => {
 
   const isPreviousDisabled = numRounds === 0 || currentRound === 0;
   const isNextDisabled = numRounds === 0 || currentRound === numRounds - 1;
+
+  const previousRoundButton = (
+    <Button
+      onClick={handlePreviousRound}
+      disabled={isPreviousDisabled}
+      className="flex-grow"
+    >
+      {isRTL ? <ChevronRight className="h-5 w-5 ml-2" /> : <ChevronLeft className="h-5 w-5 mr-2" />}
+      {t('common.previous_round')}
+    </Button>
+  );
+
+  const nextRoundButton = (
+    <Button
+      onClick={handleNextRound}
+      disabled={isNextDisabled}
+      className="flex-grow"
+    >
+      {t('common.next_round')}
+      {isRTL ? <ChevronLeft className="h-5 w-5 mr-2" /> : <ChevronRight className="h-5 w-5 ml-2" />}
+    </Button>
+  );
 
   return (
     <div className="space-y-4 flex flex-col flex-grow">
@@ -188,20 +212,17 @@ const Players = () => {
         <div className="flex flex-col items-center gap-2 mt-4 flex-shrink-0">
           <p className="text-lg font-semibold">{displayCurrentRoundText}</p>
           <div className="flex gap-2 w-full">
-            <Button
-              onClick={handlePreviousRound}
-              disabled={isPreviousDisabled}
-              className="flex-grow"
-            >
-              <ChevronLeft className="h-5 w-5 mr-2" /> {t('common.previous_round')}
-            </Button>
-            <Button
-              onClick={handleNextRound}
-              disabled={isNextDisabled}
-              className="flex-grow"
-            >
-              {t('common.next_round')} <ChevronRight className="h-5 w-5 ml-2" />
-            </Button>
+            {isRTL ? (
+              <>
+                {nextRoundButton}
+                {previousRoundButton}
+              </>
+            ) : (
+              <>
+                {previousRoundButton}
+                {nextRoundButton}
+              </>
+            )}
           </div>
         </div>
       ) : (
