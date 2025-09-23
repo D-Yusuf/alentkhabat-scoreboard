@@ -71,6 +71,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       { id: 1, name: 'Player 1', currentScore: 0, roundScores: [] },
       { id: 2, name: 'Player 2', currentScore: 0, roundScores: [] },
       { id: 3, name: 'Player 3', currentScore: 0, roundScores: [] },
+      { id: 4, name: 'Player 4', currentScore: 0, roundScores: [] }, // Added Player 4
     ];
   });
   const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed, -1 for "All Rounds"
