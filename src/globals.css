@@ -4,16 +4,16 @@
 
 @layer base {
   :root {
-    --background: 221 55% 42%; /* #3255a6 converted to HSL */
+    --background: 221 55% 42%; /* Original background color */
     --foreground: 0 0% 100%; /* White text for better contrast */
 
-    --card: 0 0% 100%;
+    --card: 50 100% 97%; /* Off-white for card background */
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221 55% 42%;
+    --primary: 51 100% 50%; /* Gold for primary elements */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96%;
@@ -28,8 +28,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 51 100% 50%; /* Gold for borders */
+    --input: 51 100% 50%; /* Gold for input borders */
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;

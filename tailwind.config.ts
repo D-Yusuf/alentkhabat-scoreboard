@@ -52,8 +52,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        offWhite: "#fffdf0", // Custom off-white color
-        gold: "#FFD700", // Custom gold color
       },
       borderRadius: {
         lg: "var(--radius)",
