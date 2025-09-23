@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
@@ -29,9 +29,7 @@ const Players = () => {
   const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isEditMode, setIsEditMode] = useState(false);
-  const { t, i18n } = useTranslation(); // Get i18n instance for direction
-
-  const isRTL = i18n.dir() === 'rtl';
+  const { t } = useTranslation(); // Get t for translations
 
   // Effect to ensure currentRound is always a valid index (0 or higher) on Players page
   useEffect(() => {
@@ -77,47 +75,6 @@ const Players = () => {
       setPlayerToDelete(null);
     }
   };
-
-  const handlePreviousRound = () => {
-    if (currentRound > 0) {
-      setCurrentRound(currentRound - 1);
-    }
-  };
-
-  const handleNextRound = () => {
-    if (currentRound < numRounds - 1) {
-      setCurrentRound(currentRound + 1);
-    }
-  };
-
-  const displayCurrentRoundText = numRounds === 0
-    ? t('score_list_page.no_rounds')
-    : `${t('round')} ${currentRound + 1}`;
-
-  const isPreviousDisabled = numRounds === 0 || currentRound === 0;
-  const isNextDisabled = numRounds === 0 || currentRound === numRounds - 1;
-
-  const previousRoundButton = (
-    <Button
-      onClick={handlePreviousRound}
-      disabled={isPreviousDisabled}
-      className="flex-grow"
-    >
-      {isRTL ? <ChevronRight className="h-5 w-5 ml-2" /> : <ChevronLeft className="h-5 w-5 mr-2" />}
-      {t('common.previous_round')}
-    </Button>
-  );
-
-  const nextRoundButton = (
-    <Button
-      onClick={handleNextRound}
-      disabled={isNextDisabled}
-      className="flex-grow"
-    >
-      {t('common.next_round')}
-      {isRTL ? <ChevronLeft className="h-5 w-5 mr-2" /> : <ChevronRight className="h-5 w-5 ml-2" />}
-    </Button>
-  );
 
   return (
     <div className="space-y-4 flex flex-col flex-grow">
@@ -206,21 +163,6 @@ const Players = () => {
           )
         ))}
       </div>
-
-      {/* Round Navigation */}
-      {numRounds > 0 ? (
-        <div className="flex flex-col items-center gap-2 mt-4 flex-shrink-0">
-          <p className="text-lg font-semibold">{displayCurrentRoundText}</p>
-          <div className="flex gap-2 w-full">
-            {previousRoundButton}
-            {nextRoundButton}
-          </div>
-        </div>
-      ) : (
-        <div className="text-center text-muted-foreground mt-4">
-          <p>{t('score_list_page.no_rounds_available')}</p>
-        </div>
-      )}
 
       <AddPlayerDialog isOpen={addDialogOpen} onClose={() => setAddDialogOpen(false)} />
       <EditPlayerNameDialog
