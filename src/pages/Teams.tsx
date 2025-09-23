@@ -6,6 +6,7 @@ import { useScore } from "@/context/ScoreContext";
 import { EditScoreDialog } from "@/components/EditScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "next-themes"; // Import useTheme
 
 const Teams = () => {
   const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, undoLastTeamAction, canUndoTeams } = useScore();
@@ -14,6 +15,7 @@ const Teams = () => {
   const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { t } = useTranslation();
+  const { theme } = useTheme(); // Use the useTheme hook
 
   const handleTeamNameChange = (index: number, name: string) => {
     const newTeams = [...teams];
@@ -80,7 +82,10 @@ const Teams = () => {
               onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
               className="text-center bg-card border border-input text-card-foreground"
             />
-            <Button onClick={() => handleAddScore(index)} className="w-full bg-primary/10 hover:bg-primary/20 text-white border-primary/30 border border-gray-100/50">
+            <Button
+              onClick={() => handleAddScore(index)}
+              className={`w-full bg-primary/10 hover:bg-primary/20 text-white border ${theme === 'light' ? 'border-gold' : 'border-primary/30'} border-gray-100/50`}
+            >
               {t('teams_page.add_score')}
             </Button>
           </div>
