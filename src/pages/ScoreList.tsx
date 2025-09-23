@@ -60,7 +60,7 @@ const ScoreList = () => {
 
   // Get players with their appropriate scores for display
   const getDisplayPlayers = () => {
-    return players.map(player => {
+    const playersWithDisplayScore = players.map(player => {
       if (currentRound === -1) {
         // Show total scores for all rounds (sum of roundScores)
         return {
@@ -74,7 +74,15 @@ const ScoreList = () => {
           displayScore: getPlayerRoundScore(player.id, currentRound)
         };
       }
-    }).sort((a, b) => b.displayScore - a.displayScore);
+    });
+
+    if (currentRound === -1) {
+      // Only sort by score if "All Rounds" is selected
+      return playersWithDisplayScore.sort((a, b) => b.displayScore - a.displayScore);
+    } else {
+      // For specific rounds, keep the default order
+      return playersWithDisplayScore;
+    }
   };
 
   const displayPlayers = getDisplayPlayers();
