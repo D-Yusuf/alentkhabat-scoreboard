@@ -12,7 +12,9 @@
     "cancel": "Cancel",
     "update": "Update",
     "confirm": "Confirm",
-    "add": "Add"
+    "add": "Add",
+    "previous_round": "Previous Round",
+    "next_round": "Next Round"
   },
   "teams_page": {
     "first_team": "First Team",

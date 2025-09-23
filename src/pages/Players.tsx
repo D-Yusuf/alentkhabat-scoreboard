@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScore, Player } from "@/context/ScoreContext";
-import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil } from "lucide-react";
+import { PlusCircle, RotateCcw, LayoutGrid, List, Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
 import { AddPlayerDialog } from "@/components/AddPlayerDialog";
 import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
@@ -16,6 +16,9 @@ const Players = () => {
     deletePlayer,
     resetPlayerScores,
     updatePlayerCurrentScore,
+    currentRound,
+    setCurrentRound,
+    numRounds,
   } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
@@ -62,8 +65,28 @@ const Players = () => {
     }
   };
 
+  const handlePreviousRound = () => {
+    if (currentRound > 0) {
+      setCurrentRound(currentRound - 1);
+    } else if (currentRound === 0) {
+      setCurrentRound(-1); // Go to "All Rounds"
+    }
+  };
+
+  const handleNextRound = () => {
+    if (currentRound === -1) {
+      setCurrentRound(0); // Go from "All Rounds" to Round 1
+    } else if (currentRound < numRounds - 1) {
+      setCurrentRound(currentRound + 1);
+    }
+  };
+
+  const displayCurrentRoundText = currentRound === -1
+    ? t('score_list_page.all_rounds')
+    : `${t('round')} ${currentRound + 1}`;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 flex flex-col h-full">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
@@ -84,7 +107,7 @@ const Players = () => {
         </div>
       </div>
 
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4" : "flex flex-col gap-4"}>
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 flex-grow overflow-y-auto" : "flex flex-col gap-4 flex-grow overflow-y-auto"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
@@ -149,6 +172,30 @@ const Players = () => {
           )
         ))}
       </div>
+
+      {/* Round Navigation */}
+      {numRounds > 0 && (
+        <div className="flex flex-col items-center gap-2 mt-4 flex-shrink-0">
+          <p className="text-lg font-semibold">{displayCurrentRoundText}</p>
+          <div className="flex gap-2 w-full">
+            <Button
+              onClick={handlePreviousRound}
+              disabled={currentRound === -1 || currentRound === 0}
+              className="flex-grow"
+            >
+              <ChevronLeft className="h-5 w-5 mr-2" /> {t('common.previous_round')}
+            </Button>
+            <Button
+              onClick={handleNextRound}
+              disabled={currentRound === numRounds - 1}
+              className="flex-grow"
+            >
+              {t('common.next_round')} <ChevronRight className="h-5 w-5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      )}
+
       <AddPlayerDialog isOpen={addDialogOpen} onClose={() => setAddDialogOpen(false)} />
       <EditPlayerNameDialog
         isOpen={editNameDialogOpen}
@@ -161,7 +208,7 @@ const Players = () => {
         onClose={() => setEditScoreDialogOpen(false)}
         player={selectedPlayer}
         onUpdate={handleUpdatePlayerScore}
-        currentRound={-1} // Pass -1 or any dummy value, as it's not used for saving here
+        currentRound={currentRound}
       />
       <ConfirmDialog
         isOpen={isResetConfirmOpen}

@@ -12,7 +12,9 @@
     "cancel": "إلغاء",
     "update": "تحديث",
     "confirm": "تأكيد",
-    "add": "إضافة"
+    "add": "إضافة",
+    "previous_round": "الجولة السابقة",
+    "next_round": "الجولة التالية"
   },
   "teams_page": {
     "first_team": "الفريق الأول",
