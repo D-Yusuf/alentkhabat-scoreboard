@@ -58,10 +58,6 @@ const Settings = () => {
               <RadioGroupItem value="dark" id="dark" />
               <Label htmlFor="dark">{t('dark_mode')}</Label>
             </div>
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="system" id="system" />
-              <Label htmlFor="system">{t('system_mode')}</Label>
-            </div>
           </RadioGroup>
         </CardContent>
       </Card>
