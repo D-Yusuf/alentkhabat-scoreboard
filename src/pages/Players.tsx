@@ -141,7 +141,8 @@ const Players = () => {
         </div>
       </div>
 
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0" : "flex flex-col gap-4 overflow-y-auto min-h-0"}>
+      {/* Added flex-grow to this container to push the round navigation to the bottom */}
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0 flex-grow" : "flex flex-col gap-4 overflow-y-auto min-h-0 flex-grow"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
