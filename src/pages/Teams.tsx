@@ -84,7 +84,7 @@ const Teams = () => {
             />
             <Button
               onClick={() => handleAddScore(index)}
-              className={`w-full bg-primary/10 hover:bg-primary/20 text-white border ${theme === 'light' ? 'border-gold' : 'border-primary/30'} border-gray-100/50`}
+              className="w-full bg-primary/10 hover:bg-primary/20 text-white border border-input"
             >
               {t('teams_page.add_score')}
             </Button>
