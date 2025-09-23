@@ -37,6 +37,8 @@ interface ScoreContextType {
   setNumRounds: (count: number) => void; // New: Function to set total rounds
   roundCountMode: 'manual' | 'automatic'; // New: Mode for round count
   setRoundCountMode: (mode: 'manual' | 'automatic') => void; // New: Function to set round count mode
+  undoLastTeamAction: () => void; // New: Function to undo last team score action
+  canUndoTeams: boolean; // New: Flag to check if undo is possible for teams
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -57,6 +59,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
 
   const [teams, setTeams] = useState<Team[]>(() => getInitialState('scoreboard_teams', []));
+  const [teamHistory, setTeamHistory] = useState<Team[][]>(() => getInitialState('scoreboard_team_history', []));
   const [players, setPlayers] = useState<Player[]>(() => {
     const storedPlayers = getInitialState('scoreboard_players', null);
     if (storedPlayers) {
@@ -96,6 +99,10 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('scoreboard_teams', JSON.stringify(teams));
     }
   }, [teams]);
+
+  useEffect(() => {
+    localStorage.setItem('scoreboard_team_history', JSON.stringify(teamHistory));
+  }, [teamHistory]);
 
   useEffect(() => {
     localStorage.setItem('scoreboard_players', JSON.stringify(players));
@@ -281,8 +288,30 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   }, [currentRound, numRounds, saveCurrentScoresToRound, loadRoundScoresToCurrent]);
 
 
-  // --- Team-specific score management (no changes needed here based on new player logic) ---
+  // --- Team-specific score management with undo history ---
+
+  const pushTeamStateToHistory = (currentTeams: Team[]) => {
+    setTeamHistory(prev => [...prev, currentTeams]);
+  };
+
+  const undoLastTeamAction = () => {
+    setTeamHistory(prev => {
+      if (prev.length > 0) {
+        const newHistory = [...prev];
+        const lastState = newHistory.pop();
+        if (lastState) {
+          setTeams(lastState); // Revert teams to the last saved state
+        }
+        return newHistory;
+      }
+      return prev;
+    });
+  };
+
+  const canUndoTeams = teamHistory.length > 0;
+
   const addTeamScore = (teamIndex: number, score: number) => {
+    pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => {
       const newTeams = prev.map((team, index) => {
         if (index === teamIndex) {
@@ -295,10 +324,12 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resetTeamScores = () => {
+    pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => prev.map(team => ({ ...team, scores: [] })));
   };
 
   const updateTeamScore = (teamIndex: number, scoreIndex: number, newScore: number) => {
+    pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => {
       const newTeams = [...prev];
       newTeams[teamIndex].scores[scoreIndex] = newScore;
@@ -307,6 +338,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteTeamScore = (teamIndex: number, scoreIndex: number) => {
+    pushTeamStateToHistory(teams); // Save current state before modification
     setTeams(prev => {
       const newTeams = [...prev];
       newTeams[teamIndex].scores.splice(scoreIndex, 1);
@@ -338,6 +370,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       setNumRounds,
       roundCountMode,
       setRoundCountMode,
+      undoLastTeamAction, // Expose undo function
+      canUndoTeams,       // Expose undo flag
     }}>
       {children}
     </ScoreContext.Provider>

@@ -14,7 +14,8 @@
     "confirm": "Confirm",
     "add": "Add",
     "previous_round": "Previous Round",
-    "next_round": "Next Round"
+    "next_round": "Next Round",
+    "undo": "Undo"
   },
   "teams_page": {
     "first_team": "First Team",

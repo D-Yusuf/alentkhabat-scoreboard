@@ -14,7 +14,8 @@
     "confirm": "تأكيد",
     "add": "إضافة",
     "previous_round": "الجولة السابقة",
-    "next_round": "الجولة التالية"
+    "next_round": "الجولة التالية",
+    "undo": "تراجع"
   },
   "teams_page": {
     "first_team": "الفريق الأول",

@@ -8,7 +8,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 const Teams = () => {
-  const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore } = useScore();
+  const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, undoLastTeamAction, canUndoTeams } = useScore();
   const [scoresToAdd, setScoresToAdd] = useState<string[]>(['', '']);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
@@ -116,7 +116,10 @@ const Teams = () => {
         </CardFooter>
       </Card>
 
-      <div className="mt-4">
+      <div className="mt-4 flex gap-2">
+        <Button variant="outline" onClick={undoLastTeamAction} disabled={!canUndoTeams} className="w-full">
+          {t('common.undo')}
+        </Button>
         <Button variant="destructive" onClick={() => setIsConfirmOpen(true)} className="w-full">
           {t('teams_page.delete_all')}
         </Button>
