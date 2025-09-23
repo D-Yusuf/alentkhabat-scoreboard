@@ -141,8 +141,7 @@ const Players = () => {
         </div>
       </div>
 
-      {/* Added flex-grow to this container to push the round navigation to the bottom */}
-      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0 flex-grow" : "flex flex-col gap-4 overflow-y-auto min-h-0 flex-grow"}>
+      <div className={viewMode === 'grid' ? "grid grid-cols-2 gap-4 overflow-y-auto min-h-0" : "flex flex-col gap-4 overflow-y-auto min-h-0"}>
         {players.map((player) => (
           viewMode === 'grid' ? (
             <Card
@@ -207,6 +206,9 @@ const Players = () => {
           )
         ))}
       </div>
+
+      {/* Spacer to push navigation to the bottom */}
+      <div className="flex-grow" />
 
       {/* Round Navigation */}
       {numRounds > 0 ? (
