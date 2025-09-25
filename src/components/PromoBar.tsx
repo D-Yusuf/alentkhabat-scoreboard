@@ -28,7 +28,7 @@ const PromoBar = () => {
 
   return (
     <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4">
-      <p className="text-sm font-medium">{athkarList[currentIndex]}</p>
+      <p className="text-base font-medium">{athkarList[currentIndex]}</p>
     </div>
   );
 };
