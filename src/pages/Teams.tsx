@@ -7,9 +7,10 @@ import { EditScoreDialog } from "@/components/EditScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes"; // Import useTheme
+import PromoBar from "@/components/PromoBar";
 
 const Teams = () => {
-  const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, undoLastTeamAction, canUndoTeams } = useScore();
+  const { teams, setTeams, addTeamScore, resetTeamScores, updateTeamScore, deleteTeamScore, undoLastTeamAction, canUndoTeams, isPromoBarVisible } = useScore();
   const [scoresToAdd, setScoresToAdd] = useState<string[]>(['', '']);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingScore, setEditingScore] = useState<{ teamIndex: number; scoreIndex: number; value: number } | null>(null);
@@ -66,6 +67,7 @@ const Teams = () => {
 
   return (
     <div className="flex flex-col h-full">
+      {isPromoBarVisible && <PromoBar />}
       <div className="grid grid-cols-2 gap-4">
         {teams.map((team, index) => (
           <div key={index} className="space-y-2">

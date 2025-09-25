@@ -1,6 +1,8 @@
 {
   "score_list": "قائمة النقاط",
   "settings": "الإعدادات",
+  "promo_bar": "الشريط الترويجي",
+  "show_promo_bar": "إظهار الشريط الترويجي",
   "language": "اللغة",
   "english": "English",
   "arabic": "العربية",
@@ -37,7 +39,7 @@
     "edit_score_for": "تعديل نتيجة {{name}}",
     "edit_current_score_for": "تعديل النتيجة الحالية لـ {{name}}",
     "player_score": "نتيجة اللاعب",
-    "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائمه. لا يمكن التراجع عن هذا الإجراء."
+    "delete_player_description": "سيؤدي هذا إلى حذف {{name}} وجميع نتائجه. لا يمكن التراجع عن هذا الإجراء."
   },
   "theme": "السمة",
   "light_mode": "فاتح",

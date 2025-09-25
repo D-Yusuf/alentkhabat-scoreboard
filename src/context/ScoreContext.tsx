@@ -39,6 +39,8 @@ interface ScoreContextType {
   setRoundCountMode: (mode: 'manual' | 'automatic') => void; // New: Function to set round count mode
   undoLastTeamAction: () => void; // New: Function to undo last team score action
   canUndoTeams: boolean; // New: Flag to check if undo is possible for teams
+  isPromoBarVisible: boolean;
+  setIsPromoBarVisible: (isVisible: boolean) => void;
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -80,6 +82,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [currentRound, setCurrentRound] = useState<number>(() => getInitialState('scoreboard_current_round', 0)); // 0-indexed, -1 for "All Rounds"
   const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
   const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
+  const [isPromoBarVisible, setIsPromoBarVisibleState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_visible', true));
 
   // Refs to store previous values for comparison in useEffect
   const prevCurrentRoundRef = useRef<number>(currentRound);
@@ -119,6 +122,14 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('scoreboard_round_count_mode', JSON.stringify(roundCountMode));
   }, [roundCountMode]);
+
+  useEffect(() => {
+    localStorage.setItem('scoreboard_promo_bar_visible', JSON.stringify(isPromoBarVisible));
+  }, [isPromoBarVisible]);
+
+  const setIsPromoBarVisible = (isVisible: boolean) => {
+    setIsPromoBarVisibleState(isVisible);
+  };
 
   // Function to set numRounds and adjust player roundScores accordingly
   const setNumRounds = (count: number) => {
@@ -388,6 +399,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       setRoundCountMode,
       undoLastTeamAction, // Expose undo function
       canUndoTeams,       // Expose undo flag
+      isPromoBarVisible,
+      setIsPromoBarVisible,
     }}>
       {children}
     </ScoreContext.Provider>

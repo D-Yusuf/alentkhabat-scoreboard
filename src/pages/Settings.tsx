@@ -3,10 +3,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
+import { Switch } from '@/components/ui/switch';
+import { useScore } from '@/context/ScoreContext';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
+  const { isPromoBarVisible, setIsPromoBarVisible } = useScore();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -59,6 +62,22 @@ const Settings = () => {
               <Label htmlFor="dark">{t('dark_mode')}</Label>
             </div>
           </RadioGroup>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-card text-card-foreground">
+        <CardHeader className="rtl:text-right">
+          <CardTitle>{t('promo_bar')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="promo-bar-switch">{t('show_promo_bar')}</Label>
+            <Switch
+              id="promo-bar-switch"
+              checked={isPromoBarVisible}
+              onCheckedChange={setIsPromoBarVisible}
+            />
+          </div>
         </CardContent>
       </Card>
     </div>
