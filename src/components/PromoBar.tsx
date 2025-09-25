@@ -12,12 +12,15 @@ const PromoBar = () => {
       return;
     }
 
+    // Set a random index when the language is loaded/changed
+    setCurrentIndex(Math.floor(Math.random() * athkarList.length));
+
     const intervalId = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % athkarList.length);
     }, 60000); // 1 minute
 
     return () => clearInterval(intervalId);
-  }, [athkarList, i18n.language]);
+  }, [i18n.language]); // Re-run effect only when language changes
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
