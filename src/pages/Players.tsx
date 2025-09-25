@@ -8,6 +8,7 @@ import { EditPlayerNameDialog } from "@/components/EditPlayerNameDialog";
 import { EditPlayerScoreDialog } from "@/components/EditPlayerScoreDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import PromoBar from "@/components/PromoBar";
 
 const Players = () => {
   const {
@@ -19,6 +20,7 @@ const Players = () => {
     currentRound,
     setCurrentRound,
     numRounds,
+    isPromoBarVisible,
   } = useScore();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editNameDialogOpen, setEditNameDialogOpen] = useState(false);
@@ -121,6 +123,7 @@ const Players = () => {
 
   return (
     <div className="space-y-4 flex flex-col flex-grow">
+      {isPromoBarVisible && <PromoBar />}
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}>
