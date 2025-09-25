@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
-import { Switch } from '@/components/ui/switch';
 import { useScore } from '@/context/ScoreContext';
 
 const Settings = () => {
@@ -70,14 +69,20 @@ const Settings = () => {
           <CardTitle>{t('promo_bar')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between">
-            <Label htmlFor="promo-bar-switch">{t('show_promo_bar')}</Label>
-            <Switch
-              id="promo-bar-switch"
-              checked={isPromoBarVisible}
-              onCheckedChange={setIsPromoBarVisible}
-            />
-          </div>
+          <RadioGroup
+            value={isPromoBarVisible ? 'show' : 'hide'}
+            onValueChange={(value) => setIsPromoBarVisible(value === 'show')}
+            className="space-y-2"
+          >
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="show" id="show-promo" />
+              <Label htmlFor="show-promo">{t('show')}</Label>
+            </div>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="hide" id="hide-promo" />
+              <Label htmlFor="hide-promo">{t('hide')}</Label>
+            </div>
+          </RadioGroup>
         </CardContent>
       </Card>
     </div>
