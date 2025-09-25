@@ -2,7 +2,13 @@
   "score_list": "Score List",
   "settings": "Settings",
   "promo_bar": "Remembrances (Athkar)",
-  "promo_bar_text": "Glory be to Allah, and praise be to Him. (Subhan-Allahi wa bihamdihi)",
+  "athkar_list": [
+    "Glory be to Allah, and praise be to Him. (Subhan-Allahi wa bihamdihi)",
+    "There is no god but Allah. (La ilaha illallah)",
+    "Allah is the greatest. (Allahu Akbar)",
+    "Praise be to Allah. (Alhamdulillah)",
+    "I seek forgiveness from Allah. (Astaghfirullah)"
+  ],
   "language": "Language",
   "english": "English",
   "arabic": "Arabic",
