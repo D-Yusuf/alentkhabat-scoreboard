@@ -8,10 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { RtlSwitch } from "@/components/RtlSwitch"; // Import the new RtlSwitch
+import { RtlSwitch } from "@/components/RtlSwitch";
+import PromoBar from "@/components/PromoBar";
 
 const ScoreList = () => {
   const {
@@ -20,12 +21,11 @@ const ScoreList = () => {
     setCurrentRound,
     getPlayerTotalRoundScore,
     getPlayerRoundScore,
-    saveCurrentScoresToRound,
-    loadRoundScoresToCurrent,
     numRounds,
     setNumRounds,
     roundCountMode,
     setRoundCountMode,
+    isPromoBarVisible,
   } = useScore();
   const { t, i18n } = useTranslation();
 
@@ -92,6 +92,7 @@ const ScoreList = () => {
 
   return (
     <div className="space-y-3">
+      {isPromoBarVisible && <PromoBar />}
       <div className="flex justify-center items-center">
         <h1 className="text-2xl font-bold text-center">{t('score_list')}</h1>
       </div>
