@@ -16,6 +16,9 @@
   "players": "Players",
   "show": "Show",
   "hide": "Hide",
+  "promo_bar_animation": "Remembrance Bar Animation",
+  "static": "Static",
+  "moving": "Moving",
   "common": {
     "are_you_sure": "Are you sure?",
     "delete": "Delete",

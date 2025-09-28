@@ -16,6 +16,9 @@
   "players": "لاعبون",
   "show": "إظهار",
   "hide": "إخفاء",
+  "promo_bar_animation": "حركة شريط الأذكار",
+  "static": "ثابت",
+  "moving": "متحرك",
   "common": {
     "are_you_sure": "هل أنت متأكد؟",
     "delete": "حذف",

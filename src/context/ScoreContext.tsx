@@ -41,6 +41,8 @@ interface ScoreContextType {
   canUndoTeams: boolean; // New: Flag to check if undo is possible for teams
   isPromoBarVisible: boolean;
   setIsPromoBarVisible: (isVisible: boolean) => void;
+  isPromoBarTextMoving: boolean;
+  setIsPromoBarTextMoving: (isMoving: boolean) => void;
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -83,6 +85,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
   const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
   const [isPromoBarVisible, setIsPromoBarVisibleState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_visible', true));
+  const [isPromoBarTextMoving, setIsPromoBarTextMovingState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_text_moving', false));
 
   // Refs to store previous values for comparison in useEffect
   const prevCurrentRoundRef = useRef<number>(currentRound);
@@ -127,8 +130,16 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('scoreboard_promo_bar_visible', JSON.stringify(isPromoBarVisible));
   }, [isPromoBarVisible]);
 
+  useEffect(() => {
+    localStorage.setItem('scoreboard_promo_bar_text_moving', JSON.stringify(isPromoBarTextMoving));
+  }, [isPromoBarTextMoving]);
+
   const setIsPromoBarVisible = (isVisible: boolean) => {
     setIsPromoBarVisibleState(isVisible);
+  };
+
+  const setIsPromoBarTextMoving = (isMoving: boolean) => {
+    setIsPromoBarTextMovingState(isMoving);
   };
 
   // Function to set numRounds and adjust player roundScores accordingly
@@ -401,6 +412,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       canUndoTeams,       // Expose undo flag
       isPromoBarVisible,
       setIsPromoBarVisible,
+      isPromoBarTextMoving,
+      setIsPromoBarTextMoving,
     }}>
       {children}
     </ScoreContext.Provider>

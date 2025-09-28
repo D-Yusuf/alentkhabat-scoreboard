@@ -8,7 +8,7 @@ import { useScore } from '@/context/ScoreContext';
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { isPromoBarVisible, setIsPromoBarVisible } = useScore();
+  const { isPromoBarVisible, setIsPromoBarVisible, isPromoBarTextMoving, setIsPromoBarTextMoving } = useScore();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -81,6 +81,28 @@ const Settings = () => {
             <div className="flex items-center gap-2 rtl:flex-row-reverse">
               <RadioGroupItem value="hide" id="hide-promo" />
               <Label htmlFor="hide-promo">{t('hide')}</Label>
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-card text-card-foreground">
+        <CardHeader className="rtl:text-right">
+          <CardTitle>{t('promo_bar_animation')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup
+            value={isPromoBarTextMoving ? 'moving' : 'static'}
+            onValueChange={(value) => setIsPromoBarTextMoving(value === 'moving')}
+            className="space-y-2"
+          >
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="static" id="static-promo" />
+              <Label htmlFor="static-promo">{t('static')}</Label>
+            </div>
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <RadioGroupItem value="moving" id="moving-promo" />
+              <Label htmlFor="moving-promo">{t('moving')}</Label>
             </div>
           </RadioGroup>
         </CardContent>
