@@ -85,7 +85,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [numRounds, setNumRoundsState] = useState<number>(() => getInitialState('scoreboard_num_rounds', 1)); // Default to 1 round
   const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
   const [isPromoBarVisible, setIsPromoBarVisibleState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_visible', true));
-  const [isPromoBarTextMoving, setIsPromoBarTextMovingState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_text_moving', false));
+  const [isPromoBarTextMoving, setIsPromoBarTextMovingState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_text_moving', true));
 
   // Refs to store previous values for comparison in useEffect
   const prevCurrentRoundRef = useRef<number>(currentRound);
