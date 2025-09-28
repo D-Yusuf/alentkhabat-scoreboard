@@ -23,6 +23,8 @@
   "slow": "Slow",
   "medium": "Medium",
   "fast": "Fast",
+  "install_app": "Install App",
+  "install_app_description": "Scan the QR code to open this app on another device and add it to your home screen.",
   "common": {
     "are_you_sure": "Are you sure?",
     "delete": "Delete",

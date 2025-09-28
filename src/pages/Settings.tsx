@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
 import { useScore } from '@/context/ScoreContext';
+import InstallPwa from '@/components/InstallPwa';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -134,6 +135,8 @@ const Settings = () => {
           )}
         </CardContent>
       </Card>
+
+      <InstallPwa />
     </div>
   );
 };
