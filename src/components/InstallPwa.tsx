@@ -9,7 +9,7 @@ const InstallPwa = () => {
 
   useEffect(() => {
     // Ensure this code runs only on the client side
-    setUrl(window.location.href);
+    setUrl(window.location.origin);
   }, []);
 
   return (
