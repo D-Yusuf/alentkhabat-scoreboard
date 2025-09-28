@@ -83,28 +83,24 @@ const Settings = () => {
               <Label htmlFor="hide-promo">{t('hide')}</Label>
             </div>
           </RadioGroup>
-        </CardContent>
-      </Card>
 
-      <Card className="bg-card text-card-foreground">
-        <CardHeader className="rtl:text-right">
-          <CardTitle>{t('promo_bar_animation')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RadioGroup
-            value={isPromoBarTextMoving ? 'moving' : 'static'}
-            onValueChange={(value) => setIsPromoBarTextMoving(value === 'moving')}
-            className="space-y-2"
-          >
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="static" id="static-promo" />
-              <Label htmlFor="static-promo">{t('static')}</Label>
-            </div>
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="moving" id="moving-promo" />
-              <Label htmlFor="moving-promo">{t('moving')}</Label>
-            </div>
-          </RadioGroup>
+          <div className="mt-4 pt-4 border-t">
+            <Label className="mb-2 block font-medium">{t('promo_bar_animation')}</Label>
+            <RadioGroup
+              value={isPromoBarTextMoving ? 'moving' : 'static'}
+              onValueChange={(value) => setIsPromoBarTextMoving(value === 'moving')}
+              className="space-y-2"
+            >
+              <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                <RadioGroupItem value="static" id="static-promo" />
+                <Label htmlFor="static-promo">{t('static')}</Label>
+              </div>
+              <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                <RadioGroupItem value="moving" id="moving-promo" />
+                <Label htmlFor="moving-promo">{t('moving')}</Label>
+              </div>
+            </RadioGroup>
+          </div>
         </CardContent>
       </Card>
     </div>
