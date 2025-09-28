@@ -28,8 +28,15 @@ const PromoBar = () => {
     return null;
   }
 
+  // This mapping ensures Tailwind's JIT compiler detects the full class names
+  const animationSpeedClasses = {
+    slow: 'animate-marquee-slow',
+    medium: 'animate-marquee-medium',
+    fast: 'animate-marquee-fast',
+  };
+
   const animationClass = isPromoBarTextMoving 
-    ? `animate-marquee-${promoBarAnimationSpeed}` 
+    ? animationSpeedClasses[promoBarAnimationSpeed]
     : '';
 
   return (
