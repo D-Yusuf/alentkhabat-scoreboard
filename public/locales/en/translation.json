@@ -19,6 +19,10 @@
   "promo_bar_animation": "Remembrance Bar Animation",
   "static": "Static",
   "moving": "Moving",
+  "promo_bar_animation_speed": "Animation Speed",
+  "slow": "Slow",
+  "medium": "Medium",
+  "fast": "Fast",
   "common": {
     "are_you_sure": "Are you sure?",
     "delete": "Delete",

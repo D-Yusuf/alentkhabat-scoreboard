@@ -19,6 +19,10 @@
   "promo_bar_animation": "حركة شريط الأذكار",
   "static": "ثابت",
   "moving": "متحرك",
+  "promo_bar_animation_speed": "سرعة الحركة",
+  "slow": "بطيء",
+  "medium": "متوسط",
+  "fast": "سريع",
   "common": {
     "are_you_sure": "هل أنت متأكد؟",
     "delete": "حذف",

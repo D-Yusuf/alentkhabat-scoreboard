@@ -4,7 +4,7 @@ import { useScore } from '@/context/ScoreContext';
 
 const PromoBar = () => {
   const { t, i18n } = useTranslation();
-  const { isPromoBarTextMoving } = useScore();
+  const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
@@ -28,9 +28,13 @@ const PromoBar = () => {
     return null;
   }
 
+  const animationClass = isPromoBarTextMoving 
+    ? `animate-marquee-${promoBarAnimationSpeed}` 
+    : '';
+
   return (
     <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap">
-      <p className={`text-base font-medium inline-block ${isPromoBarTextMoving ? 'animate-marquee' : ''}`}>
+      <p className={`text-base font-medium inline-block ${animationClass}`}>
         {athkarList[currentIndex]}
       </p>
     </div>

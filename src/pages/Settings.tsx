@@ -8,7 +8,14 @@ import { useScore } from '@/context/ScoreContext';
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { isPromoBarVisible, setIsPromoBarVisible, isPromoBarTextMoving, setIsPromoBarTextMoving } = useScore();
+  const { 
+    isPromoBarVisible, 
+    setIsPromoBarVisible, 
+    isPromoBarTextMoving, 
+    setIsPromoBarTextMoving,
+    promoBarAnimationSpeed,
+    setPromoBarAnimationSpeed
+  } = useScore();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -101,6 +108,30 @@ const Settings = () => {
               </div>
             </RadioGroup>
           </div>
+
+          {isPromoBarTextMoving && (
+            <div className="mt-4 pt-4 border-t">
+              <Label className="mb-2 block font-medium">{t('promo_bar_animation_speed')}</Label>
+              <RadioGroup
+                value={promoBarAnimationSpeed}
+                onValueChange={(value) => setPromoBarAnimationSpeed(value as 'slow' | 'medium' | 'fast')}
+                className="space-y-2"
+              >
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="slow" id="slow-promo" />
+                  <Label htmlFor="slow-promo">{t('slow')}</Label>
+                </div>
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="medium" id="medium-promo" />
+                  <Label htmlFor="medium-promo">{t('medium')}</Label>
+                </div>
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="fast" id="fast-promo" />
+                  <Label htmlFor="fast-promo">{t('fast')}</Label>
+                </div>
+              </RadioGroup>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

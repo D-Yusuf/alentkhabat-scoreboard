@@ -13,6 +13,8 @@ export interface Player {
   roundScores: number[]; // Array of scores for each round, managed by ScoreList
 }
 
+type AnimationSpeed = 'slow' | 'medium' | 'fast';
+
 interface ScoreContextType {
   teams: Team[];
   setTeams: (teams: Team[]) => void;
@@ -43,6 +45,8 @@ interface ScoreContextType {
   setIsPromoBarVisible: (isVisible: boolean) => void;
   isPromoBarTextMoving: boolean;
   setIsPromoBarTextMoving: (isMoving: boolean) => void;
+  promoBarAnimationSpeed: AnimationSpeed;
+  setPromoBarAnimationSpeed: (speed: AnimationSpeed) => void;
 }
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -86,6 +90,7 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
   const [roundCountMode, setRoundCountModeState] = useState<'manual' | 'automatic'>(() => getInitialState('scoreboard_round_count_mode', 'automatic'));
   const [isPromoBarVisible, setIsPromoBarVisibleState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_visible', true));
   const [isPromoBarTextMoving, setIsPromoBarTextMovingState] = useState<boolean>(() => getInitialState('scoreboard_promo_bar_text_moving', true));
+  const [promoBarAnimationSpeed, setPromoBarAnimationSpeedState] = useState<AnimationSpeed>(() => getInitialState('scoreboard_promo_bar_animation_speed', 'medium'));
 
   // Refs to store previous values for comparison in useEffect
   const prevCurrentRoundRef = useRef<number>(currentRound);
@@ -134,12 +139,20 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('scoreboard_promo_bar_text_moving', JSON.stringify(isPromoBarTextMoving));
   }, [isPromoBarTextMoving]);
 
+  useEffect(() => {
+    localStorage.setItem('scoreboard_promo_bar_animation_speed', JSON.stringify(promoBarAnimationSpeed));
+  }, [promoBarAnimationSpeed]);
+
   const setIsPromoBarVisible = (isVisible: boolean) => {
     setIsPromoBarVisibleState(isVisible);
   };
 
   const setIsPromoBarTextMoving = (isMoving: boolean) => {
     setIsPromoBarTextMovingState(isMoving);
+  };
+
+  const setPromoBarAnimationSpeed = (speed: AnimationSpeed) => {
+    setPromoBarAnimationSpeedState(speed);
   };
 
   // Function to set numRounds and adjust player roundScores accordingly
@@ -414,6 +427,8 @@ export const ScoreProvider = ({ children }: { children: ReactNode }) => {
       setIsPromoBarVisible,
       isPromoBarTextMoving,
       setIsPromoBarTextMoving,
+      promoBarAnimationSpeed,
+      setPromoBarAnimationSpeed,
     }}>
       {children}
     </ScoreContext.Provider>
