@@ -9,20 +9,41 @@ const PromoBar = () => {
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
 
+  // Effect to set a random index on language change or initial load
+  useEffect(() => {
+    if (!Array.isArray(athkarList) || athkarList.length === 0) {
+      return;
+    }
+    setCurrentIndex(Math.floor(Math.random() * athkarList.length));
+  }, [i18n.language, athkarList.length]);
+
+  // Effect to manage the interval for switching remembrances
   useEffect(() => {
     if (!Array.isArray(athkarList) || athkarList.length === 0) {
       return;
     }
 
-    // Set a random index when the language is loaded/changed
-    setCurrentIndex(Math.floor(Math.random() * athkarList.length));
+    let intervalDuration: number;
+
+    if (isPromoBarTextMoving) {
+      const durations = {
+        slow: 30000,   // 30 seconds per loop
+        medium: 15000, // 15 seconds per loop
+        fast: 5000,    // 5 seconds per loop
+      };
+      // Switch after two loops
+      intervalDuration = durations[promoBarAnimationSpeed] * 2;
+    } else {
+      // Switch every 30 seconds for static text
+      intervalDuration = 30000;
+    }
 
     const intervalId = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % athkarList.length);
-    }, 60000); // 1 minute
+    }, intervalDuration);
 
     return () => clearInterval(intervalId);
-  }, [i18n.language, athkarList.length]); // Re-run effect when language or list length changes
+  }, [isPromoBarTextMoving, promoBarAnimationSpeed, athkarList.length]);
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
