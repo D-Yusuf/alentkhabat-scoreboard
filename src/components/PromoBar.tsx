@@ -40,12 +40,13 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
       const distance = containerWidth + textWidth;
       const duration = (distance / speed) * 1000;
 
+      // Add translateY(-50%) to the keyframes to keep it centered
       const keyframes = isRTL ? [
-        { transform: `translateX(-${textWidth}px)` },
-        { transform: `translateX(${containerWidth}px)` }
+        { transform: `translateX(-${textWidth}px) translateY(-50%)` },
+        { transform: `translateX(${containerWidth}px) translateY(-50%)` }
       ] : [
-        { transform: `translateX(${containerWidth}px)` },
-        { transform: `translateX(-${textWidth}px)` }
+        { transform: `translateX(${containerWidth}px) translateY(-50%)` },
+        { transform: `translateX(-${textWidth}px) translateY(-50%)` }
       ];
 
       animationRef.current = textElement.animate(keyframes, {
@@ -78,7 +79,7 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
     <div ref={containerRef} className="relative w-full h-full">
       <span
         ref={textRef}
-        className="absolute whitespace-nowrap"
+        className="absolute whitespace-nowrap top-1/2" // Position top edge at the center
         key={currentIndex} // This forces React to create a new element when the index changes
       >
         {athkarList[currentIndex]}
