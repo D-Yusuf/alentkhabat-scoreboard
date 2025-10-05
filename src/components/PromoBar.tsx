@@ -53,11 +53,8 @@ const PromoBar = () => {
 
   return (
     <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap">
-      <div className={`inline-flex ${animationClass}`}>
+      <div className={`inline-block ${animationClass}`}>
         <span className="text-base font-medium px-4">{currentAthkar}</span>
-        {isPromoBarTextMoving && (
-          <span className="text-base font-medium px-4" aria-hidden="true">{currentAthkar}</span>
-        )}
       </div>
     </div>
   );
