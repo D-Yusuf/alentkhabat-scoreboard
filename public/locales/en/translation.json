@@ -70,5 +70,15 @@
     "no_rounds": "No Rounds",
     "no_rounds_available": "No rounds available. Add players or set manual rounds."
   },
-  "round": "Round"
+  "round": "Round",
+  "pwa_install": {
+    "title": "How to Install App",
+    "tooltip": "Installation Help",
+    "ios_step1": "Tap the 'Share' button in your browser's toolbar.",
+    "ios_step2": "Then, tap 'Add to Home Screen'.",
+    "android_step1": "Tap the 'More' button (three dots) in your browser's toolbar.",
+    "android_step2": "Then, tap 'Install app' or 'Add to Home Screen'.",
+    "other": "Follow your browser's instructions to add this web app to your home screen.",
+    "close": "Got it!"
+  }
 }
