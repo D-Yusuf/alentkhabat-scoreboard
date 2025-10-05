@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useScore } from '@/context/ScoreContext';
 
@@ -8,7 +8,8 @@ const PromoBar = () => {
   const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({});
   const marqueeRef = useRef<HTMLDivElement>(null);
 
-  const athkarList = t('athkar_list', { returnObjects: true }) as string[];
+  // Memoize athkarList to prevent re-creating the array on every render, which causes an infinite loop.
+  const athkarList = useMemo(() => t('athkar_list', { returnObjects: true }) as string[], [i18n.language]);
 
   useLayoutEffect(() => {
     if (isPromoBarTextMoving && marqueeRef.current) {
@@ -30,7 +31,7 @@ const PromoBar = () => {
     } else {
       setAnimationStyle({});
     }
-  }, [isPromoBarTextMoving, promoBarAnimationSpeed, athkarList, i18n.language]);
+  }, [isPromoBarTextMoving, promoBarAnimationSpeed, athkarList]);
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
