@@ -22,21 +22,31 @@ const PromoBar = () => {
     }, 60000); // 1 minute
 
     return () => clearInterval(intervalId);
-  }, [i18n.language]); // Re-run effect only when language changes
+  }, [i18n.language, athkarList.length]); // Re-run effect when language or list length changes
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
   }
 
-  // This mapping ensures Tailwind's JIT compiler detects the full class names
-  const animationSpeedClasses = {
+  const isRTL = i18n.dir() === 'rtl';
+
+  // Mappings for LTR and RTL animations
+  const ltrAnimationSpeedClasses = {
     slow: 'animate-marquee-slow',
     medium: 'animate-marquee-medium',
     fast: 'animate-marquee-fast',
   };
 
+  const rtlAnimationSpeedClasses = {
+    slow: 'animate-marquee-rtl-slow',
+    medium: 'animate-marquee-rtl-medium',
+    fast: 'animate-marquee-rtl-fast',
+  };
+
+  const animationClasses = isRTL ? rtlAnimationSpeedClasses : ltrAnimationSpeedClasses;
+
   const animationClass = isPromoBarTextMoving 
-    ? animationSpeedClasses[promoBarAnimationSpeed]
+    ? animationClasses[promoBarAnimationSpeed]
     : '';
 
   return (
