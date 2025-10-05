@@ -78,6 +78,8 @@
     "ios_step2": "Then, tap 'Add to Home Screen'.",
     "android_step1": "Tap the 'More' button (three dots) in your browser's toolbar.",
     "android_step2": "Then, tap 'Install app' or 'Add to Home Screen'.",
+    "desktop_step1": "In your browser's address bar, look for the 'Install' icon.",
+    "desktop_step2": "Click it to add the app to your computer.",
     "other": "Follow your browser's instructions to add this web app to your home screen.",
     "close": "Got it!"
   }

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { Share, MoreVertical } from "lucide-react";
+import { Share, MoreVertical, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface InstallInstructionsProps {
@@ -17,21 +17,27 @@ interface InstallInstructionsProps {
 
 const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
   const { t } = useTranslation();
-  const [os, setOs] = useState<'ios' | 'android' | 'other'>('other');
+  const [platform, setPlatform] = useState<'ios' | 'android' | 'desktop' | 'other'>('other');
 
   useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    if (/iphone|ipad|ipod/.test(userAgent)) {
-      setOs('ios');
-    } else if (/android/.test(userAgent)) {
-      setOs('android');
-    } else {
-      setOs('other');
+    if (isOpen) {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isMobile = /iphone|ipad|ipod|android|webos|blackberry|iemobile|opera mini/.test(userAgent);
+
+      if (/iphone|ipad|ipod/.test(userAgent)) {
+        setPlatform('ios');
+      } else if (/android/.test(userAgent)) {
+        setPlatform('android');
+      } else if (!isMobile) {
+        setPlatform('desktop');
+      } else {
+        setPlatform('other');
+      }
     }
-  }, []);
+  }, [isOpen]);
 
   const getInstructions = () => {
-    if (os === 'ios') {
+    if (platform === 'ios') {
       return (
         <>
           <p className="mb-4">{t('pwa_install.ios_step1')}</p>
@@ -42,7 +48,7 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
         </>
       );
     }
-    if (os === 'android') {
+    if (platform === 'android') {
       return (
         <>
           <p className="mb-4">{t('pwa_install.android_step1')}</p>
@@ -50,6 +56,17 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
             <MoreVertical className="h-6 w-6 mx-2" />
           </div>
           <p className="mt-4">{t('pwa_install.android_step2')}</p>
+        </>
+      );
+    }
+    if (platform === 'desktop') {
+      return (
+        <>
+          <p className="mb-4">{t('pwa_install.desktop_step1')}</p>
+          <div className="flex items-center justify-center">
+            <Download className="h-6 w-6 mx-2" />
+          </div>
+          <p className="mt-4">{t('pwa_install.desktop_step2')}</p>
         </>
       );
     }
