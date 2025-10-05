@@ -75,18 +75,20 @@ export default {
             height: "0",
           },
         },
-        "slide-across": {
-          "from": { transform: "translateX(100%)" },
-          "to": { transform: "translateX(-100%)" },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
-        "slide-across-rtl": {
-          "from": { transform: "translateX(-100%)" },
-          "to": { transform: "translateX(100%)" },
+        "marquee-rtl": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(50%)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "marquee": "marquee linear infinite",
+        "marquee-rtl": "marquee-rtl linear infinite",
       },
     },
   },
