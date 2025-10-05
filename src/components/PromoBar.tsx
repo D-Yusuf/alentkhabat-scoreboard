@@ -70,8 +70,10 @@ const PromoBar = () => {
     ? animationClasses[promoBarAnimationSpeed]
     : '';
 
+  const containerWhitespaceClass = isPromoBarTextMoving ? 'whitespace-nowrap' : 'whitespace-normal';
+
   return (
-    <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap">
+    <div className={`bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden ${containerWhitespaceClass}`}>
       <p className={`text-base font-medium inline-block ${animationClass}`}>
         {athkarList[currentIndex]}
       </p>
