@@ -75,6 +75,14 @@ export default {
             height: "0",
           },
         },
+        "slide-across": {
+          "from": { transform: "translateX(100%)" },
+          "to": { transform: "translateX(-100%)" },
+        },
+        "slide-across-rtl": {
+          "from": { transform: "translateX(-100%)" },
+          "to": { transform: "translateX(100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
