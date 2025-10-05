@@ -87,6 +87,8 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "scroll-across": "scroll-across 15s linear",
+        "scroll-across-rtl": "scroll-across-rtl 15s linear",
       },
     },
   },

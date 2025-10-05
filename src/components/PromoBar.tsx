@@ -6,13 +6,13 @@ const PromoBar = () => {
   const { t, i18n } = useTranslation();
   const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [dynamicDuration, setDynamicDuration] = useState(15);
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
 
-  // Effect for static text mode
+  // Effect for static text mode: cycle every 30s
   useEffect(() => {
     if (!isPromoBarTextMoving) {
       const interval = setInterval(() => {
@@ -22,20 +22,18 @@ const PromoBar = () => {
     }
   }, [isPromoBarTextMoving, athkarList.length]);
 
-  // Effect to handle the pause between animations
+  // Effect for moving text mode: control the animation sequence
   useEffect(() => {
-    if (isPromoBarTextMoving && isPaused) {
-      const timer = setTimeout(() => {
-        setCurrentIndex(prev => (prev + 1) % athkarList.length);
-        setIsPaused(false);
-      }, 2000); // 2-second pause
-      return () => clearTimeout(timer);
+    if (isPromoBarTextMoving) {
+      setIsAnimating(true);
+    } else {
+      setIsAnimating(false);
     }
-  }, [isPromoBarTextMoving, isPaused, athkarList.length]);
+  }, [isPromoBarTextMoving]);
 
-  // Effect to calculate animation duration based on text and container width
+  // Effect to calculate animation duration
   useEffect(() => {
-    if (isPromoBarTextMoving && textRef.current && !isPaused) {
+    if (isPromoBarTextMoving && isAnimating && textRef.current) {
       const pixelsPerSecond = { slow: 50, medium: 80, fast: 120 };
       const speed = pixelsPerSecond[promoBarAnimationSpeed];
       const containerWidth = textRef.current.parentElement?.offsetWidth || 0;
@@ -44,46 +42,49 @@ const PromoBar = () => {
       const duration = distance / speed;
       setDynamicDuration(duration);
     }
-  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, isPaused]);
+  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, isAnimating]);
 
   const handleAnimationEnd = () => {
-    if (isPromoBarTextMoving) {
-      setIsPaused(true);
-    }
+    setIsAnimating(false);
+    setTimeout(() => {
+      setCurrentIndex(prev => (prev + 1) % athkarList.length);
+      setIsAnimating(true);
+    }, 2000); // 2-second pause
   };
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
   }
 
-  const isRTL = i18n.dir() === 'rtl';
   const currentText = athkarList[currentIndex];
-  const animationName = isRTL ? 'scroll-across-rtl' : 'scroll-across';
-  const animationStyle = {
-    animationName,
-    animationDuration: `${dynamicDuration}s`,
-    animationTimingFunction: 'linear',
-  };
 
-  return (
-    <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden relative h-8 flex items-center justify-center">
-      {isPromoBarTextMoving ? (
-        !isPaused && (
+  if (isPromoBarTextMoving) {
+    const isRTL = i18n.dir() === 'rtl';
+    const animationClass = isRTL ? 'animate-scroll-across-rtl' : 'animate-scroll-across';
+    const animationStyle = { animationDuration: `${dynamicDuration}s` };
+    return (
+      <div className="bg-primary text-primary-foreground py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap h-8 relative">
+        {isAnimating && (
           <p
             ref={textRef}
             key={currentIndex}
             onAnimationEnd={handleAnimationEnd}
-            className="text-base font-medium whitespace-nowrap absolute"
+            className={`text-base font-medium absolute ${animationClass}`}
             style={animationStyle}
           >
             {currentText}
           </p>
-        )
-      ) : (
-        <p className="text-base font-medium">
-          {currentText}
-        </p>
-      )}
+        )}
+      </div>
+    );
+  }
+
+  // Static mode
+  return (
+    <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4">
+      <p className="text-base font-medium">
+        {currentText}
+      </p>
     </div>
   );
 };
