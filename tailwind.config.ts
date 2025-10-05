@@ -75,22 +75,20 @@ export default {
             height: "0",
           },
         },
-        "slide-in-out": {
-          "0%": { transform: "translateX(100%)" },
-          "15%, 85%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-100%)" },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
-        "slide-in-out-rtl": {
-          "0%": { transform: "translateX(-100%)" },
-          "15%, 85%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(100%)" },
+        "marquee-rtl": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "slide-in-out": "slide-in-out",
-        "slide-in-out-rtl": "slide-in-out-rtl",
+        "marquee": "marquee linear infinite",
+        "marquee-rtl": "marquee-rtl linear infinite",
       },
     },
   },
