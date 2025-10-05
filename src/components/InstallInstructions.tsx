@@ -76,7 +76,7 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-background border-none text-center">
-        <DialogHeader>
+        <DialogHeader className="sm:text-center">
           <DialogTitle className="text-center">{t('pwa_install.title')}</DialogTitle>
           <div className="text-foreground pt-2">
             {getInstructions()}
