@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { useScore } from '@/context/ScoreContext';
 import InstallPwa from '@/components/InstallPwa';
 import { Button } from '@/components/ui/button';
-import { Info } from 'lucide-react';
+import { Download } from 'lucide-react';
 import InstallInstructions from '@/components/InstallInstructions';
 
 const Settings = () => {
@@ -33,7 +33,7 @@ const Settings = () => {
         <div className="w-10" /> {/* Placeholder for spacing */}
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
         <Button variant="ghost" size="icon" onClick={() => setIsInstructionsOpen(true)}>
-          <Info className="h-6 w-6" />
+          <Download className="h-6 w-6" />
         </Button>
       </div>
       

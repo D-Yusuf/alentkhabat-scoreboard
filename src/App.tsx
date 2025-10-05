@@ -13,6 +13,7 @@ import { ScoreProvider } from "@/context/ScoreContext";
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { ThemeProvider } from "./components/ThemeProvider";
+import AutoInstallPrompt from "./components/AutoInstallPrompt";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <TooltipProvider>
         <ScoreProvider>
+          <AutoInstallPrompt />
           <Toaster />
           <Sonner />
           <BrowserRouter>

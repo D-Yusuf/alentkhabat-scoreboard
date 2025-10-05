@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Share, MoreVertical, Download } from "lucide-react";
 import { useEffect, useState } from "react";
+import IOSInstructions from "@/components/pwa/IOSInstructions";
+import AndroidInstructions from "@/components/pwa/AndroidInstructions";
 
 interface InstallInstructionsProps {
   isOpen: boolean;
@@ -16,7 +18,7 @@ interface InstallInstructionsProps {
 }
 
 const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [platform, setPlatform] = useState<'ios' | 'android' | 'desktop' | 'other'>('other');
 
   useEffect(() => {
@@ -38,26 +40,10 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
 
   const getInstructions = () => {
     if (platform === 'ios') {
-      return (
-        <>
-          <p className="mb-4">{t('pwa_install.ios_step1')}</p>
-          <div className="flex items-center justify-center">
-            <Share className="h-6 w-6 mx-2" />
-          </div>
-          <p className="mt-4">{t('pwa_install.ios_step2')}</p>
-        </>
-      );
+      return <IOSInstructions />;
     }
     if (platform === 'android') {
-      return (
-        <>
-          <p className="mb-4">{t('pwa_install.android_step1')}</p>
-          <div className="flex items-center justify-center">
-            <MoreVertical className="h-6 w-6 mx-2" />
-          </div>
-          <p className="mt-4">{t('pwa_install.android_step2')}</p>
-        </>
-      );
+      return <AndroidInstructions />;
     }
     if (platform === 'desktop') {
       return (
@@ -78,6 +64,24 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
       <DialogContent className="bg-background border-none text-center">
         <DialogHeader className="sm:text-center">
           <DialogTitle className="text-center">{t('pwa_install.title')}</DialogTitle>
+          <div className="flex justify-center gap-2 pt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => i18n.changeLanguage('en')}
+              disabled={i18n.language === 'en'}
+            >
+              {t('english')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => i18n.changeLanguage('ar')}
+              disabled={i18n.language === 'ar'}
+            >
+              {t('arabic')}
+            </Button>
+          </div>
           <div className="text-foreground pt-2">
             {getInstructions()}
           </div>
