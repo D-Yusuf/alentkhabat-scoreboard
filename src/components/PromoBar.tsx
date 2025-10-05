@@ -48,12 +48,17 @@ const PromoBar = () => {
   const animationClass = isPromoBarTextMoving 
     ? animationClasses[promoBarAnimationSpeed]
     : '';
+  
+  const currentAthkar = athkarList[currentIndex];
 
   return (
     <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap">
-      <p className={`text-base font-medium inline-block ${animationClass}`}>
-        {athkarList[currentIndex]}
-      </p>
+      <div className={`inline-flex ${animationClass}`}>
+        <span className="text-base font-medium px-4">{currentAthkar}</span>
+        {isPromoBarTextMoving && (
+          <span className="text-base font-medium px-4" aria-hidden="true">{currentAthkar}</span>
+        )}
+      </div>
     </div>
   );
 };
