@@ -1,71 +1,46 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useScore } from '@/context/ScoreContext';
 
-const PromoBar = () => {
-  const { t, i18n } = useTranslation();
-  const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
-  const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({});
-  const marqueeRef = useRef<HTMLDivElement>(null);
-
-  // Memoize athkarList to prevent re-creating the array on every render, which causes an infinite loop.
-  const athkarList = useMemo(() => t('athkar_list', { returnObjects: true }) as string[], [i18n.language]);
-
-  useLayoutEffect(() => {
-    if (isPromoBarTextMoving && marqueeRef.current) {
-      const contentWidth = marqueeRef.current.scrollWidth / 2;
-      
-      let speed: number; // pixels per second
-      switch (promoBarAnimationSpeed) {
-        case 'slow': speed = 40; break;
-        case 'fast': speed = 120; break;
-        default: speed = 80; break;
-      }
-      const duration = contentWidth / speed;
-
-      if (duration > 0) {
-        setAnimationStyle({ animationDuration: `${duration}s` });
-      } else {
-        setAnimationStyle({});
-      }
-    } else {
-      setAnimationStyle({});
-    }
-  }, [isPromoBarTextMoving, promoBarAnimationSpeed, athkarList]);
-
-  if (!Array.isArray(athkarList) || athkarList.length === 0) {
-    return null;
-  }
-
+// Component for the new slide-and-pause animation
+const SlidingAthkar = ({ athkarList, animationSpeed }: { athkarList: string[], animationSpeed: 'slow' | 'medium' | 'fast' }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const { i18n } = useTranslation();
   const isRTL = i18n.dir() === 'rtl';
-  const animationClass = isPromoBarTextMoving 
-    ? (isRTL ? 'animate-marquee-rtl' : 'animate-marquee')
-    : '';
+
+  const { duration, interval } = useMemo(() => {
+    switch (animationSpeed) {
+      case 'slow': return { duration: '8s', interval: 11000 }; // 8s animation + 3s gap
+      case 'fast': return { duration: '3s', interval: 5000 }; // 3s animation + 2s gap
+      default: return { duration: '5s', interval: 7000 }; // 5s animation + 2s gap
+    }
+  }, [animationSpeed]);
+
+  useEffect(() => {
+    if (athkarList.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentIndex(prev => (prev + 1) % athkarList.length);
+      }, interval);
+      return () => clearInterval(timer);
+    }
+  }, [athkarList.length, interval]);
+
+  const animationClass = isRTL ? 'animate-slide-in-out-rtl' : 'animate-slide-in-out';
 
   return (
-    <div dir={i18n.dir()} className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap">
-      {isPromoBarTextMoving ? (
-        <div
-          ref={marqueeRef}
-          className={`inline-flex ${animationClass}`}
-          style={animationStyle}
-        >
-          {/* Render the full list of remembrances twice for a seamless loop */}
-          {athkarList.map((athkar, index) => (
-            <span key={`first-${index}`} className="text-base font-medium px-10">{athkar}</span>
-          ))}
-          {athkarList.map((athkar, index) => (
-            <span key={`second-${index}`} className="text-base font-medium px-10" aria-hidden="true">{athkar}</span>
-          ))}
-        </div>
-      ) : (
-        <StaticAthkar athkarList={athkarList} />
-      )}
+    <div className="relative h-6 flex justify-center items-center">
+      <span
+        key={currentIndex} // This is crucial to restart the animation for each item
+        className={`absolute whitespace-nowrap ${animationClass}`}
+        style={{ animationDuration: duration, animationTimingFunction: 'ease-in-out' }}
+      >
+        {athkarList[currentIndex]}
+      </span>
     </div>
   );
 };
 
-// A small helper component to manage the state for the static text display
+// Component for the static, fading text
 const StaticAthkar = ({ athkarList }: { athkarList: string[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -78,6 +53,27 @@ const StaticAthkar = ({ athkarList }: { athkarList: string[] }) => {
   }, [athkarList.length]);
 
   return <span className="text-base font-medium px-4">{athkarList[currentIndex]}</span>;
+};
+
+const PromoBar = () => {
+  const { t, i18n } = useTranslation();
+  const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
+
+  const athkarList = useMemo(() => t('athkar_list', { returnObjects: true }) as string[], [i18n.language]);
+
+  if (!Array.isArray(athkarList) || athkarList.length === 0) {
+    return null;
+  }
+
+  return (
+    <div dir={i18n.dir()} className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden">
+      {isPromoBarTextMoving ? (
+        <SlidingAthkar athkarList={athkarList} animationSpeed={promoBarAnimationSpeed} />
+      ) : (
+        <StaticAthkar athkarList={athkarList} />
+      )}
+    </div>
+  );
 };
 
 export default PromoBar;
