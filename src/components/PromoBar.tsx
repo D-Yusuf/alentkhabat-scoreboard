@@ -95,11 +95,11 @@ const StaticAthkar = ({ athkarList }: { athkarList: string[] }) => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPaused) {
-      // This is the 5-second pause period
+      // This is the 4-second pause period
       timer = setTimeout(() => {
         setCurrentIndex(prev => (prev + 1) % athkarList.length);
         setIsPaused(false); // Start showing the next item
-      }, 5000);
+      }, 4000);
     } else {
       // This is the 10-second display period
       timer = setTimeout(() => {
