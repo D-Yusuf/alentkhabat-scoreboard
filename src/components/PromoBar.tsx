@@ -47,7 +47,7 @@ const PromoBar = () => {
 
     if (isPromoBarTextMoving) {
       const duration = dynamicDuration ?? 15; // Fallback to 15s if not calculated yet
-      intervalDuration = duration * 1000 * 2; // Switch after two loops
+      intervalDuration = duration * 1000; // Switch after one loop
     } else {
       intervalDuration = 30000; // Switch every 30 seconds for static text
     }
