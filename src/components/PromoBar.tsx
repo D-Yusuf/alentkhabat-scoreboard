@@ -90,29 +90,36 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
 // --- Static Text Component ---
 const StaticAthkar = ({ athkarList }: { athkarList: string[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isPaused) {
-      // This is the 4-second pause period
-      timer = setTimeout(() => {
+    // 1. Display for 10 seconds, then start fading out
+    const displayTimer = setTimeout(() => {
+      setIsFading(true);
+    }, 10000);
+
+    return () => clearTimeout(displayTimer);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (isFading) {
+      // 2. After fade out starts, wait for it to finish (500ms) plus the pause (4s)
+      const pauseTimer = setTimeout(() => {
+        // 3. Change the text and start fading back in
         setCurrentIndex(prev => (prev + 1) % athkarList.length);
-        setIsPaused(false); // Start showing the next item
-      }, 4000);
-    } else {
-      // This is the 10-second display period
-      timer = setTimeout(() => {
-        setIsPaused(true); // Start fading out
-      }, 10000);
+        setIsFading(false);
+      }, 4000 + 500); // 4s pause + 500ms fade out duration
+
+      return () => clearTimeout(pauseTimer);
     }
-    return () => clearTimeout(timer);
-  }, [isPaused, athkarList.length]);
+  }, [isFading, athkarList.length]);
 
   return (
-    <span className="text-base font-medium px-4 inline-block transition-opacity duration-500" style={{ opacity: isPaused ? 0 : 1 }}>
-      {/* Use a non-breaking space during pause to maintain height */}
-      {isPaused ? '\u00A0' : athkarList[currentIndex]}
+    <span
+      className="text-base font-medium px-4 inline-block transition-opacity duration-500"
+      style={{ opacity: isFading ? 0 : 1 }}
+    >
+      {athkarList[currentIndex]}
     </span>
   );
 };
