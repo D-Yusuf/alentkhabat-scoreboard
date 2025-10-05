@@ -28,7 +28,8 @@ const PromoBar = () => {
         fast: 120,
       };
       const speed = pixelsPerSecond[promoBarAnimationSpeed];
-      const width = textRef.current.scrollWidth;
+      // We animate over half the width because the content is duplicated
+      const width = textRef.current.scrollWidth / 2;
       const duration = width / speed;
       setDynamicDuration(duration);
     } else {
@@ -83,14 +84,22 @@ const PromoBar = () => {
 
   const animationStyle = dynamicDuration ? { animationDuration: `${dynamicDuration}s` } : {};
 
+  const currentText = athkarList[currentIndex];
+
   return (
     <div className={`bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden ${containerWhitespaceClass}`}>
       <p
         ref={textRef}
-        className={`text-base font-medium inline-block ${animationClass}`}
+        className={`text-base font-medium ${isPromoBarTextMoving ? 'inline-flex' : 'inline-block'} ${animationClass}`}
         style={animationStyle}
       >
-        {athkarList[currentIndex]}
+        {currentText}
+        {isPromoBarTextMoving && (
+          <>
+            <span className="px-4" />
+            {currentText}
+          </>
+        )}
       </p>
     </div>
   );
