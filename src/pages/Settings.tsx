@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -5,6 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from 'next-themes';
 import { useScore } from '@/context/ScoreContext';
 import InstallPwa from '@/components/InstallPwa';
+import { Button } from '@/components/ui/button';
+import { Info } from 'lucide-react';
+import InstallInstructions from '@/components/InstallInstructions';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -17,6 +21,7 @@ const Settings = () => {
     promoBarAnimationSpeed,
     setPromoBarAnimationSpeed
   } = useScore();
+  const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -24,8 +29,12 @@ const Settings = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-between">
+        <div className="w-10" /> {/* Placeholder for spacing */}
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
+        <Button variant="ghost" size="icon" onClick={() => setIsInstructionsOpen(true)}>
+          <Info className="h-6 w-6" />
+        </Button>
       </div>
       
       <Card className="bg-card text-card-foreground">
@@ -137,6 +146,11 @@ const Settings = () => {
       </Card>
 
       <InstallPwa />
+
+      <InstallInstructions
+        isOpen={isInstructionsOpen}
+        onClose={() => setIsInstructionsOpen(false)}
+      />
     </div>
   );
 };

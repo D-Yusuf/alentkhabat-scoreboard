@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import BottomNav from './BottomNav';
-import PwaInstallPrompt from './PwaInstallPrompt';
 
 const Layout = () => {
   return (
@@ -8,7 +7,6 @@ const Layout = () => {
       <main className="p-4 container mx-auto max-w-md flex-grow pb-20 box-border flex flex-col bg-background">
         <Outlet />
       </main>
-      <PwaInstallPrompt />
       <BottomNav />
     </div>
   );
