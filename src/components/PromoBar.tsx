@@ -6,101 +6,84 @@ const PromoBar = () => {
   const { t, i18n } = useTranslation();
   const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
-  const [dynamicDuration, setDynamicDuration] = useState<number | null>(null);
+  const [dynamicDuration, setDynamicDuration] = useState(15);
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
 
-  // Effect to set a random index on language change or initial load
+  // Effect for static text mode
   useEffect(() => {
-    if (!Array.isArray(athkarList) || athkarList.length === 0) {
-      return;
+    if (!isPromoBarTextMoving) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prev => (prev + 1) % athkarList.length);
+      }, 30000);
+      return () => clearInterval(interval);
     }
-    setCurrentIndex(Math.floor(Math.random() * athkarList.length));
-  }, [i18n.language, athkarList.length]);
+  }, [isPromoBarTextMoving, athkarList.length]);
 
-  // Effect to calculate dynamic animation duration
+  // Effect to handle the pause between animations
   useEffect(() => {
-    if (isPromoBarTextMoving && textRef.current) {
-      const pixelsPerSecond = {
-        slow: 30,
-        medium: 60,
-        fast: 120,
-      };
+    if (isPromoBarTextMoving && isPaused) {
+      const timer = setTimeout(() => {
+        setCurrentIndex(prev => (prev + 1) % athkarList.length);
+        setIsPaused(false);
+      }, 2000); // 2-second pause
+      return () => clearTimeout(timer);
+    }
+  }, [isPromoBarTextMoving, isPaused, athkarList.length]);
+
+  // Effect to calculate animation duration based on text and container width
+  useEffect(() => {
+    if (isPromoBarTextMoving && textRef.current && !isPaused) {
+      const pixelsPerSecond = { slow: 50, medium: 80, fast: 120 };
       const speed = pixelsPerSecond[promoBarAnimationSpeed];
-      // We animate over half the width because the content is duplicated
-      const width = textRef.current.scrollWidth / 2;
-      const duration = width / speed;
+      const containerWidth = textRef.current.parentElement?.offsetWidth || 0;
+      const textWidth = textRef.current.scrollWidth;
+      const distance = containerWidth + textWidth;
+      const duration = distance / speed;
       setDynamicDuration(duration);
-    } else {
-      setDynamicDuration(null);
     }
-  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, athkarList]);
+  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, isPaused]);
 
-  // Effect to manage the interval for switching remembrances
-  useEffect(() => {
-    if (!Array.isArray(athkarList) || athkarList.length === 0) {
-      return;
-    }
-
-    let intervalDuration: number;
-
+  const handleAnimationEnd = () => {
     if (isPromoBarTextMoving) {
-      const duration = dynamicDuration ?? 15; // Fallback to 15s if not calculated yet
-      intervalDuration = duration * 1000; // Switch after one loop
-    } else {
-      intervalDuration = 30000; // Switch every 30 seconds for static text
+      setIsPaused(true);
     }
-
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % athkarList.length);
-    }, intervalDuration);
-
-    return () => clearInterval(intervalId);
-  }, [isPromoBarTextMoving, dynamicDuration, athkarList.length]);
+  };
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
   }
 
   const isRTL = i18n.dir() === 'rtl';
-
-  const ltrAnimationSpeedClasses = {
-    slow: 'animate-marquee-slow',
-    medium: 'animate-marquee-medium',
-    fast: 'animate-marquee-fast',
-  };
-
-  const rtlAnimationSpeedClasses = {
-    slow: 'animate-marquee-rtl-slow',
-    medium: 'animate-marquee-rtl-medium',
-    fast: 'animate-marquee-rtl-fast',
-  };
-
-  const animationClasses = isRTL ? rtlAnimationSpeedClasses : ltrAnimationSpeedClasses;
-  const animationClass = isPromoBarTextMoving ? animationClasses[promoBarAnimationSpeed] : '';
-
-  const containerWhitespaceClass = isPromoBarTextMoving ? 'whitespace-nowrap' : 'whitespace-normal';
-
-  const animationStyle = dynamicDuration ? { animationDuration: `${dynamicDuration}s` } : {};
-
   const currentText = athkarList[currentIndex];
+  const animationName = isRTL ? 'scroll-across-rtl' : 'scroll-across';
+  const animationStyle = {
+    animationName,
+    animationDuration: `${dynamicDuration}s`,
+    animationTimingFunction: 'linear',
+  };
 
   return (
-    <div className={`bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden ${containerWhitespaceClass}`}>
-      <p
-        ref={textRef}
-        className={`text-base font-medium ${isPromoBarTextMoving ? 'inline-flex' : 'inline-block'} ${animationClass}`}
-        style={animationStyle}
-      >
-        {currentText}
-        {isPromoBarTextMoving && (
-          <>
-            <span className="px-4" />
+    <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden relative h-8 flex items-center justify-center">
+      {isPromoBarTextMoving ? (
+        !isPaused && (
+          <p
+            ref={textRef}
+            key={currentIndex}
+            onAnimationEnd={handleAnimationEnd}
+            className="text-base font-medium whitespace-nowrap absolute"
+            style={animationStyle}
+          >
             {currentText}
-          </>
-        )}
-      </p>
+          </p>
+        )
+      ) : (
+        <p className="text-base font-medium">
+          {currentText}
+        </p>
+      )}
     </div>
   );
 };
