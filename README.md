@@ -130,4 +130,4 @@ The application can be installed on your mobile device or desktop for easy acces
 -   **On Mobile**: Use the "Add to Home Screen" option in your browser's share menu.
 -   **On Desktop**: Look for an install icon in the browser's address bar.
 
-The app includes a help icon in the Settings page with platform-specific instructions.
+The app includes a help icon in the Settings page with platform-specific instructions.# entikhabat-scoreboard
