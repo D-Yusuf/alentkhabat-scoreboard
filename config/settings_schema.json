@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Theme settings",
+    "settings": [
+      {
+        "type": "text",
+        "id": "app_title",
+        "label": "App title",
+        "default": "Scoreboard"
+      }
+    ]
+  }
+]
+
+
