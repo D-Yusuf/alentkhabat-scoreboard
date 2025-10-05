@@ -14,6 +14,8 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
     const containerElement = containerRef.current;
     if (!textElement || !containerElement) return;
 
+    // Ensure the new text is visible before starting animation
+    textElement.style.opacity = '1';
     let isMounted = true;
 
     const runAnimation = () => {
@@ -21,6 +23,12 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
 
       const textWidth = textElement.offsetWidth;
       const containerWidth = containerElement.offsetWidth;
+
+      // If the element isn't rendered with a width yet, wait a moment and try again.
+      if (textWidth === 0 || containerWidth === 0) {
+        setTimeout(runAnimation, 50);
+        return;
+      }
 
       let speed: number;
       switch (animationSpeed) {
@@ -47,20 +55,22 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
 
       animationRef.current.onfinish = () => {
         if (isMounted) {
+          // Hide the element after animation finishes to prevent it from reappearing
+          textElement.style.opacity = '0';
+          
           setTimeout(() => {
+            // This will trigger the useEffect for the next item
             setCurrentIndex(prev => (prev + 1) % athkarList.length);
           }, 5000); // 5-second pause
         }
       };
     };
 
-    // Delay to allow the new text to render and get its width
-    const timeoutId = setTimeout(runAnimation, 50);
+    runAnimation();
 
     return () => {
       isMounted = false;
       animationRef.current?.cancel();
-      clearTimeout(timeoutId);
     };
   }, [currentIndex, athkarList, animationSpeed, isRTL]);
 
@@ -69,7 +79,7 @@ const MovingAthkar = ({ athkarList, animationSpeed, isRTL }: { athkarList: strin
       <span
         ref={textRef}
         className="absolute whitespace-nowrap"
-        key={currentIndex} // Force re-render when text changes
+        key={currentIndex} // This forces React to create a new element when the index changes
       >
         {athkarList[currentIndex]}
       </span>
