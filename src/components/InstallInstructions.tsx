@@ -3,7 +3,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -62,9 +61,9 @@ const InstallInstructions = ({ isOpen, onClose }: InstallInstructionsProps) => {
       <DialogContent className="bg-background border-none text-center">
         <DialogHeader>
           <DialogTitle className="text-center">{t('pwa_install.title')}</DialogTitle>
-          <DialogDescription className="text-foreground">
+          <div className="text-foreground pt-2">
             {getInstructions()}
-          </DialogDescription>
+          </div>
         </DialogHeader>
         <DialogFooter className="sm:justify-center">
           <Button variant="outline" onClick={onClose}>{t('pwa_install.close')}</Button>
