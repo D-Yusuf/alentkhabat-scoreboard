@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useScore } from '@/context/ScoreContext';
 
@@ -6,6 +6,8 @@ const PromoBar = () => {
   const { t, i18n } = useTranslation();
   const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [dynamicDuration, setDynamicDuration] = useState<number | null>(null);
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
 
@@ -17,6 +19,23 @@ const PromoBar = () => {
     setCurrentIndex(Math.floor(Math.random() * athkarList.length));
   }, [i18n.language, athkarList.length]);
 
+  // Effect to calculate dynamic animation duration
+  useEffect(() => {
+    if (isPromoBarTextMoving && textRef.current) {
+      const pixelsPerSecond = {
+        slow: 30,
+        medium: 60,
+        fast: 120,
+      };
+      const speed = pixelsPerSecond[promoBarAnimationSpeed];
+      const width = textRef.current.scrollWidth;
+      const duration = width / speed;
+      setDynamicDuration(duration);
+    } else {
+      setDynamicDuration(null);
+    }
+  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, athkarList]);
+
   // Effect to manage the interval for switching remembrances
   useEffect(() => {
     if (!Array.isArray(athkarList) || athkarList.length === 0) {
@@ -26,16 +45,10 @@ const PromoBar = () => {
     let intervalDuration: number;
 
     if (isPromoBarTextMoving) {
-      const durations = {
-        slow: 30000,   // 30 seconds per loop
-        medium: 15000, // 15 seconds per loop
-        fast: 5000,    // 5 seconds per loop
-      };
-      // Switch after two loops
-      intervalDuration = durations[promoBarAnimationSpeed] * 2;
+      const duration = dynamicDuration ?? 15; // Fallback to 15s if not calculated yet
+      intervalDuration = duration * 1000 * 2; // Switch after two loops
     } else {
-      // Switch every 30 seconds for static text
-      intervalDuration = 30000;
+      intervalDuration = 30000; // Switch every 30 seconds for static text
     }
 
     const intervalId = setInterval(() => {
@@ -43,7 +56,7 @@ const PromoBar = () => {
     }, intervalDuration);
 
     return () => clearInterval(intervalId);
-  }, [isPromoBarTextMoving, promoBarAnimationSpeed, athkarList.length]);
+  }, [isPromoBarTextMoving, dynamicDuration, athkarList.length]);
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
@@ -51,7 +64,6 @@ const PromoBar = () => {
 
   const isRTL = i18n.dir() === 'rtl';
 
-  // Mappings for LTR and RTL animations
   const ltrAnimationSpeedClasses = {
     slow: 'animate-marquee-slow',
     medium: 'animate-marquee-medium',
@@ -65,16 +77,19 @@ const PromoBar = () => {
   };
 
   const animationClasses = isRTL ? rtlAnimationSpeedClasses : ltrAnimationSpeedClasses;
-
-  const animationClass = isPromoBarTextMoving 
-    ? animationClasses[promoBarAnimationSpeed]
-    : '';
+  const animationClass = isPromoBarTextMoving ? animationClasses[promoBarAnimationSpeed] : '';
 
   const containerWhitespaceClass = isPromoBarTextMoving ? 'whitespace-nowrap' : 'whitespace-normal';
 
+  const animationStyle = dynamicDuration ? { animationDuration: `${dynamicDuration}s` } : {};
+
   return (
     <div className={`bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4 overflow-hidden ${containerWhitespaceClass}`}>
-      <p className={`text-base font-medium inline-block ${animationClass}`}>
+      <p
+        ref={textRef}
+        className={`text-base font-medium inline-block ${animationClass}`}
+        style={animationStyle}
+      >
         {athkarList[currentIndex]}
       </p>
     </div>
