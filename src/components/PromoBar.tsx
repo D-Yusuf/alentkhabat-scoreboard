@@ -5,87 +5,74 @@ import { useScore } from '@/context/ScoreContext';
 const PromoBar = () => {
   const { t, i18n } = useTranslation();
   const { isPromoBarTextMoving, promoBarAnimationSpeed } = useScore();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHiding, setIsHiding] = useState(false); // For smooth transition
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const [dynamicDuration, setDynamicDuration] = useState(15);
+  const [shuffledAthkar, setShuffledAthkar] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // For static mode
+  const textRef = useRef<HTMLParagraphElement>(null); // For duration calculation
+  const [animationDuration, setAnimationDuration] = useState('60s');
 
   const athkarList = t('athkar_list', { returnObjects: true }) as string[];
 
-  const selectNextRandomIndex = () => {
-    if (athkarList.length <= 1) {
-      return;
-    }
-    setCurrentIndex(prevIndex => {
-      let nextIndex;
-      do {
-        nextIndex = Math.floor(Math.random() * athkarList.length);
-      } while (nextIndex === prevIndex);
-      return nextIndex;
-    });
-  };
-
-  // Effect for static text mode: cycle randomly every 30s
+  // Shuffle list for marquee mode
   useEffect(() => {
-    if (!isPromoBarTextMoving) {
+    if (isPromoBarTextMoving && athkarList.length > 0) {
+      const shuffled = [...athkarList].sort(() => Math.random() - 0.5);
+      setShuffledAthkar(shuffled);
+    }
+  }, [isPromoBarTextMoving, athkarList.length]);
+
+  // Cycle text for static mode
+  useEffect(() => {
+    if (!isPromoBarTextMoving && athkarList.length > 0) {
+      // Set initial random index for static mode
+      setCurrentIndex(Math.floor(Math.random() * athkarList.length));
+
       const interval = setInterval(() => {
-        selectNextRandomIndex();
+        // Select next random index without repeating
+        setCurrentIndex(prevIndex => {
+          let nextIndex;
+          do {
+            nextIndex = Math.floor(Math.random() * athkarList.length);
+          } while (nextIndex === prevIndex && athkarList.length > 1);
+          return nextIndex;
+        });
       }, 30000);
       return () => clearInterval(interval);
     }
   }, [isPromoBarTextMoving, athkarList.length]);
 
-  // Effect to calculate animation duration
+  // Calculate animation duration for marquee
   useEffect(() => {
-    if (isPromoBarTextMoving && !isHiding && textRef.current) {
-      const pixelsPerSecond = { slow: 50, medium: 80, fast: 120 };
+    if (isPromoBarTextMoving && textRef.current) {
+      const pixelsPerSecond = { slow: 30, medium: 50, fast: 80 };
       const speed = pixelsPerSecond[promoBarAnimationSpeed];
-      const containerWidth = textRef.current.parentElement?.offsetWidth || 0;
       const textWidth = textRef.current.scrollWidth;
-      const distance = containerWidth + textWidth;
-      const duration = distance / speed;
-      setDynamicDuration(duration);
+      const duration = textWidth / speed;
+      setAnimationDuration(`${duration}s`);
     }
-  }, [currentIndex, isPromoBarTextMoving, promoBarAnimationSpeed, isHiding]);
-
-  const handleAnimationEnd = () => {
-    setIsHiding(true); // Hide the element smoothly
-    setTimeout(() => {
-      selectNextRandomIndex(); // Select new text
-      setIsHiding(false); // Show the new element to start animation
-    }, 2000); // 2-second pause
-  };
-
-  // Set initial random index
-  useEffect(() => {
-    if (athkarList.length > 0) {
-      setCurrentIndex(Math.floor(Math.random() * athkarList.length));
-    }
-  }, [athkarList.length]);
-
+  }, [shuffledAthkar, isPromoBarTextMoving, promoBarAnimationSpeed]);
 
   if (!Array.isArray(athkarList) || athkarList.length === 0) {
     return null;
   }
 
-  const currentText = athkarList[currentIndex];
-
   if (isPromoBarTextMoving) {
     const isRTL = i18n.dir() === 'rtl';
-    const animationClass = isRTL ? 'animate-scroll-across-rtl' : 'animate-scroll-across';
-    const animationStyle = { animationDuration: `${dynamicDuration}s` };
-    
+    const animationClass = isRTL ? 'animate-marquee-rtl' : 'animate-marquee';
+    const marqueeText = shuffledAthkar.join(' • ');
+
     return (
-      <div className="bg-primary text-primary-foreground py-1 px-2 rounded-md mb-4 overflow-hidden whitespace-nowrap h-8 relative">
-        <p
-          ref={textRef}
-          key={currentIndex} // Key change will reset the animation
-          onAnimationEnd={handleAnimationEnd}
-          className={`text-base font-medium absolute transition-opacity duration-300 ${animationClass} ${isHiding ? 'opacity-0' : 'opacity-100'}`}
-          style={animationStyle}
+      <div className="bg-primary text-primary-foreground py-1 px-2 rounded-md mb-4 overflow-hidden relative h-8 flex items-center">
+        <div
+          className={`flex w-[200%] ${animationClass}`}
+          style={{ animationDuration }}
         >
-          {currentText}
-        </p>
+          <p ref={textRef} className="w-1/2 flex-shrink-0 text-center whitespace-nowrap text-base font-medium">
+            {marqueeText}
+          </p>
+          <p className="w-1/2 flex-shrink-0 text-center whitespace-nowrap text-base font-medium">
+            {marqueeText}
+          </p>
+        </div>
       </div>
     );
   }
@@ -94,7 +81,7 @@ const PromoBar = () => {
   return (
     <div className="bg-primary text-primary-foreground text-center py-1 px-2 rounded-md mb-4">
       <p className="text-base font-medium">
-        {currentText}
+        {athkarList[currentIndex]}
       </p>
     </div>
   );
