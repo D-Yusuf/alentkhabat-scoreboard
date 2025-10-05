@@ -8,8 +8,20 @@ const PromoBar = () => {
   const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({});
   const marqueeRef = useRef<HTMLDivElement>(null);
 
-  // Memoize athkarList to prevent re-creating the array on every render, which causes an infinite loop.
-  const athkarList = useMemo(() => t('athkar_list', { returnObjects: true }) as string[], [i18n.language]);
+  // Memoize and shuffle the athkarList to prevent re-creating the array on every render.
+  // The list is shuffled once when the language changes.
+  const athkarList = useMemo(() => {
+    const originalList = t('athkar_list', { returnObjects: true }) as string[];
+    if (!Array.isArray(originalList)) return [];
+    
+    const shuffledList = [...originalList]; // Create a copy to avoid mutating the original
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffledList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledList[i], shuffledList[j]] = [shuffledList[j], shuffledList[i]];
+    }
+    return shuffledList;
+  }, [i18n.language]);
 
   useLayoutEffect(() => {
     if (isPromoBarTextMoving && marqueeRef.current) {
@@ -72,7 +84,7 @@ const StaticAthkar = ({ athkarList }: { athkarList: string[] }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentIndex(prev => (prev + 1) % athkarList.length);
-    }, 5000); // Change text every 5 seconds
+    }, 10000); // Change text every 10 seconds
 
     return () => clearInterval(intervalId);
   }, [athkarList.length]);
