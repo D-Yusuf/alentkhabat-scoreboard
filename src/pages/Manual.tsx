@@ -1,9 +1,12 @@
-import React from 'react'
+    import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 export default function Manual() {
+    const { t } = useTranslation();
   return (
-    <div className="w-screen h-screen fixed top-0 left-0">
-      <embed src="/files/game-manual.pdf" type="application/pdf" width="100%" height="100%"/>
-    </div>
+      <a href="/files/game-manual.pdf" target="_blank" rel="noopener noreferrer">
+          {t('open_manual')}
+      </a>
+        
   )
 }
