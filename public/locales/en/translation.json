@@ -20,10 +20,12 @@
   "static": "Static",
   "moving": "Moving",
   "promo_bar_animation_speed": "Animation Speed",
+  "show_install_button": "Install Button",
+
   "slow": "Slow",
   "medium": "Medium",
   "fast": "Fast",
-  "install_app": "Install App",
+  "install_app": "Install",
   "install_app_description": "Scan the QR code to open this app on another device and add it to your home screen.",
   "common": {
     "are_you_sure": "Are you sure?",
@@ -62,6 +64,8 @@
   "light_mode": "Light",
   "dark_mode": "Dark",
   "system_mode": "System",
+  "manual": "Manual",
+  "open_manual": "Open Manual (PDF)",
   "score_list_page": {
     "all_rounds": "All Rounds",
     "round_management": "Round Management",

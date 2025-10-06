@@ -27,7 +27,7 @@
   "slow": "بطيء",
   "medium": "متوسط",
   "fast": "سريع",
-  "install_app": "تثبيت التطبيق",
+  "install_app": "تثبيت",
   "install_app_description": "امسح رمز الاستجابة السريعة لفتح هذا التطبيق على جهاز آخر وإضافته إلى شاشتك الرئيسية.",
   "common": {
     "are_you_sure": "هل أنت متأكد؟",
@@ -66,6 +66,8 @@
   "light_mode": "فاتح",
   "dark_mode": "داكن",
   "system_mode": "النظام",
+  "manual": "القوانين",
+  "open_manual": "فتح",
   "score_list_page": {
     "all_rounds": "جميع الجولات",
     "round_management": "إدارة الجولات",
@@ -74,6 +76,7 @@
     "no_rounds": "لا توجد جولات",
     "no_rounds_available": "لا توجد جولات متاحة. أضف لاعبين أو قم بتعيين جولات يدوية."
   },
+  "show_install_button": "زر التثبيت",
   "round": "الجولة",
   "pwa_install": {
     "title": "كيفية تثبيت التطبيق",

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useTheme } from 'next-themes';
 import { useScore } from '@/context/ScoreContext';
 import InstallPwa from '@/components/InstallPwa';
@@ -22,6 +23,20 @@ const Settings = () => {
     setPromoBarAnimationSpeed
   } = useScore();
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+  const [showInstallHelpButton, setShowInstallHelpButton] = useState<boolean>(() => {
+    try {
+      const v = localStorage.getItem('scoreboard_show_install_help_button');
+      return v === null ? true : v === 'true';
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('scoreboard_show_install_help_button', showInstallHelpButton ? 'true' : 'false');
+    } catch {}
+  }, [showInstallHelpButton]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -32,60 +47,83 @@ const Settings = () => {
       <div className="flex items-center justify-between">
         <div className="w-10" /> {/* Placeholder for spacing */}
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
-        <Button variant="ghost" size="icon" onClick={() => setIsInstructionsOpen(true)}>
-          <Download className="h-6 w-6" />
-        </Button>
+          <button className="text-white border p-4 border-[#ffd900] rounded-lg" onClick={() => setIsInstructionsOpen(true)}>
+            {/* <Download className="h-6 w-6" /> */}
+            {t('install_app')}
+          </button>
       </div>
       
-      <Card className="bg-card text-card-foreground">
-        <CardHeader className="rtl:text-right">
-          <CardTitle>{t('language')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RadioGroup
-            defaultValue={i18n.language}
-            onValueChange={changeLanguage}
-            className="space-y-2"
-          >
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="en" id="en" />
-              <Label htmlFor="en">{t('english')}</Label>
+      <Accordion type="multiple" className="bg-card text-card-foreground rounded-lg">
+        <AccordionItem value="language">
+          <AccordionTrigger className="px-4 rtl:text-right">{t('language')}</AccordionTrigger>
+          <AccordionContent>
+            <div className="p-4">
+              <RadioGroup
+                defaultValue={i18n.language}
+                onValueChange={changeLanguage}
+                className="space-y-2"
+              >
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="en" id="en" />
+                  <Label htmlFor="en">{t('english')}</Label>
+                </div>
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="ar" id="ar" />
+                  <Label htmlFor="ar">{t('arabic')}</Label>
+                </div>
+              </RadioGroup>
             </div>
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="ar" id="ar" />
-              <Label htmlFor="ar">{t('arabic')}</Label>
-            </div>
-          </RadioGroup>
-        </CardContent>
-      </Card>
+          </AccordionContent>
+        </AccordionItem>
 
-      <Card className="bg-card text-card-foreground">
-        <CardHeader className="rtl:text-right">
-          <CardTitle>{t('theme')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RadioGroup
-            defaultValue={theme}
-            onValueChange={setTheme}
-            className="space-y-2"
-          >
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="light" id="light" />
-              <Label htmlFor="light">{t('light_mode')}</Label>
+        {/* <AccordionItem value="install-help">
+          <AccordionTrigger className="px-4 rtl:text-right">{t('show_install_button')}</AccordionTrigger>
+          <AccordionContent>
+            <div className="p-4">
+              <RadioGroup
+                value={showInstallHelpButton ? 'show' : 'hide'}
+                onValueChange={(v) => setShowInstallHelpButton(v === 'show')}
+                className="space-y-2"
+              >
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="show" id="show-install-btn" />
+                  <Label htmlFor="show-install-btn">{t('show')}</Label>
+                </div>
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="hide" id="hide-install-btn" />
+                  <Label htmlFor="hide-install-btn">{t('hide')}</Label>
+                </div>
+              </RadioGroup>
             </div>
-            <div className="flex items-center gap-2 rtl:flex-row-reverse">
-              <RadioGroupItem value="dark" id="dark" />
-              <Label htmlFor="dark">{t('dark_mode')}</Label>
-            </div>
-          </RadioGroup>
-        </CardContent>
-      </Card>
+          </AccordionContent>
+        </AccordionItem> */}
 
-      <Card className="bg-card text-card-foreground">
-        <CardHeader className="rtl:text-right">
-          <CardTitle>{t('promo_bar')}</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <AccordionItem value="theme">
+          <AccordionTrigger className="px-4 rtl:text-right">{t('theme')}</AccordionTrigger>
+          <AccordionContent>
+            <div className="p-4">
+              <RadioGroup
+                defaultValue={theme}
+                onValueChange={setTheme}
+                className="space-y-2"
+              >
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="light" id="light" />
+                  <Label htmlFor="light">{t('light_mode')}</Label>
+                </div>
+                <div className="flex items-center gap-2 rtl:flex-row-reverse">
+                  <RadioGroupItem value="dark" id="dark" />
+                  <Label htmlFor="dark">{t('dark_mode')}</Label>
+                </div>
+              </RadioGroup>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="promo">
+          <AccordionTrigger className="px-4 rtl:text-right">{t('promo_bar')}</AccordionTrigger>
+          <AccordionContent>
+            <div className="p-4">
           <RadioGroup
             value={isPromoBarVisible ? 'show' : 'hide'}
             onValueChange={(value) => setIsPromoBarVisible(value === 'show')}
@@ -142,8 +180,19 @@ const Settings = () => {
               </RadioGroup>
             </div>
           )}
-        </CardContent>
-      </Card>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="manual">
+          <AccordionTrigger className="px-4 rtl:text-right">{t('manual')}</AccordionTrigger>
+          <AccordionContent>
+            <div className="p-4">
+              <Button className="text-white" variant="outline" onClick={() => window.open('/files/game-manual.pdf', '_blank', 'noopener')}>{t('open_manual')}</Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       <InstallPwa />
 
