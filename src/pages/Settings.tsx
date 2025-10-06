@@ -190,6 +190,7 @@ const Settings = () => {
           <AccordionTrigger className="px-4 rtl:text-right">{t('manual')}</AccordionTrigger>
           <AccordionContent>
             <div className="p-4">
+              <a href="/files/game-manual.pdf" target="_blank" rel="noopener noreferrer">{t('open_manual')}</a>
               <Button className="text-white" variant="outline" onClick={() => navigate('/manual')}>{t('open_manual')}</Button>
             </div>
           </AccordionContent>
