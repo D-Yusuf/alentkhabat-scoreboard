@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Users, User, List, Settings as SettingsIcon } from 'lucide-react';
+import { BookOpen, Users, User, List, Settings as SettingsIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const BottomNav = () => {
@@ -21,6 +21,10 @@ const BottomNav = () => {
         <NavLink to="/score-list" className={({ isActive }) => `flex flex-col items-center p-3 ${isActive ? activeLinkClass : inactiveLinkClass}`}>
           <List size={20} />
           <span className="text-xs mt-1">{t('score_list')}</span>
+        </NavLink>
+        <NavLink to="/manual" className={({ isActive }) => `flex flex-col items-center p-3 ${isActive ? activeLinkClass : inactiveLinkClass}`}>
+          <BookOpen size={20} />
+          <span className="text-xs mt-1">{t('manual_tab')}</span>
         </NavLink>
         <NavLink to="/settings" className={({ isActive }) => `flex flex-col items-center p-3 ${isActive ? activeLinkClass : inactiveLinkClass}`}>
           <SettingsIcon size={20} />

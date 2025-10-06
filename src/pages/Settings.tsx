@@ -10,6 +10,7 @@ import InstallPwa from '@/components/InstallPwa';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import InstallInstructions from '@/components/InstallInstructions';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -23,6 +24,7 @@ const Settings = () => {
     setPromoBarAnimationSpeed
   } = useScore();
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+  const navigate = useNavigate();
   const [showInstallHelpButton, setShowInstallHelpButton] = useState<boolean>(() => {
     try {
       const v = localStorage.getItem('scoreboard_show_install_help_button');
@@ -47,7 +49,7 @@ const Settings = () => {
       <div className="flex items-center justify-between">
         <div className="w-10" /> {/* Placeholder for spacing */}
         <h1 className="text-2xl font-bold">{t('settings')}</h1>
-          <button className="text-white border p-4 border-[#ffd900] rounded-lg" onClick={() => setIsInstructionsOpen(true)}>
+          <button className="text-white border p-4 border-[#ffd900] rounded-lg" onClick={() => setIsInstructionsOpen(true)  }>
             {/* <Download className="h-6 w-6" /> */}
             {t('install_app')}
           </button>
@@ -188,7 +190,7 @@ const Settings = () => {
           <AccordionTrigger className="px-4 rtl:text-right">{t('manual')}</AccordionTrigger>
           <AccordionContent>
             <div className="p-4">
-              <Button className="text-white" variant="outline" onClick={() => window.open('/files/game-manual.pdf', '_blank', 'noopener')}>{t('open_manual')}</Button>
+              <Button className="text-white" variant="outline" onClick={() => navigate('/manual')}>{t('open_manual')}</Button>
             </div>
           </AccordionContent>
         </AccordionItem>

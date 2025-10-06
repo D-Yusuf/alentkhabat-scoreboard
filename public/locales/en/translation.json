@@ -66,6 +66,7 @@
   "system_mode": "System",
   "manual": "Manual",
   "open_manual": "Open Manual (PDF)",
+  "manual_tab": "Manual",
   "score_list_page": {
     "all_rounds": "All Rounds",
     "round_management": "Round Management",

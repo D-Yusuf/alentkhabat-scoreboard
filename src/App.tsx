@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { ThemeProvider } from "./components/ThemeProvider";
 import AutoInstallPrompt from "./components/AutoInstallPrompt";
+import Manual from "./pages/Manual";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const AppContent = () => {
         <Route path="/players" element={<Players />} />
         <Route path="/score-list" element={<ScoreList />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/manual" element={<Manual />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
