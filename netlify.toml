@@ -1,0 +1,13 @@
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--no-fund --no-audit"
+  # Ensure Netlify doesn't try pnpm
+  NETLIFY_USE_PNPM = "false"
+
+[functions]
+  node_bundler = "esbuild"
+
