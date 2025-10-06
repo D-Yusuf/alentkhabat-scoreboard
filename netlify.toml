@@ -7,6 +7,8 @@
   NPM_FLAGS = "--no-fund --no-audit"
   # Ensure Netlify doesn't try pnpm
   NETLIFY_USE_PNPM = "false"
+  # If Netlify uses pnpm during the dependency installation phase, allow out-of-date lockfile
+  PNPM_FLAGS = "--no-frozen-lockfile"
 
 [functions]
   node_bundler = "esbuild"
