@@ -35,7 +35,7 @@ const AppContent = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/manual" element={<Manual />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
+      {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>
   );
 }
