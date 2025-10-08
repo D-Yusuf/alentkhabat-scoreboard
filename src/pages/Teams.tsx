@@ -30,13 +30,14 @@ const Teams = () => {
     setScoresToAdd(newScoresToAdd);
   };
 
-  const handleAddScore = (teamIndex: number) => {
-    const scoreValue = parseInt(scoresToAdd[teamIndex], 10);
-    if (!isNaN(scoreValue)) {
-      addTeamScore(teamIndex, scoreValue);
-      const newScoresToAdd = [...scoresToAdd];
-      newScoresToAdd[teamIndex] = '';
-      setScoresToAdd(newScoresToAdd);
+  const handleAddRound = () => {
+    const team1Score = parseInt(scoresToAdd[0], 10);
+    const team2Score = parseInt(scoresToAdd[1], 10);
+    
+    if (!isNaN(team1Score) && !isNaN(team2Score)) {
+      addTeamScore(0, team1Score);
+      addTeamScore(1, team2Score);
+      setScoresToAdd(['', '']);
     }
   };
 
@@ -81,19 +82,21 @@ const Teams = () => {
               placeholder={t('teams_page.enter_score')}
               value={scoresToAdd[index]}
               onChange={(e) => handleScoreChange(index, e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleAddScore(index)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAddRound()}
               className="text-center bg-card border border-input text-card-foreground"
             />
-            <Button
-              variant="outline" // Changed to outline variant
-              onClick={() => handleAddScore(index)}
-              className="w-full" // Removed custom background/text classes
-            >
-              {t('teams_page.add_score')}
-            </Button>
           </div>
         ))}
       </div>
+
+      <Button
+        variant="outline"
+        onClick={handleAddRound}
+        className="w-full mt-4"
+        disabled={!scoresToAdd[0] || !scoresToAdd[1]}
+      >
+        {t('teams_page.add_score')}
+      </Button>
 
       <Card className="dark:bg-card dark:border-border text-card-foreground mt-4 flex-grow flex flex-col overflow-hidden">
         <CardContent className="p-4 flex-grow overflow-y-auto">
