@@ -15,7 +15,6 @@ import { useEffect } from 'react';
 import { ThemeProvider } from "./components/ThemeProvider";
 import AutoInstallPrompt from "./components/AutoInstallPrompt";
 import Manual from "./pages/Manual";
-import ManualViewer from "./components/ManualViewer";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +34,6 @@ const AppContent = () => {
         <Route path="/score-list" element={<ScoreList />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/manual" element={<Manual />} />
-      <Route path="/files/game-manual" element={<ManualViewer />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
