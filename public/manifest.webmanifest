@@ -1,7 +1,7 @@
 {
-    "name": "Scoreboard",
-    "short_name": "Scoreboard",
-    "description": "A simple offline scoreboard app.",
+    "name": "القيد",
+    "short_name": "القيد",
+    "description": "تطبيق لحساب القيد في لعبة الانتخابات وغيرها",
     "start_url": "./",
     "scope": "./",
     "display": "standalone",
