@@ -35,8 +35,8 @@ const AppContent = () => {
         <Route path="/score-list" element={<ScoreList />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/manual" element={<Manual />} />
-      </Route>
       <Route path="/files/game-manual" element={<ManualViewer />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -190,7 +190,7 @@ const Settings = () => {
           <AccordionTrigger className="px-4 rtl:text-right">{t('manual')}</AccordionTrigger>
           <AccordionContent>
             <div className="p-4">
-              <a className="border p-4 bg-primary text-primary-foreground rounded-md" href="/files/game-manual.pdf" target="_blank" rel="noopener noreferrer">{t('open_manual')}</a>
+              <a className="border p-4 bg-primary text-primary-foreground rounded-md" href="/files/game-manual" target="_blank" rel="noopener noreferrer">{t('open_manual')}</a>
             </div>
           </AccordionContent>
         </AccordionItem>

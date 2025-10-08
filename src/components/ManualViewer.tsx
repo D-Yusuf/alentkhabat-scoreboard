@@ -1,7 +1,9 @@
-import React from 'react'
-
+import React from 'react' 
+import gameManual from "/game-manual.pdf"
 export default function GameManual() {
   return (
-        <iframe src="/game-manual.pdf" className='w-full h-screen'></iframe>
+    <div className='w-full'>
+        <iframe src={gameManual} className='w-full h-screen'></iframe>
+    </div>
   )
 }

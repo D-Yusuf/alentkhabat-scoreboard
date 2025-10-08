@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["Full-Logo.png"],
+      includeAssets: ["Full-Logo.png","game-manual.pdf"],
       manifest: {
         name: "Scoreboard",
         short_name: "Scoreboard",
@@ -23,6 +23,7 @@ export default defineConfig({
         icons: [
           { src: "Full-Logo.png", sizes: "192x192", type: "image/png" },
         ],
+     
       },
     }),
   ],

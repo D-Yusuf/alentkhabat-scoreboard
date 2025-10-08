@@ -1,4 +1,0 @@
-/scoreboard     https://scoreboard.alentkhbat.com   301
-
-/files/*    /files/:splat    200
-/*           /index.html     200

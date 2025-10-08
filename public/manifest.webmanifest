@@ -26,6 +26,13 @@
         "type": "image/png",
         "purpose": "maskable"
       }
+
+    ],
+    "files": [
+      {
+        "src": "game-manual.pdf",
+        "type": "application/pdf"
+      }
     ]
   }
   
