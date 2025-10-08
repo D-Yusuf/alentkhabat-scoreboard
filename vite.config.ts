@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["Full-Logo.png","/files/game-manual.pdf"],
       manifest: {
-        name: "Scoreboard",
-        short_name: "Scoreboard",
-        description: "A simple scoreboard app.",
+        name: "القيد",
+        short_name: "القيد",
+        description: "تطبيق لحساب القيد في لعبة الانتخابات وغيرها",
         theme_color: "#3255a6",
         background_color: "#3255a6",
         display: "standalone",

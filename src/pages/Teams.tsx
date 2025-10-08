@@ -78,7 +78,7 @@ const Teams = () => {
               className="text-center font-bold bg-card text-card-foreground"
             />
             <Input
-              type="number"
+              type={/Android/i.test(navigator.userAgent) ? "text" : "number"}
               placeholder={t('teams_page.enter_score')}
               value={scoresToAdd[index]}
               onChange={(e) => handleScoreChange(index, e.target.value)}
