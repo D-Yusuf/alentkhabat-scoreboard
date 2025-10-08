@@ -1,9 +1,9 @@
+
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     { "source": "/assets/(.*)", "destination": "/assets/$1" },
     { "source": "/locales/(.*)", "destination": "/locales/$1" },
-    { "source": "/files/(.*)", "destination": "/files/$1" },
     { "source": "/registerSW.js", "destination": "/registerSW.js" },
     { "source": "/workbox-:hash.js", "destination": "/workbox-:hash.js" },
     { "source": "/manifest.webmanifest", "destination": "/manifest.webmanifest" },
