@@ -2,77 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 221 55% 42%; /* #3255a6 converted to HSL */
-    --foreground: 0 0% 100%; /* White text for better contrast */
-
-    --card: 50 100% 98%; /* #fffdf0 */
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 221 55% 42%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 	#ffd900; /* Gold HSL */
-    --border-opacity: 0.5; /* 50% transparency */
-    --input: 51 100% 50%; /* Gold HSL for input border */
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 215 14.3% 40%; /* Lighter gray for better visibility */
-    --input: 215 14.3% 40%; /* Lighter gray for better visibility */
-    --ring: 212.7 26.8% 83.9%;
-  }
+ :root {
+  --primary-blue: #1e40af;
+  --dark-bg: #0f172a;
+  --gold: #c5a059;
+  --gold-hover: #b08d4a;
+  --white: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.15);
+  --red: #ff6b6b;
+  --green: #4ade80;
+  --muted: rgba(255, 255, 255, 0.6);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+body {
+  background: radial-gradient(circle at top, var(--primary-blue), var(--dark-bg));
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--white);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100%;
+}
+
+@keyframes loader-pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+.loader-logo-img {
+  animation: loader-pulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.4));
 }
